@@ -1,0 +1,82 @@
+---
+const testimonials = [
+  {
+    text: '"La mejor noche de nuestras vidas. El DJ puso todos los temazos que pedimos y las fotos quedaron para enmarcar. Lloramos viendo el aftermovie."',
+    name: 'Marina García',
+    school: 'IES Montserrat',
+    time: 'Hace 2 semanas',
+    avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100',
+  },
+  {
+    text: '"Pensábamos que organizar una graduación para 120 personas iba a ser imposible. Ellos se encargaron de todo. Solo tuvimos que ir y disfrutar."',
+    name: 'Marc Puig',
+    school: 'Col·legi Sant Ignasi',
+    time: 'Hace 1 mes',
+    avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100',
+  },
+  {
+    text: '"El photocall personalizado fue un éxito total en redes. Todos preguntando dónde lo hicimos. La decoración era increíble."',
+    name: 'Laura Vidal',
+    school: 'IES Pau Claris',
+    time: 'Hace 3 semanas',
+    avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100',
+  },
+];
+---
+
+<section class="bg-gray-50 py-24 px-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-16">
+      <p class="text-brand font-semibold text-sm tracking-wide uppercase mb-3">Testimonios</p>
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display text-navy">
+        Lo que dicen de nosotros
+      </h2>
+    </div>
+
+    <!-- Cards -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {testimonials.map(({ text, name, school, time, avatar }) => (
+        <article class="bg-white rounded-xl border border-gray-100 p-7 shadow-sm">
+          <!-- Stars -->
+          <div class="flex gap-0.5 mb-5">
+            {[1, 2, 3, 4, 5].map(() => (
+              <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+            ))}
+          </div>
+
+          <!-- Quote -->
+          <p class="text-gray-600 text-sm leading-relaxed mb-6">{text}</p>
+
+          <!-- Author -->
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden shrink-0">
+              <img src={avatar} alt={name} class="w-full h-full object-cover" loading="lazy" />
+            </div>
+            <div>
+              <p class="text-navy font-semibold text-sm">{name}</p>
+              <p class="text-gray-400 text-xs">{school} · {time}</p>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- Google rating -->
+    <div class="flex justify-center mt-12">
+      <div class="inline-flex items-center gap-3 bg-white border border-gray-200 rounded-full px-6 py-3 shadow-sm">
+        <div class="flex gap-0.5">
+          {[1, 2, 3, 4, 5].map(() => (
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          ))}
+        </div>
+        <span class="text-navy font-bold">4.9</span>
+        <span class="text-gray-400 text-sm">347 reseñas en Google</span>
+      </div>
+    </div>
+  </div>
+</section>

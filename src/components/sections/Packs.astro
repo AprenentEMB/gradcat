@@ -1,0 +1,102 @@
+---
+const packs = [
+  {
+    name: 'ESO',
+    popular: false,
+    features: [
+      'Sala privada 4h',
+      'DJ & equipo de sonido',
+      'Iluminación profesional',
+      'Photocall básico',
+      'Coordinador de evento',
+    ],
+  },
+  {
+    name: 'Bachillerato',
+    popular: true,
+    features: [
+      'Sala premium 6h',
+      'DJ profesional',
+      'Cena incluida',
+      'Fotógrafo + 200 fotos',
+      'Photocall personalizado',
+      'Aftermovie 2min',
+    ],
+  },
+  {
+    name: 'Selectividad',
+    popular: false,
+    features: [
+      'Sala VIP toda la noche',
+      'DJ + Artista invitado',
+      'Cena gourmet',
+      '2 Fotógrafos',
+      'Aftermovie 5min',
+      'Decoración temática',
+      'Open bar 2h',
+    ],
+  },
+];
+---
+
+<section id="packs" class="bg-white py-24 px-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-16">
+      <p class="text-brand font-semibold text-sm tracking-wide uppercase mb-3">Nuestros packs</p>
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display text-navy mb-4">
+        Elige tu experiencia
+      </h2>
+      <p class="text-gray-500 text-lg">
+        Packs adaptados a cada tipo de graduación
+      </p>
+    </div>
+
+    <!-- Cards -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      {packs.map((pack) => (
+        <div
+          class:list={[
+            'relative rounded-xl p-8 border transition-all',
+            pack.popular
+              ? 'border-brand shadow-lg shadow-brand/10 ring-1 ring-brand/20'
+              : 'border-gray-200 hover:border-gray-300',
+          ]}
+        >
+          {pack.popular && (
+            <div class="absolute -top-3.5 left-1/2 -translate-x-1/2">
+              <span class="bg-brand text-white text-xs font-bold px-4 py-1.5 rounded-full">
+                Más popular
+              </span>
+            </div>
+          )}
+
+          <h3 class="text-2xl font-extrabold text-navy text-center mb-8 mt-2">{pack.name}</h3>
+
+          <ul class="space-y-4 mb-8">
+            {pack.features.map((feature) => (
+              <li class="flex items-center gap-3 text-gray-600 text-sm border-b border-gray-100 pb-4">
+                <svg class="w-5 h-5 text-brand shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                {feature}
+              </li>
+            ))}
+          </ul>
+
+          <a
+            href="#contacto"
+            class:list={[
+              'block text-center font-semibold text-sm py-3.5 rounded-lg transition-all',
+              pack.popular
+                ? 'bg-brand text-white hover:bg-brand-light'
+                : 'border border-gray-200 text-navy hover:border-brand hover:text-brand',
+            ]}
+          >
+            Solicitar info
+          </a>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

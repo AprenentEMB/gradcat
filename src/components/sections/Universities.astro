@@ -1,0 +1,47 @@
+---
+const universities = [
+  { name: 'Universitat de Barcelona',          abbr: 'UB',       logo: '/logos/universities/ub.gif'       },
+  { name: 'Universitat Autònoma de Barcelona', abbr: 'UAB',      logo: '/logos/universities/uab.png'      },
+  { name: 'Universitat Politècnica de Catalunya', abbr: 'UPC',   logo: '/logos/universities/upc.svg'      },
+  { name: 'Universitat Pompeu Fabra',          abbr: 'UPF',      logo: '/logos/universities/upf.png'      },
+  { name: 'ESADE',                             abbr: 'ESADE',    logo: '/logos/universities/esade.png'    },
+  { name: 'La Salle – URL',                    abbr: 'La Salle', logo: '/logos/universities/lasalle.png'  },
+  { name: 'Universitat Internacional de Catalunya', abbr: 'UIC', logo: '/logos/universities/uic.svg'      },
+  { name: 'INEFC',                             abbr: 'INEFC',    logo: '/logos/universities/inefc.jpg'    },
+];
+---
+
+<section class="bg-white py-16 px-6 border-y border-gray-100">
+  <div class="max-w-5xl mx-auto text-center">
+
+    <p class="text-xs font-bold tracking-[0.25em] uppercase text-indigo-500 mb-2">
+      Confían en nosotros
+    </p>
+    <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-3">
+      Celebramos con alumnos de las mejores universidades
+    </h2>
+    <p class="text-gray-500 text-base mb-12 max-w-xl mx-auto">
+      Graduados de estos centros ya han vivido su fiesta con Graduacions.cat
+    </p>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 items-center">
+        {universities.map((uni) => (
+          <div class={
+            `flex flex-col items-center justify-center gap-3 p-5 rounded-2xl bg-gray-50 hover:bg-indigo-50 hover:shadow-md transition-all duration-200 group `
+          }>
+            <img
+              src={uni.logo}
+              alt={`Logo ${uni.name}`}
+              class="h-10 w-auto object-contain transition-all duration-300"
+              loading="lazy"
+              style={uni.abbr === 'UIC' ? 'background: #7dd3fc; padding: 0.25rem; border-radius: 0.5rem;' : ''}
+            />
+            <span class="text-xs font-semibold text-gray-400 group-hover:text-indigo-500 transition-colors tracking-wide">
+              {uni.abbr}
+            </span>
+          </div>
+        ))}
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://weekmepro.com/sitemap-index.xml

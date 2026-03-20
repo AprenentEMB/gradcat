@@ -1,0 +1,76 @@
+---
+import '../styles/global.css';
+import SEO from '../components/SEO.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = 'Graduacions.cat — Fiestas de Graduación en Barcelona',
+  description = 'Organizamos la fiesta de graduación perfecta en Barcelona. ESO, Bachillerato y Selectividad. Salas exclusivas, DJ, catering, fotografía y aftermovie. Pide presupuesto gratis.',
+  image = '/images/og-image.jpg',
+} = Astro.props;
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <SEO title={title} description={description} image={image} />
+
+    <meta name="theme-color" content="#173696" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Local Business structured data -->
+    <script is:inline type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "EventPlanner",
+        "name": "Graduacions.cat",
+        "alternateName": "GRAD-CAT",
+        "description": "Organizamos fiestas de graduación en Barcelona. ESO, Bachillerato y Selectividad.",
+        "url": "https://graduacions.cat",
+        "telephone": "+34605508397",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Barcelona",
+          "addressRegion": "Catalunya",
+          "addressCountry": "ES"
+        },
+        "areaServed": {
+          "@type": "City",
+          "name": "Barcelona"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "reviewCount": "347",
+          "bestRating": "5"
+        }
+      }
+    </script>
+  </head>
+  <body class="bg-white text-gray-900 font-sans">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:bg-brand focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg"
+    >
+      Ir al contenido
+    </a>
+    <slot />
+  </body>
+</html>
