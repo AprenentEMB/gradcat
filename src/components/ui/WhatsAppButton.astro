@@ -1,12 +1,20 @@
 ---
-const WHATSAPP_URL = 'https://wa.me/34605508397?text=Hola!%20Me%20gustaría%20información%20sobre%20fiestas%20de%20graduación';
+import type { Translations } from '../../i18n/translations';
+
+interface Props {
+  t: Translations['whatsapp'];
+}
+
+const { t } = Astro.props;
+
+const WHATSAPP_URL = `https://wa.me/34605508397?text=${t.message}`;
 ---
 
 <a
   href={WHATSAPP_URL}
   target="_blank"
   rel="noopener noreferrer"
-  aria-label="Contactar por WhatsApp"
+  aria-label={t.ariaLabel}
   class="fixed bottom-6 right-6 z-40 bg-[#25D366] hover:bg-[#20bd5a] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 focus-visible:ring-offset-2"
 >
   <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">

@@ -1,23 +1,33 @@
 ---
-const images = [
-  { src: 'https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=1200', alt: 'Fiesta de graduación con confeti y luces', span: 'col-span-2 row-span-2' },
-  { src: 'https://images.pexels.com/photos/1540406/pexels-photo-1540406.jpeg?auto=compress&cs=tinysrgb&w=800', alt: 'Escenario con luces de colores', span: '' },
-  { src: 'https://images.pexels.com/photos/1267350/pexels-photo-1267350.jpeg?auto=compress&cs=tinysrgb&w=800', alt: 'Celebración con confeti', span: '' },
-  { src: 'https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg?auto=compress&cs=tinysrgb&w=800', alt: 'DJ en evento nocturno', span: '' },
-  { src: 'https://images.pexels.com/photos/2263436/pexels-photo-2263436.jpeg?auto=compress&cs=tinysrgb&w=800', alt: 'Evento con iluminación profesional', span: '' },
+import type { Translations } from '../../i18n/translations';
+
+interface Props {
+  t: Translations['gallery'];
+}
+
+const { t } = Astro.props;
+
+const imageSrcs = [
+  { src: 'https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=1200', span: 'col-span-2 row-span-2' },
+  { src: 'https://images.pexels.com/photos/1540406/pexels-photo-1540406.jpeg?auto=compress&cs=tinysrgb&w=800', span: '' },
+  { src: 'https://images.pexels.com/photos/1267350/pexels-photo-1267350.jpeg?auto=compress&cs=tinysrgb&w=800', span: '' },
+  { src: 'https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg?auto=compress&cs=tinysrgb&w=800', span: '' },
+  { src: 'https://images.pexels.com/photos/2263436/pexels-photo-2263436.jpeg?auto=compress&cs=tinysrgb&w=800', span: '' },
 ];
+
+const images = imageSrcs.map((img, i) => ({ ...img, alt: t.images[i]?.alt ?? '' }));
 ---
 
 <section id="galeria" class="bg-gray-50 py-24 px-6">
   <div class="max-w-7xl mx-auto">
     <!-- Header -->
     <div class="text-center mb-16">
-      <p class="text-brand font-semibold text-sm tracking-wide uppercase mb-3">Nuestros eventos</p>
+      <p class="text-brand font-semibold text-sm tracking-wide uppercase mb-3">{t.eyebrow}</p>
       <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display text-navy mb-4">
-        Graduaciones reales
+        {t.title}
       </h2>
       <p class="text-gray-500 text-lg">
-        Así lo pasan nuestros graduados
+        {t.subtitle}
       </p>
     </div>
 

@@ -1,60 +1,29 @@
 ---
-const packs = [
-  {
-    name: 'ESO',
-    popular: false,
-    features: [
-      'Sala privada 4h',
-      'DJ & equipo de sonido',
-      'Iluminación profesional',
-      'Photocall básico',
-      'Coordinador de evento',
-    ],
-  },
-  {
-    name: 'Bachillerato',
-    popular: true,
-    features: [
-      'Sala premium 6h',
-      'DJ profesional',
-      'Cena incluida',
-      'Fotógrafo + 200 fotos',
-      'Photocall personalizado',
-      'Aftermovie 2min',
-    ],
-  },
-  {
-    name: 'Selectividad',
-    popular: false,
-    features: [
-      'Sala VIP toda la noche',
-      'DJ + Artista invitado',
-      'Cena gourmet',
-      '2 Fotógrafos',
-      'Aftermovie 5min',
-      'Decoración temática',
-      'Open bar 2h',
-    ],
-  },
-];
+import type { Translations } from '../../i18n/translations';
+
+interface Props {
+  t: Translations['packs'];
+}
+
+const { t } = Astro.props;
 ---
 
 <section id="packs" class="bg-white py-24 px-6">
   <div class="max-w-7xl mx-auto">
     <!-- Header -->
     <div class="text-center mb-16">
-      <p class="text-brand font-semibold text-sm tracking-wide uppercase mb-3">Nuestros packs</p>
+      <p class="text-brand font-semibold text-sm tracking-wide uppercase mb-3">{t.eyebrow}</p>
       <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display text-navy mb-4">
-        Elige tu experiencia
+        {t.title}
       </h2>
       <p class="text-gray-500 text-lg">
-        Packs adaptados a cada tipo de graduación
+        {t.subtitle}
       </p>
     </div>
 
     <!-- Cards -->
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-      {packs.map((pack) => (
+      {t.items.map((pack) => (
         <div
           class:list={[
             'relative rounded-xl p-8 border transition-all',
@@ -66,7 +35,7 @@ const packs = [
           {pack.popular && (
             <div class="absolute -top-3.5 left-1/2 -translate-x-1/2">
               <span class="bg-brand text-white text-xs font-bold px-4 py-1.5 rounded-full">
-                Más popular
+                {t.popularLabel}
               </span>
             </div>
           )}
@@ -93,7 +62,7 @@ const packs = [
                 : 'border border-gray-200 text-navy hover:border-brand hover:text-brand',
             ]}
           >
-            Solicitar info
+            {t.ctaBtn}
           </a>
         </div>
       ))}

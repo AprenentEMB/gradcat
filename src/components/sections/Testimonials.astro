@@ -1,42 +1,26 @@
 ---
-const testimonials = [
-  {
-    text: '"La mejor noche de nuestras vidas. El DJ puso todos los temazos que pedimos y las fotos quedaron para enmarcar. Lloramos viendo el aftermovie."',
-    name: 'Marina García',
-    school: 'IES Montserrat',
-    time: 'Hace 2 semanas',
-    avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100',
-  },
-  {
-    text: '"Pensábamos que organizar una graduación para 120 personas iba a ser imposible. Ellos se encargaron de todo. Solo tuvimos que ir y disfrutar."',
-    name: 'Marc Puig',
-    school: 'Col·legi Sant Ignasi',
-    time: 'Hace 1 mes',
-    avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100',
-  },
-  {
-    text: '"El photocall personalizado fue un éxito total en redes. Todos preguntando dónde lo hicimos. La decoración era increíble."',
-    name: 'Laura Vidal',
-    school: 'IES Pau Claris',
-    time: 'Hace 3 semanas',
-    avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100',
-  },
-];
+import type { Translations } from '../../i18n/translations';
+
+interface Props {
+  t: Translations['testimonials'];
+}
+
+const { t } = Astro.props;
 ---
 
 <section class="bg-gray-50 py-24 px-6">
   <div class="max-w-7xl mx-auto">
     <!-- Header -->
     <div class="text-center mb-16">
-      <p class="text-brand font-semibold text-sm tracking-wide uppercase mb-3">Testimonios</p>
+      <p class="text-brand font-semibold text-sm tracking-wide uppercase mb-3">{t.eyebrow}</p>
       <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display text-navy">
-        Lo que dicen de nosotros
+        {t.title}
       </h2>
     </div>
 
     <!-- Cards -->
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {testimonials.map(({ text, name, school, time, avatar }) => (
+      {t.items.map(({ text, name, school, time, avatar }) => (
         <article class="bg-white rounded-xl border border-gray-100 p-7 shadow-sm">
           <!-- Stars -->
           <div class="flex gap-0.5 mb-5">
@@ -75,7 +59,7 @@ const testimonials = [
           ))}
         </div>
         <span class="text-navy font-bold">4.9</span>
-        <span class="text-gray-400 text-sm">347 reseñas en Google</span>
+        <span class="text-gray-400 text-sm">{t.googleRating}</span>
       </div>
     </div>
   </div>

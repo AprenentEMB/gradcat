@@ -1,4 +1,5 @@
 ---
+import { translations } from '../i18n/translations';
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/sections/Header.astro';
 import Hero from '../components/sections/Hero.astro';
@@ -13,22 +14,29 @@ import FAQ from '../components/sections/FAQ.astro';
 import Contact from '../components/sections/Contact.astro';
 import Footer from '../components/sections/Footer.astro';
 import WhatsAppButton from '../components/ui/WhatsAppButton.astro';
+
+const t = translations.ca;
 ---
 
-<Layout>
-  <Header />
+<Layout
+  title={t.layout.title}
+  description={t.layout.description}
+  lang="ca"
+  skipToContent={t.layout.skipToContent}
+>
+  <Header t={t.header} lang="ca" />
   <main id="main-content">
-    <Hero />
-    <Stats />
-    <Universities />
-    <Services />
-    <CTA />
-    <Gallery />
-    <Packs />
-    <Testimonials />
-    <FAQ />
-    <Contact />
+    <Hero t={t.hero} />
+    <Stats t={t.stats} />
+    <Universities t={t.universities} />
+    <Services t={t.services} />
+    <CTA t={t.cta} />
+    <Gallery t={t.gallery} />
+    <Packs t={t.packs} />
+    <Testimonials t={t.testimonials} />
+    <FAQ t={t.faq} />
+    <Contact t={t.contact} />
   </main>
-  <Footer />
-  <WhatsAppButton />
+  <Footer t={t.footer} />
+  <WhatsAppButton t={t.whatsapp} />
 </Layout>

@@ -1,19 +1,24 @@
 ---
+import type { Lang } from '../i18n/translations';
+
 interface Props {
   title: string;
   description: string;
+  lang: Lang;
   image?: string;
 }
 
 const {
   title,
   description,
+  lang,
   image = '/images/og-image.jpg',
 } = Astro.props;
 
 const site = Astro.site ?? new URL('https://graduacions.cat');
 const canonicalURL = new URL(Astro.url.pathname, site);
 const ogImage = new URL(image, site);
+const ogLocale = lang === 'ca' ? 'ca_ES' : 'es_ES';
 ---
 
 <title>{title}</title>
@@ -25,7 +30,7 @@ const ogImage = new URL(image, site);
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={ogImage} />
-<meta property="og:locale" content="es_ES" />
+<meta property="og:locale" content={ogLocale} />
 <meta property="og:site_name" content="Graduacions.cat" />
 
 <meta name="twitter:card" content="summary_large_image" />

@@ -1,4 +1,12 @@
 ---
+import type { Translations } from '../../i18n/translations';
+
+interface Props {
+  t: Translations['footer'];
+}
+
+const { t } = Astro.props;
+
 const PHONE_HREF = 'tel:+34605508397';
 const EMAIL = 'info@graduacions.cat';
 ---
@@ -13,7 +21,7 @@ const EMAIL = 'info@graduacions.cat';
           <span class="text-lg font-extrabold text-white">GRAD-CAT</span>
         </div>
         <p class="text-white/50 text-sm leading-relaxed max-w-xs mb-5">
-          Organizamos fiestas de graduación inolvidables en Barcelona. ESO, Bachillerato, Selectividad y universidad.
+          {t.description}
         </p>
         <div class="flex gap-3">
           <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:border-white/30 transition-colors">
@@ -27,42 +35,40 @@ const EMAIL = 'info@graduacions.cat';
 
       <!-- Services -->
       <div>
-        <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Servicios</h4>
+        <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">{t.servicesTitle}</h4>
         <ul class="space-y-2.5 text-white/40 text-sm">
-          <li><a href="#servicios" class="hover:text-white transition-colors">Salas Exclusivas</a></li>
-          <li><a href="#servicios" class="hover:text-white transition-colors">Cenas & Catering</a></li>
-          <li><a href="#servicios" class="hover:text-white transition-colors">DJ & Música</a></li>
-          <li><a href="#servicios" class="hover:text-white transition-colors">Fotografía & Aftermovie</a></li>
-          <li><a href="#servicios" class="hover:text-white transition-colors">Photocall</a></li>
+          {t.services.map((service) => (
+            <li><a href="#servicios" class="hover:text-white transition-colors">{service}</a></li>
+          ))}
         </ul>
       </div>
 
       <!-- Packs -->
       <div>
-        <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Packs</h4>
+        <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">{t.packsTitle}</h4>
         <ul class="space-y-2.5 text-white/40 text-sm">
-          <li><a href="#packs" class="hover:text-white transition-colors">Graduación ESO</a></li>
-          <li><a href="#packs" class="hover:text-white transition-colors">Graduación Bachillerato</a></li>
-          <li><a href="#packs" class="hover:text-white transition-colors">Graduación Selectividad</a></li>
-          <li><a href="#contacto" class="hover:text-white transition-colors">Pack Personalizado</a></li>
+          {t.packs.slice(0, 3).map((pack) => (
+            <li><a href="#packs" class="hover:text-white transition-colors">{pack}</a></li>
+          ))}
+          <li><a href="#contacto" class="hover:text-white transition-colors">{t.packs[3]}</a></li>
         </ul>
       </div>
 
       <!-- Contact -->
       <div>
-        <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Contacto</h4>
+        <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">{t.contactTitle}</h4>
         <ul class="space-y-2.5 text-white/40 text-sm">
           <li><a href={PHONE_HREF} class="hover:text-white transition-colors">605 508 397</a></li>
           <li><a href={`mailto:${EMAIL}`} class="hover:text-white transition-colors">{EMAIL}</a></li>
           <li>Barcelona, Catalunya</li>
-          <li class="text-white/30">Atención 24/7</li>
+          <li class="text-white/30">{t.attention}</li>
         </ul>
       </div>
     </div>
 
     <div class="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <p class="text-white/30 text-sm">&copy; 2025 Graduacions.cat. Todos los derechos reservados.</p>
-      <p class="text-white/20 text-xs">Graduaciones Barcelona &middot; Fiestas de graduación ESO, Bachillerato, Selectividad</p>
+      <p class="text-white/30 text-sm">{t.copyright}</p>
+      <p class="text-white/20 text-xs">{t.seoText}</p>
     </div>
   </div>
 </footer>

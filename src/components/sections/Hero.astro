@@ -1,4 +1,11 @@
 ---
+import type { Translations } from '../../i18n/translations';
+
+interface Props {
+  t: Translations['hero'];
+}
+
+const { t } = Astro.props;
 ---
 
 <section class="bg-white pt-28 pb-20 lg:pt-36 lg:pb-28">
@@ -7,25 +14,29 @@
       <!-- Left: Copy -->
       <div>
         <p class="text-brand font-semibold text-sm tracking-wide uppercase mb-4">
-          Graduaciones ESO, Bachillerato & Selectividad
+
         </p>
 
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-display text-navy leading-[1.05] mb-6">
-          Organizamos tu graduación. Tú solo disfruta.
+        <h1 class="text-4xl sm:text-4xl lg:text-4xl font-display text-navy leading-[1.05] mb-6">
+          {t.headline1}
+        </h1>
+
+        <h1 class="text-4xl sm:text-4xl lg:text-4xl text-navy mb-6 font-display">
+          {t.headline2}
         </h1>
 
         <p class="text-gray-500 text-lg leading-relaxed mb-8 max-w-lg">
-          Fiestas de graduación para grupos de la ESO, Bachillerato, Paasos de ecuador, Fin de carrera.
+          {t.subtitle}
         </p>
 
         <!-- Callback form -->
         <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 max-w-md">
-          <p class="text-navy font-bold text-base mb-4">Te llamamos gratis en 2 minutos</p>
+          <p class="text-navy font-bold text-base mb-4">{t.callbackTitle}</p>
           <form class="flex flex-col sm:flex-row gap-3" action="#contacto" method="get">
             <input
               type="tel"
               name="phone"
-              placeholder="Tu teléfono (ej: 612 345 678)"
+              placeholder={t.phonePlaceholder}
               class="flex-1 bg-white border border-gray-200 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
               required
             />
@@ -33,11 +44,11 @@
               type="submit"
               class="bg-brand text-white font-semibold text-sm px-6 py-3 rounded-lg hover:bg-brand-light transition-colors whitespace-nowrap"
             >
-              Contactarme
+              {t.contactBtn}
             </button>
           </form>
           <p class="text-gray-400 text-xs mt-3">
-            Tu graduación empieza aquí. Déjanos tus datos y te contactaremos en menos de 24h.
+            {t.callbackNote}
           </p>
         </div>
       </div>
@@ -62,8 +73,8 @@
               <div class="w-7 h-7 rounded-full bg-brand/30 border-2 border-white"></div>
             </div>
             <div>
-              <p class="text-navy font-bold text-sm">+50 graduaciones</p>
-              <p class="text-gray-400 text-xs">organizadas con éxito</p>
+              <p class="text-navy font-bold text-sm">{t.badgeCount}</p>
+              <p class="text-gray-400 text-xs">{t.badgeLabel}</p>
             </div>
           </div>
         </div>
