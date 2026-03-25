@@ -6,6 +6,8 @@ interface Props {
 }
 
 const { t } = Astro.props;
+
+const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
 ---
 
 <section id="contacto" class="bg-gray-50 py-24 px-6 border-t border-gray-100">
@@ -23,7 +25,7 @@ const { t } = Astro.props;
 
     <!-- Form -->
     <div class="bg-white border border-gray-200 rounded-2xl p-8 sm:p-10 shadow-sm">
-      <form action="#" method="POST" class="space-y-6">
+      <form id="contact-form" class="space-y-6" data-script-url={appsScriptUrl}>
         <!-- Phone -->
         <div>
           <label for="phone" class="block text-navy text-sm font-semibold mb-2">{t.phoneLabel}</label>
@@ -46,10 +48,20 @@ const { t } = Astro.props;
         <!-- Submit -->
         <button
           type="submit"
-          class="w-full bg-brand text-white font-semibold text-base py-4 rounded-lg hover:bg-brand-light transition-colors"
+          id="submit-btn"
+          class="w-full bg-brand text-white font-semibold text-base py-4 rounded-lg hover:bg-brand-light transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          {t.submitBtn}
+          <span id="btn-text">{t.submitBtn}</span>
+          <span id="btn-loading" class="hidden">Enviant...</span>
         </button>
+
+        <!-- Feedback -->
+        <div id="form-success" class="hidden text-center py-3 px-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm font-medium">
+          Missatge enviat correctament. Et contactarem aviat!
+        </div>
+        <div id="form-error" class="hidden text-center py-3 px-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm font-medium">
+          Hi ha hagut un error. Prova-ho de nou o escriu-nos directament.
+        </div>
 
         <p class="text-gray-400 text-xs text-center">
           {t.disclaimer}
@@ -58,3 +70,51 @@ const { t } = Astro.props;
     </div>
   </div>
 </section>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const scriptUrl = form.dataset.scriptUrl;
+      if (!scriptUrl) {
+        console.error('Apps Script URL no configurada');
+        return;
+      }
+
+      const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+      const btnText = document.getElementById('btn-text') as HTMLElement;
+      const btnLoading = document.getElementById('btn-loading') as HTMLElement;
+      const successMsg = document.getElementById('form-success') as HTMLElement;
+      const errorMsg = document.getElementById('form-error') as HTMLElement;
+
+      const phone = (document.getElementById('phone') as HTMLInputElement).value;
+      const message = (document.getElementById('message') as HTMLTextAreaElement).value;
+
+      submitBtn.disabled = true;
+      btnText.classList.add('hidden');
+      btnLoading.classList.remove('hidden');
+      successMsg.classList.add('hidden');
+      errorMsg.classList.add('hidden');
+
+      try {
+        await fetch(scriptUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone, message }),
+        });
+
+        form.reset();
+        successMsg.classList.remove('hidden');
+      } catch {
+        errorMsg.classList.remove('hidden');
+      } finally {
+        submitBtn.disabled = false;
+        btnText.classList.remove('hidden');
+        btnLoading.classList.add('hidden');
+      }
+    });
+  }
+</script>
