@@ -22,11 +22,11 @@ const { t } = Astro.props;
     </div>
 
     <!-- Cards -->
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-3xl mx-auto">
       {t.items.map((pack) => (
         <div
           class:list={[
-            'relative rounded-xl p-8 border transition-all',
+            'relative rounded-xl p-8 border flex flex-col transition-all',
             pack.popular
               ? 'border-brand shadow-lg shadow-brand/10 ring-1 ring-brand/20'
               : 'border-gray-200 hover:border-gray-300',
@@ -40,23 +40,17 @@ const { t } = Astro.props;
             </div>
           )}
 
-          <h3 class="text-2xl font-extrabold text-navy text-center mb-8 mt-2">{pack.name}</h3>
-
-          <ul class="space-y-4 mb-8">
-            {pack.features.map((feature) => (
-              <li class="flex items-center gap-3 text-gray-600 text-sm border-b border-gray-100 pb-4">
-                <svg class="w-5 h-5 text-brand shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                </svg>
-                {feature}
-              </li>
-            ))}
-          </ul>
+          <div class="text-center mb-6 mt-2">
+            <h3 class="text-2xl font-extrabold text-navy mb-3">{pack.name}</h3>
+            <span class="inline-block bg-gray-100 text-gray-500 text-sm font-medium px-4 py-1.5 rounded-full">
+              {pack.age}
+            </span>
+          </div>
 
           <a
             href="#contacto"
             class:list={[
-              'block text-center font-semibold text-sm py-3.5 rounded-lg transition-all',
+              'mt-auto block text-center font-semibold text-sm py-3.5 rounded-lg transition-all',
               pack.popular
                 ? 'bg-brand text-white hover:bg-brand-light'
                 : 'border border-gray-200 text-navy hover:border-brand hover:text-brand',

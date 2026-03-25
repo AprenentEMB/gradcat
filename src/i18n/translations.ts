@@ -18,26 +18,27 @@ export const translations = {
       mobileMenuLabel: 'Obrir menú',
     },
     hero: {
+      preheadline: 'GRADUACIONS, ESO, BATXILLERAT I UNIVERSITAT',
       headline1: 'Organitzem la teva graduació.',
-      headline2: 'Tu, gaudeix.',
+      headline2: 'Tu només gaudeix.',
       subtitle:
-        "Festes de graduació per a grups de l'ESO, Batxillerat, Pas de l'Equador, Fi de carrera.",
-      callbackTitle: 'Et truquem gratis en 2 minuts',
+        "Si vols organitzar la teva festa de graduació i no saps ni per on començar, nosaltres t’ajudem.",
+      callbackTitle: 'La teva graduació comença aquí',
       phonePlaceholder: 'El teu telèfon (ex: 612 345 678)',
       contactBtn: 'Contactar-me',
       callbackNote:
-        "La teva graduació comença aquí. Deixa'ns les teves dades. Et contactarem en menys de 24h.",
+        "Deixa'ns el teu número i ens posarem en contacte amb tu en menys de 24 hores.",
       badgeCount: '+50 graduacions',
       badgeLabel: 'organitzades amb èxit',
     },
     stats: [
       { value: '+50', label: 'Graduacions organitzades' },
-      { value: '+400', label: 'Graduats feliços' },
+      { value: '+5000', label: 'Graduats feliços' },
       { value: '100%', label: 'Satisfacció garantida' },
     ],
     universities: {
       eyebrow: 'Confien en nosaltres',
-      title: 'Celebrem amb alumnes de les millors universitats',
+      title: 'Hem organitzat les graduacions dels centres d’estudis més reconegudes.',
       subtitle: "Graduats d'aquests centres ja han viscut la seva festa amb Graduacions.cat",
     },
     services: {
@@ -46,18 +47,18 @@ export const translations = {
       subtitle: "Ens encarreguem de cada detall perquè només hagis de passar-ho bé.",
       items: [
         {
-          title: 'Sales Exclusives',
-          description:
-            'Les millors sales de Barcelona adaptades al vostre grup, pressupost i estil de festa.',
+          title: 'Sopars & Càtering',
+          description: 'Menús personalitzats per a tots els gustos amb opció de sopar i fer la festa al mateix lloc.',
         },
         {
-          title: 'Sopars & Càtering',
-          description: 'Menús personalitzats per a tots els gustos. Sopar i festa al mateix lloc.',
+          title: 'Sales Exclusives',
+          description:
+            'Les millors discoteques de Barcelona adaptades al vostre grup, pressupost i estil de festa.',
         },
         {
           title: 'DJ & Música',
           description:
-            "La música la trieu vosaltres. Reggaeton, hits, electrònica... 100% al vostre rotllo.",
+            "Tenim DJ’s de tots els estils de música. Reggaeton, top hits, electrònica... 100% al vostre rotllo.",
         },
         {
           title: 'Fotografia Professional',
@@ -75,14 +76,16 @@ export const translations = {
       ],
     },
     cta: {
-      title: 'Preparats per a la millor nit de la vostra vida?',
+      title: 'Preparat per la millor nit de la teva vida!',
       subtitle:
         "Omple el formulari i et contactem en menys de 24h amb un pressupost personalitzat.",
-      btn: 'Demanar pressupost gratis',
+      btn: 'Contactar-me',
+      phonePlaceholder: 'El teu telèfon (ex: 612 345 678)',
+      callbackNote: "Deixa'ns el teu número i ens posarem en contacte amb tu en menys de 24 hores.",
     },
     gallery: {
-      eyebrow: 'Els nostres esdeveniments',
-      title: 'Graduacions reals',
+      eyebrow: 'LES NOSTRES GRADUACIONS',
+      title: 'Organitzem graduacions especials',
       subtitle: 'Així ho passen els nostres graduats',
       images: [
         { alt: 'Festa de graduació amb confeti i llums' },
@@ -93,7 +96,7 @@ export const translations = {
       ],
     },
     packs: {
-      eyebrow: 'Els nostres packs',
+      eyebrow: 'TIPUS DE GRADUACIONS',
       title: 'Tria la teva experiència',
       subtitle: 'Packs adaptats a cada tipus de graduació',
       popularLabel: 'Més popular',
@@ -102,38 +105,17 @@ export const translations = {
         {
           name: 'ESO',
           popular: false,
-          features: [
-            'Sala privada 4h',
-            'DJ & equip de so',
-            'Il·luminació professional',
-            'Photocall bàsic',
-            "Coordinador d'event",
-          ],
+          age: '15 anys o més',
         },
         {
           name: 'Batxillerat',
           popular: true,
-          features: [
-            'Sala premium 6h',
-            'DJ professional',
-            'Sopar inclòs',
-            'Fotògraf + 200 fotos',
-            'Photocall personalitzat',
-            'Aftermovie 2min',
-          ],
+          age: '17 anys o més',
         },
         {
-          name: 'Selectivitat',
+          name: 'Universitat',
           popular: false,
-          features: [
-            'Sala VIP tota la nit',
-            'DJ + Artista convidat',
-            'Sopar gourmet',
-            '2 Fotògrafs',
-            'Aftermovie 5min',
-            'Decoració temàtica',
-            'Open bar 2h',
-          ],
+          age: '21 anys o més',
         },
       ],
     },
@@ -145,23 +127,23 @@ export const translations = {
         {
           text: '"La millor nit de les nostres vides. El DJ va posar tots els temassos que vam demanar i les fotos van quedar per emmarcar. Vam plorar veient l\'aftermovie."',
           name: 'Marina García',
-          school: 'IES Montserrat',
+          school: 'UB',
           time: 'Fa 2 setmanes',
-          avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100',
+          avatar: '/testimonials/test1.webp',
         },
         {
           text: '"Pensàvem que organitzar una graduació per a 120 persones seria impossible. Ells se\'n van encarregar de tot. Només vam haver d\'anar i gaudir."',
           name: 'Marc Puig',
-          school: 'Col·legi Sant Ignasi',
+          school: 'UPF',
           time: 'Fa 1 mes',
-          avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100',
+          avatar: '/testimonials/test2.webp',
         },
         {
           text: '"El photocall personalitzat va ser un èxit total a xarxes. Tothom preguntava on ho vam fer. La decoració era increïble."',
           name: 'Laura Vidal',
-          school: 'IES Pau Claris',
+          school: 'ESADE',
           time: 'Fa 3 setmanes',
-          avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100',
+          avatar: '/testimonials/test3.webp',
         },
       ],
     },
@@ -169,67 +151,47 @@ export const translations = {
       title: 'Preguntes freqüents',
       items: [
         {
-          question: 'Quant costa una graduació?',
+          question: 'Quant costa organitzar una graduació?',
           answer:
-            "Depèn del nombre de persones i serveis. Des de 20€/persona per a l'ESO fins a esdeveniments premium. <strong>Demana pressupost sense compromís.</strong>",
+            "Des de <strong>20 € per persona</strong> per a l'ESO depenent del nombre de persones i serveis. Pots demanar-nos pressupost sense compromís.",
         },
         {
-          question: 'Amb quanta antelació cal reservar?',
+          question: 'De quantes persones mínim ha de ser la graduació?',
+          answer:
+            'Treballem amb grups <strong>des de 40 fins a més de 500 persones</strong>. Com més, millor preu.',
+        },
+        {
+          question: 'Amb quanta antelació cal reservar la graduació?',
           answer:
             'Recomanem <strong>mínim 2-3 mesos</strong>, especialment per al maig-juny que s\'omple ràpid.',
         },
         {
-          question: 'Quantes persones mínim?',
-          answer:
-            'Treballem amb grups <strong>des de 50 fins a 500+ persones</strong>. Com més, millor preu.',
-        },
-        {
-          question: 'On se celebren les festes?',
+          question: 'On se celebren les festes de graduació?',
           answer:
             'Tenim acords amb les <strong>millors sales i espais de Barcelona</strong>. Seleccionem l\'espai ideal segons el vostre grup i pressupost.',
         },
         {
-          question: 'Podem triar la música?',
+          question: 'També organitzeu passo d\'equador?',
           answer:
-            '<strong>Per descomptat.</strong> Vosaltres decidiu l\'estil i els temassos. El DJ s\'adapta 100% als vostres gustos.',
-        },
-        {
-          question: "Quan rebem les fotos i l'aftermovie?",
-          answer:
-            'Les fotos en <strong>48-72h</strong> i l\'aftermovie editat en <strong>màxim 2 setmanes</strong> després de l\'event.',
+            'I tant! És un format també que ens demanen molt des de les universitats.',
         },
       ],
     },
     contact: {
       eyebrow: 'Contacte',
-      title: "Explica'ns la teva graduació",
-      subtitle: "Omple el formulari i t'enviem un pressupost personalitzat en menys de 24h.",
-      nameLabel: 'Nom',
-      namePlaceholder: 'El teu nom',
-      emailLabel: 'Email',
+      title: 'Tens dubtes sobre l\'organització de la teva graduació?',
+      subtitle: 'Omple el formulari i et respondrem les teves preguntes per whatsapp en menys de 24h.',
       phoneLabel: 'Telèfon',
-      schoolLabel: 'Centre educatiu',
-      schoolPlaceholder: "Nom de l'institut",
-      typeLabel: 'Tipus de graduació',
-      typePlaceholder: 'Selecciona',
-      typeOptions: [
-        { value: 'eso', label: 'ESO' },
-        { value: 'batxillerat', label: 'Batxillerat' },
-        { value: 'selectivitat', label: 'Selectivitat' },
-        { value: 'universitat', label: 'Universitat' },
-        { value: 'altre', label: 'Altre' },
-      ],
-      peopleLabel: 'Nombre de persones',
-      messageLabel: 'Missatge',
-      messagePlaceholder: "Explica'ns més sobre el que busqueu...",
+      messageLabel: 'Dubtes',
+      messagePlaceholder: 'Deixa per aquí tots els dubtes que tinguis...',
       submitBtn: "Enviar sol·licitud",
       disclaimer: 'Et responem en menys de 24h. Sense compromís.',
     },
     footer: {
       description:
-        'Organitzem festes de graduació inoblidables a Barcelona. ESO, Batxillerat, Selectivitat i universitat.',
+        "Organització de festes de graduació a Barcelona d'ESO, Batxillerat i Universitat.",
       servicesTitle: 'Serveis',
-      packsTitle: 'Packs',
+      packsTitle: 'Tipus',
       contactTitle: 'Contacte',
       attention: 'Atenció 24/7',
       copyright: '© 2025 Graduacions.cat. Tots els drets reservats.',
@@ -242,9 +204,9 @@ export const translations = {
         'Photocall',
       ],
       packs: [
-        'Graduació ESO',
-        'Graduació Batxillerat',
-        'Graduació Selectivitat',
+        'Graduacions ESO',
+        'Graduacions Batxillerat',
+        'Graduacions Universitàries',
         'Pack Personalitzat',
       ],
     },
@@ -270,26 +232,27 @@ export const translations = {
       mobileMenuLabel: 'Abrir menú',
     },
     hero: {
+      preheadline: 'GRADUACIONES, ESO, BACHILLERATO Y UNIVERSIDAD',
       headline1: 'Organizamos tu graduación.',
       headline2: 'Tú solo disfruta.',
       subtitle:
-        'Fiestas de graduación para grupos de la ESO, Bachillerato, Pasos de ecuador, Fin de carrera.',
-      callbackTitle: 'Te llamamos gratis en 2 minutos',
+        'Si quieres organizar tu fiesta de graduación y no sabes por dónde empezar, nosotros te ayudamos.',
+      callbackTitle: 'Tu graduación empieza aquí',
       phonePlaceholder: 'Tu teléfono (ej: 612 345 678)',
       contactBtn: 'Contactarme',
       callbackNote:
-        'Tu graduación empieza aquí. Déjanos tus datos. Te contactaremos en menos de 24h.',
+        'Déjanos tu número y nos pondremos en contacto contigo en menos de 24 horas.',
       badgeCount: '+50 graduaciones',
       badgeLabel: 'organizadas con éxito',
     },
     stats: [
       { value: '+50', label: 'Graduaciones organizadas' },
-      { value: '+400', label: 'Graduados felices' },
+      { value: '+5000', label: 'Graduados felices' },
       { value: '100%', label: 'Satisfacción garantizada' },
     ],
     universities: {
       eyebrow: 'Confían en nosotros',
-      title: 'Celebramos con alumnos de las mejores universidades',
+      title: 'Hemos organizado las graduaciones de los centros de estudios más reconocidas.',
       subtitle: 'Graduados de estos centros ya han vivido su fiesta con Graduacions.cat',
     },
     services: {
@@ -298,18 +261,18 @@ export const translations = {
       subtitle: 'Nos encargamos de cada detalle para que solo tengas que pasarlo bien.',
       items: [
         {
-          title: 'Salas Exclusivas',
-          description:
-            'Las mejores salas de Barcelona adaptadas a vuestro grupo, presupuesto y estilo de fiesta.',
+          title: 'Cenas & Catering',
+          description: 'Menús personalizados para todos los gustos con opción de cenar y hacer la fiesta en el mismo lugar.',
         },
         {
-          title: 'Cenas & Catering',
-          description: 'Menús personalizados para todos los gustos. Cena y fiesta en el mismo sitio.',
+          title: 'Salas Exclusivas',
+          description:
+            'Las mejores discotecas de Barcelona adaptadas a vuestro grupo, presupuesto y estilo de fiesta.',
         },
         {
           title: 'DJ & Música',
           description:
-            'La música la elegís vosotros. Reggaeton, hits, electrónica... 100% a vuestro rollo.',
+            'Tenemos DJ’s de todos los estilos de música. Reggaeton, top hits, electrónica... 100% a vuestro rollo.',
         },
         {
           title: 'Fotografía Profesional',
@@ -327,14 +290,16 @@ export const translations = {
       ],
     },
     cta: {
-      title: '¿Preparados para la mejor noche de vuestra vida?',
+      title: '¡Preparado para la mejor noche de tu vida!',
       subtitle:
         'Rellena el formulario y te contactamos en menos de 24h con un presupuesto personalizado.',
-      btn: 'Pedir presupuesto gratis',
+      btn: 'Contactarme',
+      phonePlaceholder: 'Tu teléfono (ej: 612 345 678)',
+      callbackNote: 'Déjanos tu número y nos pondremos en contacto contigo en menos de 24 horas.',
     },
     gallery: {
-      eyebrow: 'Nuestros eventos',
-      title: 'Graduaciones reales',
+      eyebrow: 'NUESTRAS GRADUACIONES',
+      title: 'Organizamos graduaciones especiales',
       subtitle: 'Así lo pasan nuestros graduados',
       images: [
         { alt: 'Fiesta de graduación con confeti y luces' },
@@ -354,38 +319,17 @@ export const translations = {
         {
           name: 'ESO',
           popular: false,
-          features: [
-            'Sala privada 4h',
-            'DJ & equipo de sonido',
-            'Iluminación profesional',
-            'Photocall básico',
-            'Coordinador de evento',
-          ],
+          age: '15 años o más',
         },
         {
           name: 'Bachillerato',
           popular: true,
-          features: [
-            'Sala premium 6h',
-            'DJ profesional',
-            'Cena incluida',
-            'Fotógrafo + 200 fotos',
-            'Photocall personalizado',
-            'Aftermovie 2min',
-          ],
+          age: '17 años o más',
         },
         {
-          name: 'Selectividad',
+          name: 'Universidad',
           popular: false,
-          features: [
-            'Sala VIP toda la noche',
-            'DJ + Artista invitado',
-            'Cena gourmet',
-            '2 Fotógrafos',
-            'Aftermovie 5min',
-            'Decoración temática',
-            'Open bar 2h',
-          ],
+          age: '21 años o más',
         },
       ],
     },
@@ -421,67 +365,47 @@ export const translations = {
       title: 'Preguntas frecuentes',
       items: [
         {
-          question: '¿Cuánto cuesta una graduación?',
+          question: '¿Cuánto cuesta organizar una graduación?',
           answer:
-            'Depende del número de personas y servicios. Desde 20€/persona para ESO hasta eventos premium. <strong>Pide presupuesto sin compromiso.</strong>',
+            'Desde <strong>20 € por persona</strong> para ESO dependiendo del número de personas y servicios. Puedes pedirnos presupuesto sin compromiso.',
         },
         {
-          question: '¿Con cuánta antelación hay que reservar?',
+          question: '¿De cuántas personas mínimo tiene que ser la graduación?',
+          answer:
+            'Trabajamos con grupos <strong>desde 40 hasta más de 500 personas</strong>. Cuantos más, mejor precio.',
+        },
+        {
+          question: '¿Con cuánta antelación hay que reservar la graduación?',
           answer:
             'Recomendamos <strong>mínimo 2-3 meses</strong>, especialmente para mayo-junio que se llenan rápido.',
         },
         {
-          question: '¿Cuántas personas mínimo?',
-          answer:
-            'Trabajamos con grupos <strong>desde 50 hasta 500+ personas</strong>. Cuantos más, mejor precio.',
-        },
-        {
-          question: '¿Dónde se celebran las fiestas?',
+          question: '¿Dónde se celebran las fiestas de graduación?',
           answer:
             'Tenemos acuerdos con las <strong>mejores salas y espacios de Barcelona</strong>. Seleccionamos el espacio ideal según vuestro grupo y presupuesto.',
         },
         {
-          question: '¿Podemos elegir la música?',
+          question: '¿También organizáis paso del ecuador?',
           answer:
-            '<strong>Por supuesto.</strong> Vosotros decidís el estilo y los temazos. El DJ se adapta 100% a vuestros gustos.',
-        },
-        {
-          question: '¿Cuándo recibimos las fotos y el aftermovie?',
-          answer:
-            'Las fotos en <strong>48-72h</strong> y el aftermovie editado en <strong>máximo 2 semanas</strong> después del evento.',
+            '¡Por supuesto! Es un formato que también nos piden mucho desde las universidades.',
         },
       ],
     },
     contact: {
       eyebrow: 'Contacto',
-      title: 'Cuéntanos tu graduación',
-      subtitle: 'Rellena el formulario y te enviamos un presupuesto personalizado en menos de 24h.',
-      nameLabel: 'Nombre',
-      namePlaceholder: 'Tu nombre',
-      emailLabel: 'Email',
+      title: '¿Tienes dudas sobre la organización de tu graduación?',
+      subtitle: 'Rellena el formulario y te responderemos por whatsapp en menos de 24h.',
       phoneLabel: 'Teléfono',
-      schoolLabel: 'Centro educativo',
-      schoolPlaceholder: 'Nombre del instituto',
-      typeLabel: 'Tipo de graduación',
-      typePlaceholder: 'Selecciona',
-      typeOptions: [
-        { value: 'eso', label: 'ESO' },
-        { value: 'bachillerato', label: 'Bachillerato' },
-        { value: 'selectividad', label: 'Selectividad' },
-        { value: 'universidad', label: 'Universidad' },
-        { value: 'otro', label: 'Otro' },
-      ],
-      peopleLabel: 'Número de personas',
-      messageLabel: 'Mensaje',
-      messagePlaceholder: 'Cuéntanos más sobre lo que buscáis...',
+      messageLabel: 'Dudas',
+      messagePlaceholder: 'Deja aquí todas las dudas que tengas...',
       submitBtn: 'Enviar solicitud',
       disclaimer: 'Te respondemos en menos de 24h. Sin compromiso.',
     },
     footer: {
       description:
-        'Organizamos fiestas de graduación inolvidables en Barcelona. ESO, Bachillerato, Selectividad y universidad.',
+        'Organización de fiestas de graduación en Barcelona de ESO, Bachillerato y Universidad.',
       servicesTitle: 'Servicios',
-      packsTitle: 'Packs',
+      packsTitle: 'Tipos',
       contactTitle: 'Contacto',
       attention: 'Atención 24/7',
       copyright: '© 2025 Graduacions.cat. Todos los derechos reservados.',
@@ -494,9 +418,9 @@ export const translations = {
         'Photocall',
       ],
       packs: [
-        'Graduación ESO',
-        'Graduación Bachillerato',
-        'Graduación Selectividad',
+        'Graduaciones ESO',
+        'Graduaciones Bachillerato',
+        'Graduaciones Universitarias',
         'Pack Personalizado',
       ],
     },
