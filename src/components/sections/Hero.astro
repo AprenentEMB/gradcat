@@ -31,16 +31,12 @@ const { t } = Astro.props;
 
       <!-- Esquerra: Vídeo (3/5) -->
       <div class="lg:col-span-3 relative">
-        <div class="aspect-video rounded-2xl overflow-hidden bg-gray-900 shadow-2xl">
-          <video
-            autoplay
-            muted
-            loop
-            playsinline
+        <div class="aspect-video rounded-2xl overflow-hidden shadow-2xl">
+          <img
+            src="/fallback.webp"
+            alt="Vídeo de presentació"
             class="w-full h-full object-cover"
-          >
-            <source src="/hero.mov" type="video/mp4" />
-          </video>
+          />
         </div>
         <!-- Floating badge -->
         <div class="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg border border-gray-100 px-5 py-3">
