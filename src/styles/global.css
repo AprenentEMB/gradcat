@@ -1,5 +1,32 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Corra Montserra';
+  src: url('/fonts/Corra Montserra/VARIABLE/Cora Montserra Variable.woff2') format('woff2'),
+       url('/fonts/Corra Montserra/VARIABLE/Cora Montserra Variable.woff') format('woff');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Corra Montserra';
+  src: url('/fonts/Corra Montserra/WOFF2/Corra Montserra Bold.woff2') format('woff2'),
+       url('/fonts/Corra Montserra/WOFF/Corra Montserra Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Corra Montserra';
+  src: url('/fonts/Corra Montserra/WOFF2/Corra Montserra Semibold.woff2') format('woff2'),
+       url('/fonts/Corra Montserra/WOFF/Corra Montserra Semibold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --color-brand: #173696;
   --color-brand-light: #1e45b8;
