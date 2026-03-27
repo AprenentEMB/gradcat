@@ -10,6 +10,7 @@ const { t, lang } = Astro.props;
 
 const PHONE = '658 020 084';
 const PHONE_HREF = 'tel:+34658020084';
+const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
 
 const currentLabel = lang === 'ca' ? 'CA' : 'ES';
 ---
@@ -33,7 +34,6 @@ const currentLabel = lang === 'ca' ? 'CA' : 'ES';
     <nav aria-label="Navegació principal" class="hidden lg:flex items-center gap-8">
       <a href="#servicios" class="text-white hover:text-gray-300 text-sm font-medium transition-colors">{t.services}</a>
       <a href="#packs" class="text-white hover:text-gray-300 text-sm font-medium transition-colors">{t.packs}</a>
-      <a href="#galeria" class="text-white hover:text-gray-300 text-sm font-medium transition-colors">{t.gallery}</a>
       <a href="#contacto" class="text-white hover:text-gray-300 text-sm font-medium transition-colors">{t.contact}</a>
     </nav>
 
@@ -106,12 +106,50 @@ const currentLabel = lang === 'ca' ? 'CA' : 'ES';
       </div>
 
       <!-- CTA -->
-      <a
-        href="#contacto"
-        class="bg-white text-brand font-semibold text-sm px-5 py-2.5 rounded-lg hover:bg-brand-light transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
-      >
-        {t.cta}
-      </a>
+      <div class="relative" id="header-cta-wrapper">
+        <button
+          id="header-cta-btn"
+          type="button"
+          class="bg-white text-brand font-semibold text-sm px-5 py-2.5 rounded-lg hover:bg-gray-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+        >
+          {t.cta}
+        </button>
+
+        <!-- CTA dropdown form -->
+        <div
+          id="header-cta-dropdown"
+          class="absolute right-0 top-full mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-100 p-4 hidden z-50"
+        >
+          <form
+            id="header-cta-form"
+            class="flex flex-col gap-2"
+            data-script-url={appsScriptUrl}
+            data-msg-success={t.formSuccess}
+            data-msg-error={t.formError}
+            data-msg-sending={t.formSending}
+            data-msg-sent={t.formSent}
+          >
+            <input
+              type="tel"
+              id="header-cta-phone"
+              name="phone"
+              maxlength="9"
+              placeholder={t.phonePlaceholder}
+              class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+              required
+            />
+            <button
+              type="submit"
+              id="header-cta-submit"
+              class="w-full bg-brand text-white font-semibold text-sm px-4 py-2.5 rounded-lg hover:bg-brand-light transition-colors disabled:opacity-80 disabled:cursor-not-allowed"
+            >
+              <span id="header-cta-btn-text">{t.cta}</span>
+            </button>
+          </form>
+          <div id="header-cta-success" class="hidden mt-2 text-green-600 text-xs font-medium"></div>
+          <div id="header-cta-error" class="hidden mt-2 text-red-600 text-xs font-medium"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Mobile menu button -->
@@ -209,6 +247,81 @@ const currentLabel = lang === 'ca' ? 'CA' : 'ES';
       langDropdown.classList.add('hidden');
       langChevron.style.transform = '';
       langBtn.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  // Header CTA dropdown toggle
+  const ctaBtn = document.getElementById('header-cta-btn');
+  const ctaDropdown = document.getElementById('header-cta-dropdown');
+
+  if (ctaBtn && ctaDropdown) {
+    ctaBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      ctaDropdown.classList.toggle('hidden');
+    });
+
+    ctaDropdown.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    document.addEventListener('click', () => {
+      ctaDropdown.classList.add('hidden');
+    });
+  }
+
+  // Header CTA form -> Sheets
+  const headerCtaForm = document.getElementById('header-cta-form') as HTMLFormElement | null;
+  if (headerCtaForm) {
+    headerCtaForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const scriptUrl = headerCtaForm.dataset.scriptUrl;
+      if (!scriptUrl) return;
+
+      const submitBtn = document.getElementById('header-cta-submit') as HTMLButtonElement;
+      const btnText = document.getElementById('header-cta-btn-text') as HTMLElement;
+      const phoneInput = document.getElementById('header-cta-phone') as HTMLInputElement;
+      const successMsg = document.getElementById('header-cta-success') as HTMLElement;
+      const errorMsg = document.getElementById('header-cta-error') as HTMLElement;
+
+      const phone = phoneInput.value;
+      const lang = document.documentElement.lang || 'ca';
+      const originalBtnText = btnText.innerText;
+
+      const msgSending = headerCtaForm.dataset.msgSending || 'Enviant...';
+      const msgSent = headerCtaForm.dataset.msgSent || 'Enviat!';
+      const msgSuccess = headerCtaForm.dataset.msgSuccess || '';
+      const msgError = headerCtaForm.dataset.msgError || '';
+
+      submitBtn.disabled = true;
+      btnText.innerText = msgSending;
+      successMsg.classList.add('hidden');
+      errorMsg.classList.add('hidden');
+
+      try {
+        await fetch(scriptUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone, message: '', lang }),
+        });
+
+        headerCtaForm.reset();
+        successMsg.textContent = msgSuccess;
+        successMsg.classList.remove('hidden');
+        btnText.innerText = msgSent;
+      } catch {
+        errorMsg.textContent = msgError;
+        errorMsg.classList.remove('hidden');
+        btnText.innerText = originalBtnText;
+      } finally {
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          btnText.innerText = originalBtnText;
+          successMsg.classList.add('hidden');
+          ctaDropdown?.classList.add('hidden');
+        }, 4000);
+      }
     });
   }
 </script>

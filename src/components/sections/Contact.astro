@@ -25,7 +25,7 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
 
     <!-- Form -->
     <div class="bg-white border border-gray-200 rounded-2xl p-8 sm:p-10 shadow-sm">
-      <form id="contact-form" class="space-y-6" data-script-url={appsScriptUrl}>
+      <form id="contact-form" class="space-y-6" data-script-url={appsScriptUrl} data-msg-success={t.formSuccess} data-msg-error={t.formError} data-msg-sending={t.formSending}>
         <!-- Phone -->
         <div>
           <label for="phone" class="block text-navy text-sm font-semibold mb-2">{t.phoneLabel}</label>
@@ -52,16 +52,12 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
           class="w-full bg-brand text-white font-semibold text-base py-4 rounded-lg hover:bg-brand-light transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
         >
           <span id="btn-text">{t.submitBtn}</span>
-          <span id="btn-loading" class="hidden">Enviant...</span>
+          <span id="btn-loading" class="hidden"></span>
         </button>
 
         <!-- Feedback -->
-        <div id="form-success" class="hidden text-center py-3 px-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm font-medium">
-          Missatge enviat correctament. Et contactarem aviat!
-        </div>
-        <div id="form-error" class="hidden text-center py-3 px-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm font-medium">
-          Hi ha hagut un error. Prova-ho de nou o escriu-nos directament.
-        </div>
+        <div id="form-success" class="hidden text-center py-3 px-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm font-medium"></div>
+        <div id="form-error" class="hidden text-center py-3 px-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm font-medium"></div>
 
         <p class="text-gray-400 text-xs text-center">
           {t.disclaimer}
@@ -91,9 +87,18 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
 
       const phone = (document.getElementById('phone') as HTMLInputElement).value;
       const message = (document.getElementById('message') as HTMLTextAreaElement).value;
+      
+      // Llegim l'idioma actual (Astro normalment el posa al html lang="")
+      // Si a la teva web el guardeu d'una altra manera, ho pots canviar aquí.
+      const lang = document.documentElement.lang || 'ca'; 
+
+      const msgSending = form.dataset.msgSending || 'Enviant...';
+      const msgSuccess = form.dataset.msgSuccess || '';
+      const msgError = form.dataset.msgError || '';
 
       submitBtn.disabled = true;
       btnText.classList.add('hidden');
+      btnLoading.textContent = msgSending;
       btnLoading.classList.remove('hidden');
       successMsg.classList.add('hidden');
       errorMsg.classList.add('hidden');
@@ -103,12 +108,14 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone, message }),
+          body: JSON.stringify({ phone, message, lang }),
         });
 
         form.reset();
+        successMsg.textContent = msgSuccess;
         successMsg.classList.remove('hidden');
       } catch {
+        errorMsg.textContent = msgError;
         errorMsg.classList.remove('hidden');
       } finally {
         submitBtn.disabled = false;

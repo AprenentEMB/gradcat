@@ -16,6 +16,11 @@ export const translations = {
       contact: 'Contacte',
       cta: 'Sol·licitar informació',
       mobileMenuLabel: 'Obrir menú',
+      phonePlaceholder: 'El teu telèfon (ex: 612 345 678)',
+      formSuccess: "Sol·licitud enviada! Et contactarem ben aviat.",
+      formError: "Hi ha hagut un error. Si us plau, torna-ho a provar.",
+      formSending: "Enviant...",
+      formSent: "Enviat!",
     },
     hero: {
       preheadline: 'GRADUACIONS, ESO, BATXILLERAT I UNIVERSITAT',
@@ -30,6 +35,10 @@ export const translations = {
         "Deixa'ns el teu número i ens posarem en contacte amb tu en menys de 24 hores.",
       badgeCount: '+50 graduacions',
       badgeLabel: 'organitzades amb èxit',
+      formSuccess: "Sol·licitud enviada! Et contactarem ben aviat.",
+      formError: "Hi ha hagut un error. Si us plau, torna-ho a provar.",
+      formSending: "Enviant...",
+      formSent: "Enviat!",
     },
     stats: [
       { value: '+50', label: 'Graduacions organitzades' },
@@ -82,6 +91,10 @@ export const translations = {
       btn: 'Contactar-me',
       phonePlaceholder: 'El teu telèfon (ex: 612 345 678)',
       callbackNote: "Deixa'ns el teu número i ens posarem en contacte amb tu en menys de 24 hores.",
+      formSuccess: "Sol·licitud enviada! Et contactarem ben aviat.",
+      formError: "Hi ha hagut un error. Si us plau, torna-ho a provar.",
+      formSending: "Enviant...",
+      formSent: "Enviat!",
     },
     gallery: {
       eyebrow: 'LES NOSTRES GRADUACIONS',
@@ -186,6 +199,9 @@ export const translations = {
       messagePlaceholder: 'Deixa per aquí tots els dubtes que tinguis...',
       submitBtn: "Enviar sol·licitud",
       disclaimer: 'Et responem en menys de 24h. Sense compromís.',
+      formSuccess: "Missatge enviat correctament. Et contactarem aviat!",
+      formError: "Hi ha hagut un error. Prova-ho de nou o escriu-nos directament.",
+      formSending: "Enviant...",
     },
     footer: {
       description:
@@ -230,6 +246,11 @@ export const translations = {
       contact: 'Contacto',
       cta: 'Solicitar información',
       mobileMenuLabel: 'Abrir menú',
+      phonePlaceholder: 'Tu teléfono (ej: 612 345 678)',
+      formSuccess: "¡Solicitud enviada! Te contactaremos muy pronto.",
+      formError: "Ha habido un error. Por favor, inténtalo de nuevo.",
+      formSending: "Enviando...",
+      formSent: "¡Enviado!",
     },
     hero: {
       preheadline: 'GRADUACIONES, ESO, BACHILLERATO Y UNIVERSIDAD',
@@ -244,6 +265,10 @@ export const translations = {
         'Déjanos tu número y nos pondremos en contacto contigo en menos de 24 horas.',
       badgeCount: '+50 graduaciones',
       badgeLabel: 'organizadas con éxito',
+      formSuccess: "¡Solicitud enviada! Te contactaremos muy pronto.",
+      formError: "Ha habido un error. Por favor, inténtalo de nuevo.",
+      formSending: "Enviando...",
+      formSent: "¡Enviado!",
     },
     stats: [
       { value: '+50', label: 'Graduaciones organizadas' },
@@ -296,6 +321,10 @@ export const translations = {
       btn: 'Contactarme',
       phonePlaceholder: 'Tu teléfono (ej: 612 345 678)',
       callbackNote: 'Déjanos tu número y nos pondremos en contacto contigo en menos de 24 horas.',
+      formSuccess: "¡Solicitud enviada! Te contactaremos muy pronto.",
+      formError: "Ha habido un error. Por favor, inténtalo de nuevo.",
+      formSending: "Enviando...",
+      formSent: "¡Enviado!",
     },
     gallery: {
       eyebrow: 'NUESTRAS GRADUACIONES',
@@ -400,6 +429,9 @@ export const translations = {
       messagePlaceholder: 'Deja aquí todas las dudas que tengas...',
       submitBtn: 'Enviar solicitud',
       disclaimer: 'Te respondemos en menos de 24h. Sin compromiso.',
+      formSuccess: "Mensaje enviado correctamente. ¡Te contactaremos pronto!",
+      formError: "Ha habido un error. Inténtalo de nuevo o escríbenos directamente.",
+      formSending: "Enviando...",
     },
     footer: {
       description:

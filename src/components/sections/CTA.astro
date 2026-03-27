@@ -6,6 +6,9 @@ interface Props {
 }
 
 const { t } = Astro.props;
+
+// Afegim la variable d'entorn per a l'Apps Script
+const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
 ---
 
 <section class="bg-brand py-24 px-6">
@@ -16,9 +19,11 @@ const { t } = Astro.props;
     <p class="text-white/70 text-lg max-w-xl mx-auto mb-10">
       {t.subtitle}
     </p>
-    <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" action="#contacto" method="get">
+    
+    <form id="cta-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" data-script-url={appsScriptUrl} data-msg-success={t.formSuccess} data-msg-error={t.formError} data-msg-sending={t.formSending} data-msg-sent={t.formSent}>
       <input
         type="tel"
+        id="cta-phone"
         name="phone"
         maxlength="9"
         placeholder={t.phonePlaceholder}
@@ -27,11 +32,77 @@ const { t } = Astro.props;
       />
       <button
         type="submit"
-        class="bg-white text-brand font-bold text-sm px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors whitespace-nowrap"
+        id="cta-submit-btn"
+        class="bg-white text-brand font-bold text-sm px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors whitespace-nowrap disabled:opacity-80 disabled:cursor-not-allowed disabled:hover:bg-white"
       >
-        {t.btn}
+        <span id="cta-btn-text">{t.btn}</span>
       </button>
     </form>
+    
+    <div id="cta-success" class="hidden mt-4 text-green-300 text-sm font-medium"></div>
+    <div id="cta-error" class="hidden mt-4 text-red-300 text-sm font-medium"></div>
+
     <p class="text-white/40 text-xs mt-4">{t.callbackNote}</p>
   </div>
 </section>
+
+<script>
+  const ctaForm = document.getElementById('cta-form') as HTMLFormElement | null;
+  
+  if (ctaForm) {
+    ctaForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const scriptUrl = ctaForm.dataset.scriptUrl;
+      if (!scriptUrl) {
+        console.error('Apps Script URL no configurada al CTA');
+        return;
+      }
+
+      const submitBtn = document.getElementById('cta-submit-btn') as HTMLButtonElement;
+      const btnText = document.getElementById('cta-btn-text') as HTMLElement;
+      const phoneInput = document.getElementById('cta-phone') as HTMLInputElement;
+      const successMsg = document.getElementById('cta-success') as HTMLElement;
+      const errorMsg = document.getElementById('cta-error') as HTMLElement;
+
+      const phone = phoneInput.value;
+      const lang = document.documentElement.lang || 'ca';
+      const originalBtnText = btnText.innerText;
+
+      const msgSending = ctaForm.dataset.msgSending || 'Enviant...';
+      const msgSent = ctaForm.dataset.msgSent || 'Enviat!';
+      const msgSuccess = ctaForm.dataset.msgSuccess || '';
+      const msgError = ctaForm.dataset.msgError || '';
+
+      submitBtn.disabled = true;
+      btnText.innerText = msgSending;
+      successMsg.classList.add('hidden');
+      errorMsg.classList.add('hidden');
+
+      try {
+        await fetch(scriptUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone, message: '', lang }),
+        });
+
+        ctaForm.reset();
+        successMsg.textContent = msgSuccess;
+        successMsg.classList.remove('hidden');
+        btnText.innerText = msgSent;
+      } catch {
+        errorMsg.textContent = msgError;
+        errorMsg.classList.remove('hidden');
+        btnText.innerText = originalBtnText;
+      } finally {
+        // Després de 4 segons, tornem el botó a la normalitat i amaguem el missatge
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          btnText.innerText = originalBtnText;
+          successMsg.classList.add('hidden');
+        }, 4000);
+      }
+    });
+  }
+</script>
