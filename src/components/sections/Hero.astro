@@ -8,78 +8,90 @@ interface Props {
 const { t } = Astro.props;
 ---
 
-<section class="bg-white pt-28 pb-20 lg:pt-32 lg:pb-24">
-  <div class="max-w-7xl mx-auto px-6">
+<section class="bg-white pt-24 pb-12 lg:pt-32 lg:pb-16 px-6">
+  <div class="max-w-6xl mx-auto flex flex-col items-center">
 
-    <!-- Headline gran a dalt -->
-    <div class="mb-10 lg:mb-12">
-      <p class="text-brand font-semibold text-sm tracking-wide uppercase mb-5">
+    <!-- Headline and Subtitle -->
+    <div class="text-center mb-10 lg:mb-12">
+      <p class="text-brand font-semibold text-xs lg:text-sm tracking-wide uppercase mb-2">
         {t.preheadline}
       </p>
-      <h1 class="font-display leading-none">
-        <span class="block text-5xl sm:text-6xl lg:text-7xl text-navy">
+      <h1 class="font-display leading-none mb-3">
+        <span class="block text-4xl sm:text-5xl lg:text-6xl text-navy lg:whitespace-nowrap">
           {t.headline1}
         </span>
-        <span class="block text-5xl sm:text-6xl lg:text-7xl text-brand mt-1">
+        <span class="block text-4xl sm:text-5xl lg:text-6xl text-brand mt-1 lg:mt-2 lg:whitespace-nowrap">
           {t.headline2}
         </span>
       </h1>
+      <p class="text-gray-500 text-sm sm:text-base lg:text-lg leading-relaxed max-w-2xl mx-auto mt-4">
+        {t.subtitle}
+      </p>
     </div>
 
-    <!-- Video + Form -->
-    <div class="grid lg:grid-cols-5 gap-8 lg:gap-12 items-start">
+    <!-- Video and Form Container -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-10 lg:gap-16 w-full">
 
-      <!-- Esquerra: Vídeo (3/5) -->
-      <div class="lg:col-span-3 relative">
-        <div class="aspect-video rounded-2xl overflow-hidden shadow-2xl">
-          <img
-            src="/fallback.webp"
-            alt="Vídeo de presentació"
-            class="w-full h-full object-cover"
-          />
-        </div>
-        <!-- Floating badge -->
-        <div class="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg border border-gray-100 px-5 py-3">
-          <div class="flex items-center gap-2">
-            <div class="flex -space-x-1.5">
-              <div class="w-7 h-7 rounded-full bg-brand/10 border-2 border-white"></div>
-              <div class="w-7 h-7 rounded-full bg-brand/20 border-2 border-white"></div>
-              <div class="w-7 h-7 rounded-full bg-brand/30 border-2 border-white"></div>
+      <!-- Vídeo -->
+      <div class="w-full sm:w-auto flex justify-center relative shrink-0 overflow-visible">
+        <div class="relative w-full max-w-[200px] sm:max-w-[220px] lg:max-w-[240px] group cursor-pointer" id="video-container">
+          <!-- Phone frame -->
+          <div class="relative aspect-[9/16] bg-gray-900 rounded-[2rem] lg:rounded-[2.5rem] p-1.5 sm:p-2 shadow-2xl ring-1 ring-gray-900/10 transition-transform group-hover:scale-[1.02]">
+            <!-- Notch -->
+            <div class="absolute top-1.5 sm:top-2 inset-x-0 h-4 z-20 flex justify-center pointer-events-none">
+              <div class="w-20 sm:w-24 h-full bg-gray-900 rounded-b-xl sm:rounded-b-2xl"></div>
             </div>
-            <div>
-              <p class="text-navy font-bold text-sm">{t.badgeCount}</p>
-              <p class="text-gray-400 text-xs">{t.badgeLabel}</p>
+            <!-- Screen -->
+            <div class="w-full h-full rounded-[1.5rem] lg:rounded-[2rem] overflow-hidden bg-black relative">
+              <iframe
+                id="hero-video"
+                src="https://www.youtube.com/embed/I96DLrMyilk?enablejsapi=1&autoplay=1&mute=1&loop=1&playlist=I96DLrMyilk&controls=0&playsinline=1&rel=0"
+                title="Vídeo de presentació"
+                class="w-full h-full pointer-events-none scale-105"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+          <!-- Floating badge -->
+          <div class="absolute -bottom-5 -left-4 sm:-left-6 lg:-left-8 bg-white rounded-xl shadow-xl border border-gray-100 px-4 py-2.5 z-30 pointer-events-none scale-90 sm:scale-100">
+            <div class="flex items-center gap-2">
+              <div class="flex -space-x-1.5">
+                <div class="w-6 h-6 rounded-full bg-brand/10 border-2 border-white"></div>
+                <div class="w-6 h-6 rounded-full bg-brand/20 border-2 border-white"></div>
+                <div class="w-6 h-6 rounded-full bg-brand/30 border-2 border-white"></div>
+              </div>
+              <div>
+                <p class="text-navy font-bold text-xs">{t.badgeCount}</p>
+                <p class="text-gray-400 text-[10px]">{t.badgeLabel}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Dreta: Subtítol + Form (2/5) -->
-      <div class="lg:col-span-2 lg:pt-4">
-        <p class="text-gray-500 text-lg leading-relaxed mb-8">
-          {t.subtitle}
-        </p>
-
+      <!-- Form -->
+      <div class="w-full max-w-[340px] sm:max-w-xs lg:max-w-sm">
         <!-- Callback form -->
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6">
-          <p class="text-navy font-bold text-base mb-4">{t.callbackTitle}</p>
-          <form class="flex flex-col gap-3" action="#contacto" method="get">
+        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-7 text-center shadow-lg w-full">
+          <p class="text-navy font-bold text-lg lg:text-xl mb-4 lg:mb-6">{t.callbackTitle}</p>
+          <form class="flex flex-col gap-3 lg:gap-4" action="#contacto" method="get">
             <input
               type="tel"
               name="phone"
               maxlength="9"
               placeholder={t.phonePlaceholder}
-              class="bg-white border border-gray-200 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+              class="bg-white border border-gray-200 rounded-xl px-4 py-2.5 sm:py-3 lg:py-4 text-gray-900 placeholder-gray-400 text-sm lg:text-base focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand text-center shadow-inner"
               required
             />
             <button
               type="submit"
-              class="bg-brand text-white font-semibold text-sm px-6 py-3 rounded-lg hover:bg-brand-light transition-colors"
+              class="bg-brand text-white font-semibold text-sm lg:text-base px-6 py-2.5 sm:py-3 lg:py-4 rounded-xl hover:bg-brand-light transition-all shadow-md hover:shadow-lg"
             >
               {t.contactBtn}
             </button>
           </form>
-          <p class="text-gray-400 text-xs mt-3">
+          <p class="text-gray-400 text-xs mt-4 lg:mt-5">
             {t.callbackNote}
           </p>
         </div>
@@ -88,3 +100,42 @@ const { t } = Astro.props;
     </div>
   </div>
 </section>
+
+<script>
+  let player: any;
+
+  // Load YouTube API
+  const tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  const firstScriptTag = document.getElementsByTagName('script')[0];
+  if (firstScriptTag && firstScriptTag.parentNode) {
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  }
+
+  // Called when API is ready
+  (window as any).onYouTubeIframeAPIReady = () => {
+    player = new (window as any).YT.Player('hero-video', {
+      events: {
+        'onReady': (event: any) => {
+          // Video is already autoplaying+muted via URL params
+          // But we have the player object now
+        }
+      }
+    });
+  };
+
+  const container = document.getElementById('video-container');
+
+  if (container) {
+    container.addEventListener('click', () => {
+      if (player && typeof player.unMute === 'function') {
+        if (player.isMuted()) {
+          player.unMute();
+          player.setVolume(100);
+        } else {
+          player.mute();
+        }
+      }
+    });
+  }
+</script>

@@ -8,11 +8,11 @@ interface Props {
 const { t } = Astro.props;
 
 const imageSrcs = [
-  { src: 'https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=1200', span: 'col-span-2 row-span-2' },
-  { src: 'https://images.pexels.com/photos/1540406/pexels-photo-1540406.jpeg?auto=compress&cs=tinysrgb&w=800', span: '' },
-  { src: 'https://images.pexels.com/photos/1267350/pexels-photo-1267350.jpeg?auto=compress&cs=tinysrgb&w=800', span: '' },
-  { src: 'https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg?auto=compress&cs=tinysrgb&w=800', span: '' },
-  { src: 'https://images.pexels.com/photos/2263436/pexels-photo-2263436.jpeg?auto=compress&cs=tinysrgb&w=800', span: '' },
+  { src: '/graduacions/1.webp', span: 'col-span-2 row-span-2' },
+  { src: '/graduacions/2.webp', span: '' },
+  { src: '/graduacions/3.webp', span: '' },
+  { src: '/graduacions/4.webp', span: '' },
+  { src: '/graduacions/5.webp', span: '' },
 ];
 
 const images = imageSrcs.map((img, i) => ({ ...img, alt: t.images[i]?.alt ?? '' }));
