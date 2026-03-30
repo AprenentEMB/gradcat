@@ -1,0 +1,210 @@
+---
+import type { Lang } from '../../i18n/translations';
+
+interface Props {
+  lang: Lang;
+  appsScriptUrl: string;
+}
+
+const { lang, appsScriptUrl } = Astro.props;
+
+const copy = {
+  ca: {
+    title: "Sol·licitar informació",
+    subtitle: "Deixa'ns el teu número i et contactem en menys de 24h.",
+    phonePlaceholder: 'El teu telèfon (ex: 612 345 678)',
+    cta: "Sol·licitar informació",
+    formSuccess: "Sol·licitud enviada! Et contactarem ben aviat.",
+    formError: "Hi ha hagut un error. Si us plau, torna-ho a provar.",
+    formSending: "Enviant...",
+    formSent: "Enviat!",
+  },
+  es: {
+    title: "Solicitar información",
+    subtitle: "Déjanos tu número y te contactamos en menos de 24h.",
+    phonePlaceholder: 'Tu teléfono (ej: 612 345 678)',
+    cta: "Solicitar información",
+    formSuccess: "¡Solicitud enviada! Te contactaremos muy pronto.",
+    formError: "Ha habido un error. Por favor, inténtalo de nuevo.",
+    formSending: "Enviando...",
+    formSent: "¡Enviado!",
+  },
+}[lang];
+---
+
+<!-- Modal backdrop -->
+<div
+  id="contact-modal"
+  class="fixed inset-0 z-[200] flex items-center justify-center p-4 hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="contact-modal-title"
+>
+  <!-- Backdrop -->
+  <div id="contact-modal-backdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+
+  <!-- Panel -->
+  <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 animate-modal">
+    <!-- Close button -->
+    <button
+      id="contact-modal-close"
+      type="button"
+      aria-label="Tancar"
+      class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+    >
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- Header -->
+    <div class="mb-6">
+      <h2 id="contact-modal-title" class="text-2xl font-extrabold text-navy mb-1">{copy.title}</h2>
+      <p class="text-gray-500 text-sm">{copy.subtitle}</p>
+    </div>
+
+    <!-- Form -->
+    <form
+      id="contact-modal-form"
+      class="flex flex-col gap-3"
+      data-script-url={appsScriptUrl}
+      data-msg-success={copy.formSuccess}
+      data-msg-error={copy.formError}
+      data-msg-sending={copy.formSending}
+      data-msg-sent={copy.formSent}
+    >
+      <!-- Honeypot -->
+      <input type="text" name="_hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" />
+
+      <input
+        type="tel"
+        id="contact-modal-phone"
+        name="phone"
+        maxlength="9"
+        placeholder={copy.phonePlaceholder}
+        class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+        required
+      />
+
+      <button
+        type="submit"
+        id="contact-modal-submit"
+        class="w-full bg-brand text-white font-semibold text-sm px-4 py-3.5 rounded-xl hover:bg-brand-light transition-colors disabled:opacity-80 disabled:cursor-not-allowed"
+      >
+        <span id="contact-modal-btn-text">{copy.cta}</span>
+      </button>
+    </form>
+
+    <div id="contact-modal-success" class="hidden mt-3 text-green-600 text-sm font-medium text-center"></div>
+    <div id="contact-modal-error" class="hidden mt-3 text-red-600 text-sm font-medium text-center"></div>
+  </div>
+</div>
+
+<style>
+  @keyframes modal-in {
+    from { opacity: 0; transform: scale(0.95) translateY(8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .animate-modal {
+    animation: modal-in 0.18s ease-out both;
+  }
+</style>
+
+<script>
+  import { notifyWhatsApp } from '../../scripts/whatsapp-notify';
+
+  const modal = document.getElementById('contact-modal') as HTMLElement;
+  const backdrop = document.getElementById('contact-modal-backdrop') as HTMLElement;
+  const closeBtn = document.getElementById('contact-modal-close') as HTMLButtonElement;
+  const form = document.getElementById('contact-modal-form') as HTMLFormElement;
+  const phoneInput = document.getElementById('contact-modal-phone') as HTMLInputElement;
+  const submitBtn = document.getElementById('contact-modal-submit') as HTMLButtonElement;
+  const btnText = document.getElementById('contact-modal-btn-text') as HTMLElement;
+  const successMsg = document.getElementById('contact-modal-success') as HTMLElement;
+  const errorMsg = document.getElementById('contact-modal-error') as HTMLElement;
+
+  let currentPack = '';
+
+  function openModal(pack = '') {
+    currentPack = pack;
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => phoneInput?.focus(), 50);
+  }
+
+  function closeModal() {
+    currentPack = '';
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+    form?.reset();
+    successMsg.classList.add('hidden');
+    errorMsg.classList.add('hidden');
+  }
+
+  // Expose globally so any button can open it
+  (window as any).openContactModal = openModal;
+
+  // Listen for custom event — detail.pack optional
+  document.addEventListener('open-contact-modal', (e) => {
+    const detail = (e as CustomEvent).detail;
+    openModal(detail?.pack ?? '');
+  });
+
+  closeBtn?.addEventListener('click', closeModal);
+  backdrop?.addEventListener('click', closeModal);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+  });
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const scriptUrl = form.dataset.scriptUrl;
+    if (!scriptUrl) return;
+
+    const phone = phoneInput.value;
+    const lang = document.documentElement.lang || 'ca';
+    const originalText = btnText.innerText;
+
+    const msgSending = form.dataset.msgSending || '...';
+    const msgSent = form.dataset.msgSent || 'Enviat!';
+    const msgSuccess = form.dataset.msgSuccess || '';
+    const msgError = form.dataset.msgError || '';
+
+    const honeypot = (form.querySelector('input[name="_hp"]') as HTMLInputElement)?.value ?? '';
+
+    submitBtn.disabled = true;
+    btnText.innerText = msgSending;
+    successMsg.classList.add('hidden');
+    errorMsg.classList.add('hidden');
+
+    try {
+      await Promise.allSettled([
+        fetch(scriptUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone, message: '', lang, pack: currentPack }),
+        }),
+        notifyWhatsApp(phone, lang, honeypot),
+      ]);
+
+      form.reset();
+      successMsg.textContent = msgSuccess;
+      successMsg.classList.remove('hidden');
+      btnText.innerText = msgSent;
+
+      setTimeout(() => {
+        closeModal();
+        submitBtn.disabled = false;
+        btnText.innerText = originalText;
+      }, 3000);
+    } catch {
+      errorMsg.textContent = msgError;
+      errorMsg.classList.remove('hidden');
+      btnText.innerText = originalText;
+      submitBtn.disabled = false;
+    }
+  });
+</script>

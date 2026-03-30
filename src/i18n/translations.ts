@@ -47,7 +47,7 @@ export const translations = {
     ],
     universities: {
       eyebrow: 'Confien en nosaltres',
-      title: 'Hem organitzat les graduacions dels centres d’estudis més reconegudes.',
+      title: 'Organitzem les graduacions dels centres d’estudis més reconeguts',
       subtitle: "Graduats d'aquests centres ja han viscut la seva festa amb Graduacions.cat",
     },
     services: {
@@ -113,22 +113,22 @@ export const translations = {
       title: 'Tria la teva experiència',
       subtitle: 'Packs adaptats a cada tipus de graduació',
       popularLabel: 'Més popular',
-      ctaBtn: 'Sol·licitar info',
+      ctaBtn: 'SOL·LICITAR INFO',
       items: [
         {
-          name: 'ESO',
+          name: 'SOPAR',
           popular: false,
-          age: '15 anys o més',
+          features: ['Càtering', 'Menú per grups', 'A la carta', 'Opció vegetarians'],
         },
         {
-          name: 'Batxillerat',
+          name: 'FESTA',
           popular: true,
-          age: '17 anys o més',
+          features: ['Locals', 'Entrades discoteques', 'Reservats VIP'],
         },
         {
-          name: 'Universitat',
+          name: 'SOPAR + FESTA',
           popular: false,
-          age: '21 anys o més',
+          features: ['Sopar', 'Festa'],
         },
       ],
     },
@@ -277,7 +277,7 @@ export const translations = {
     ],
     universities: {
       eyebrow: 'Confían en nosotros',
-      title: 'Hemos organizado las graduaciones de los centros de estudios más reconocidas.',
+      title: 'Organizamos las graduaciones de los centros de estudios más reconocidos',
       subtitle: 'Graduados de estos centros ya han vivido su fiesta con Graduacions.cat',
     },
     services: {
@@ -339,26 +339,26 @@ export const translations = {
       ],
     },
     packs: {
-      eyebrow: 'Nuestros packs',
+      eyebrow: 'TIPOS DE GRADUACIONES',
       title: 'Elige tu experiencia',
       subtitle: 'Packs adaptados a cada tipo de graduación',
       popularLabel: 'Más popular',
-      ctaBtn: 'Solicitar info',
+      ctaBtn: 'SOLICITAR INFO',
       items: [
         {
-          name: 'ESO',
+          name: 'CENA',
           popular: false,
-          age: '15 años o más',
+          features: ['Catering', 'Menú para grupos', 'A la carta', 'Opción vegetarianos'],
         },
         {
-          name: 'Bachillerato',
+          name: 'FIESTA',
           popular: true,
-          age: '17 años o más',
+          features: ['Locales', 'Entradas discotecas', 'Reservados VIP'],
         },
         {
-          name: 'Universidad',
+          name: 'CENA + FIESTA',
           popular: false,
-          age: '21 años o más',
+          features: ['Cena', 'Fiesta'],
         },
       ],
     },

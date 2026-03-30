@@ -11,35 +11,32 @@
 //    Nom: PUBLIC_APPS_SCRIPT_URL
 //    Valor: https://script.google.com/macros/s/XXXXXXX/exec
 
-const SHEET_NAME = 'Sol·licituds';
+const SHEET_SOLICITUDS = 'Sol·licituds';
 
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
     const phone = data.phone || '';
     const message = data.message || '';
+    const lang = data.lang || 'ca';
+    const pack = data.pack || '';
 
     const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getSheetByName(SHEET_NAME);
 
-    if (!sheet) {
-      return ContentService
-        .createTextOutput(JSON.stringify({ error: 'Full no trobat' }))
-        .setMimeType(ContentService.MimeType.JSON);
-    }
-
-    const lastRow = sheet.getLastRow();
-    const newRow = lastRow + 1;
-
-    // Columnes: Número, Contacte, Centre Educatiu, Tipus, Data, Persones, Local, Cost, Preu, Benefici por pax, Benefici total, Benefici net, Estat, Missatge
+    // Creem un format de data i hora per saber exactament quan han fet el submit
     const today = new Date();
-    const dateStr = Utilities.formatDate(today, Session.getScriptTimeZone(), 'dd/MM/yyyy');
+    const dateStr = Utilities.formatDate(today, Session.getScriptTimeZone(), 'dd/MM/yyyy HH:mm:ss');
 
-    sheet.getRange(newRow, 1).setValue(newRow - 1);   // Número (descompta la capçalera)
-    sheet.getRange(newRow, 2).setValue(phone);         // Contacte
-    sheet.getRange(newRow, 5).setValue(dateStr);       // Data
-    sheet.getRange(newRow, 13).setValue('A l\'espera'); // Estat
-    sheet.getRange(newRow, 14).setValue(message);      // Missatge (columna extra)
+    // --- 1. ESCRIPTURA A SOL·LICITUDS ---
+    const sheetSolicituds = ss.getSheetByName(SHEET_SOLICITUDS);
+    if (sheetSolicituds) {
+      const newRowS = sheetSolicituds.getLastRow() + 1;
+
+      sheetSolicituds.getRange(newRowS, 1).setValue(dateStr); // A: Data d'entrada
+      sheetSolicituds.getRange(newRowS, 2).setValue(phone);   // B: Número Whatsapp
+      sheetSolicituds.getRange(newRowS, 3).setValue(lang);    // C: Idioma
+      sheetSolicituds.getRange(newRowS, 4).setValue(pack);    // D: Pack escollit
+    }
 
     return ContentService
       .createTextOutput(JSON.stringify({ success: true }))
@@ -56,7 +53,7 @@ function doPost(e) {
 function testDoPost() {
   const mockEvent = {
     postData: {
-      contents: JSON.stringify({ phone: '600123456', message: 'Test des d\'Apps Script' })
+      contents: JSON.stringify({ phone: '600123456', message: '', lang: 'ca', pack: 'SOPAR + FESTA' })
     }
   };
   const result = doPost(mockEvent);
