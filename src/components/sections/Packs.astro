@@ -41,25 +41,40 @@ const { t } = Astro.props;
           )}
 
           <div class="text-center mb-6 mt-2">
-            <h3 class="text-2xl font-extrabold text-navy mb-3">{pack.name}</h3>
-            <span class="inline-block bg-gray-100 text-gray-500 text-sm font-medium px-4 py-1.5 rounded-full">
-              {pack.age}
-            </span>
+            <h3 class="text-2xl font-extrabold text-navy mb-4">{pack.name}</h3>
+            <ul class="text-sm text-gray-500 space-y-1.5">
+              {pack.features.map((f) => (
+                <li class="flex items-center gap-2 justify-center">
+                  <span class="text-brand">✓</span> {f}
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <a
-            href="#contacto"
+          <button
+            type="button"
+            data-open-modal
+            data-pack={pack.name}
             class:list={[
-              'mt-auto block text-center font-semibold text-sm py-3.5 rounded-lg transition-all',
+              'mt-auto w-full text-center font-semibold text-sm py-3.5 rounded-lg transition-all cursor-pointer',
               pack.popular
                 ? 'bg-brand text-white hover:bg-brand-light'
                 : 'border border-gray-200 text-navy hover:border-brand hover:text-brand',
             ]}
           >
             {t.ctaBtn}
-          </a>
+          </button>
         </div>
       ))}
     </div>
   </div>
 </section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-open-modal]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const pack = btn.dataset.pack ?? '';
+      document.dispatchEvent(new CustomEvent('open-contact-modal', { detail: { pack } }));
+    });
+  });
+</script>

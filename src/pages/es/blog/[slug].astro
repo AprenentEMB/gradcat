@@ -1,0 +1,135 @@
+---
+export const prerender = true;
+
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/sections/Header.astro';
+import Footer from '../../../components/sections/Footer.astro';
+import { fetchStrapi, getStrapiMediaUrl, blocksToHtml } from '../../../lib/strapi';
+import type { Article, StrapiListResponse } from '../../../lib/strapi';
+import { translations } from '../../../i18n/translations';
+
+const t = translations.es;
+
+export async function getStaticPaths() {
+  const { data: articles } = await fetchStrapi<StrapiListResponse<Article>>(
+    '/articles?fields[0]=slug&fields[1]=title&pagination[pageSize]=100&locale=es'
+  );
+  return articles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+const { slug } = Astro.params;
+
+const { data: articles } = await fetchStrapi<StrapiListResponse<Article>>(
+  `/articles?filters[slug][$eq]=${slug}&populate=image&pagination[pageSize]=1&locale=es`
+);
+
+const article = articles[0];
+
+if (!article) return Astro.redirect('/es/blog');
+
+const coverUrl = article.image ? getStrapiMediaUrl(article.image.url) : undefined;
+const contentHtml = blocksToHtml(article.content);
+---
+
+<Layout
+  title={`${article.title} — Blog Graduacions.cat`}
+  description={article.description ?? article.title}
+  lang="es"
+  skipToContent={t.layout.skipToContent}
+  image={coverUrl}
+>
+  <Header t={t.header} lang="es" />
+
+  <main id="main-content">
+
+    <div class="relative bg-brand pt-24 pb-0">
+
+      {coverUrl ? (
+        <>
+          <div class="absolute inset-0 overflow-hidden">
+            <img
+              src={coverUrl}
+              alt={article.image?.alternativeText ?? article.title}
+              class="w-full h-full object-cover opacity-20"
+              loading="eager"
+            />
+          </div>
+          <div class="relative max-w-3xl mx-auto px-6 pt-8 pb-16 text-center">
+            <a href="/es/blog" class="inline-flex items-center gap-1.5 text-white/60 hover:text-white text-sm font-medium transition-colors mb-6">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+              </svg>
+              Volver al blog
+            </a>
+            <h1 class="text-3xl md:text-4xl font-bold text-white leading-tight mb-4">{article.title}</h1>
+            {article.publishedAt && (
+              <time datetime={article.publishedAt} class="text-white/60 text-sm">
+                {new Date(article.publishedAt).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </time>
+            )}
+          </div>
+        </>
+      ) : (
+        <div class="relative max-w-3xl mx-auto px-6 pt-8 pb-16 text-center">
+          <a href="/es/blog" class="inline-flex items-center gap-1.5 text-white/60 hover:text-white text-sm font-medium transition-colors mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Volver al blog
+          </a>
+          <h1 class="text-3xl md:text-4xl font-bold text-white leading-tight mb-4">{article.title}</h1>
+          {article.publishedAt && (
+            <time datetime={article.publishedAt} class="text-white/60 text-sm">
+              {new Date(article.publishedAt).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>
+          )}
+        </div>
+      )}
+
+      <svg viewBox="0 0 1440 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="block w-full -mb-1">
+        <path d="M0 40 C360 0 1080 0 1440 40 L1440 40 L0 40 Z" fill="white"/>
+      </svg>
+    </div>
+
+    {coverUrl && (
+      <div class="max-w-3xl mx-auto px-6 -mt-6 mb-10 relative z-10">
+        <img
+          src={coverUrl}
+          alt={article.image?.alternativeText ?? article.title}
+          class="w-full rounded-2xl object-cover max-h-80 shadow-lg"
+          loading="eager"
+        />
+      </div>
+    )}
+
+    <article class="max-w-3xl mx-auto px-6 pb-20">
+      <div class="prose prose-lg max-w-none
+        prose-headings:text-brand prose-headings:font-bold
+        prose-a:text-brand prose-a:no-underline hover:prose-a:underline
+        prose-strong:text-gray-900
+        prose-blockquote:border-brand prose-blockquote:text-gray-600
+        prose-code:text-brand-dark prose-code:bg-gray-50 prose-code:px-1 prose-code:rounded
+        text-gray-700">
+        <Fragment set:html={contentHtml} />
+      </div>
+
+      <div class="mt-12 pt-8 border-t border-gray-100">
+        <a
+          href="/es/blog"
+          class="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:text-brand-light transition-colors"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          Ver todos los artículos
+        </a>
+      </div>
+    </article>
+
+  </main>
+
+  <Footer t={t.footer} />
+</Layout>
