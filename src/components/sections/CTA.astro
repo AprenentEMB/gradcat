@@ -21,6 +21,8 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
     </p>
     
     <form id="cta-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" data-script-url={appsScriptUrl} data-msg-success={t.formSuccess} data-msg-error={t.formError} data-msg-sending={t.formSending} data-msg-sent={t.formSent}>
+      {/* Honeypot antispam */}
+      <input type="text" name="_hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" />
       <input
         type="tel"
         id="cta-phone"
@@ -47,6 +49,8 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
 </section>
 
 <script>
+  import { notifyWhatsApp } from '../../scripts/whatsapp-notify';
+
   const ctaForm = document.getElementById('cta-form') as HTMLFormElement | null;
   
   if (ctaForm) {
@@ -79,13 +83,18 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
       successMsg.classList.add('hidden');
       errorMsg.classList.add('hidden');
 
+      const honeypot = (ctaForm.querySelector('input[name="_hp"]') as HTMLInputElement)?.value ?? '';
+
       try {
-        await fetch(scriptUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone, message: '', lang }),
-        });
+        await Promise.allSettled([
+          fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone, message: '', lang }),
+          }),
+          notifyWhatsApp(phone, lang, honeypot),
+        ]);
 
         ctaForm.reset();
         successMsg.textContent = msgSuccess;

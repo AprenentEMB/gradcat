@@ -129,6 +129,8 @@ const currentLabel = lang === 'ca' ? 'CA' : 'ES';
             data-msg-sending={t.formSending}
             data-msg-sent={t.formSent}
           >
+            {/* Honeypot antispam — invisible per humans, trampa per bots */}
+            <input type="text" name="_hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" />
             <input
               type="tel"
               id="header-cta-phone"
@@ -176,7 +178,6 @@ const currentLabel = lang === 'ca' ? 'CA' : 'ES';
       </a>
       <a href="#servicios" class="text-gray-600 hover:text-brand text-sm font-medium py-3 border-b border-gray-50">{t.services}</a>
       <a href="#packs" class="text-gray-600 hover:text-brand text-sm font-medium py-3 border-b border-gray-50">{t.packs}</a>
-      <a href="#galeria" class="text-gray-600 hover:text-brand text-sm font-medium py-3 border-b border-gray-50">{t.gallery}</a>
       <a href="#contacto" class="text-gray-600 hover:text-brand text-sm font-medium py-3 border-b border-gray-50">{t.contact}</a>
 
       <!-- Language switcher mobile -->
@@ -212,6 +213,8 @@ const currentLabel = lang === 'ca' ? 'CA' : 'ES';
 </header>
 
 <script>
+  import { notifyWhatsApp } from '../../scripts/whatsapp-notify';
+
   // Mobile menu
   const btn = document.getElementById('mobile-menu-btn');
   const menu = document.getElementById('mobile-menu');
@@ -298,13 +301,18 @@ const currentLabel = lang === 'ca' ? 'CA' : 'ES';
       successMsg.classList.add('hidden');
       errorMsg.classList.add('hidden');
 
+      const honeypot = (headerCtaForm.querySelector('input[name="_hp"]') as HTMLInputElement)?.value ?? '';
+
       try {
-        await fetch(scriptUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone, message: '', lang }),
-        });
+        await Promise.allSettled([
+          fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone, message: '', lang }),
+          }),
+          notifyWhatsApp(phone, lang, honeypot),
+        ]);
 
         headerCtaForm.reset();
         successMsg.textContent = msgSuccess;

@@ -10,36 +10,38 @@ const { t } = Astro.props;
 const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
 ---
 
-<section class="bg-white pt-24 pb-16 lg:pt-32 lg:pb-24 px-6">
+<section class="bg-white pt-24 pb-20 lg:pt-32 lg:pb-24 px-6">
   <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-8">
 
     <!-- Left: Text + Form -->
-    <div class="flex-1 min-w-0 flex flex-col items-start">
+    <div class="flex-1 min-w-0 flex flex-col items-center lg:items-start">
 
       <!-- Pre-headline -->
-      <p class="text-brand font-semibold text-xs lg:text-sm tracking-widest uppercase mb-4">
+      <p class="text-brand font-semibold text-xs lg:text-sm tracking-widest uppercase mb-4 text-center lg:text-left">
         {t.preheadline}
       </p>
 
       <!-- Headline -->
-      <h1 class="font-display text-navy leading-[1.15] mb-5 lg:mb-6">
-        <span class="block text-5xl sm:text-6xl lg:text-5xl font-bold italic">
+      <h1 class="font-display text-navy leading-[1.15] mb-5 lg:mb-6 text-center lg:text-left">
+        <span class="block text-4xl sm:text-5xl lg:text-5xl font-bold italic">
           {t.headline1}
         </span>
-        <span class="block text-5xl sm:text-6xl lg:text-5xl font-bold italic bg-gradient-to-r from-brand-dark via-brand to-brand-light bg-clip-text text-transparent pb-6">
+        <span class="block text-4xl sm:text-5xl lg:text-5xl font-bold italic bg-gradient-to-r from-brand-dark via-brand to-brand-light bg-clip-text text-transparent pb-6">
           {t.headline2}
         </span>
       </h1>
 
       <!-- Subtitle -->
-      <p class="text-gray-500 text-base lg:text-lg leading-relaxed max-w-md mb-8 lg:mb-10">
+      <p class="text-gray-500 text-base lg:text-lg leading-relaxed max-w-md mb-8 lg:mb-10 text-center lg:text-left">
         {t.subtitle}
       </p>
 
       <!-- Callback form card -->
       <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-6 w-full max-w-md shadow-sm">
-        <p class="text-navy font-bold text-base lg:text-lg mb-4">{t.callbackTitle}</p>
-        <form id="hero-form" class="flex flex-row gap-2 sm:gap-3" data-script-url={appsScriptUrl} data-msg-success={t.formSuccess} data-msg-error={t.formError} data-msg-sending={t.formSending} data-msg-sent={t.formSent}>
+        <p class="text-navy font-bold text-base lg:text-lg mb-4 text-center lg:text-left">{t.callbackTitle}</p>
+        <form id="hero-form" class="flex flex-col sm:flex-row gap-2 sm:gap-3" data-script-url={appsScriptUrl} data-msg-success={t.formSuccess} data-msg-error={t.formError} data-msg-sending={t.formSending} data-msg-sent={t.formSent}>
+          {/* Honeypot antispam */}
+          <input type="text" name="_hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" />
           <input
             type="tel"
             id="hero-phone"
@@ -52,7 +54,7 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
           <button
             type="submit"
             id="hero-submit-btn"
-            class="bg-brand text-white font-semibold text-sm px-5 py-3 rounded-xl hover:bg-brand-light transition-all shadow-md hover:shadow-lg whitespace-nowrap cursor-pointer touch-manipulation"
+            class="w-full sm:w-auto bg-brand text-white font-semibold text-sm px-5 py-3 rounded-xl hover:bg-brand-light transition-all shadow-md hover:shadow-lg whitespace-nowrap cursor-pointer touch-manipulation"
           >
             <span id="hero-btn-text">{t.contactBtn}</span>
           </button>
@@ -67,7 +69,7 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
     </div>
 
     <!-- Right: Phone -->
-    <div class="flex-shrink-0 flex justify-center lg:justify-end relative">
+    <div class="flex-shrink-0 flex justify-center lg:justify-end relative pb-8 lg:pb-0">
       <div class="relative w-[220px] sm:w-[240px] lg:w-[280px] group cursor-pointer" id="video-container">
 
         <!-- Phone frame -->
@@ -142,6 +144,8 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
     });
   }
 
+  import { notifyWhatsApp } from '../../scripts/whatsapp-notify';
+
   // Hero form -> Sheets
   const heroForm = document.getElementById('hero-form') as HTMLFormElement | null;
   if (heroForm) {
@@ -174,13 +178,18 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
       successMsg.classList.add('hidden');
       errorMsg.classList.add('hidden');
 
+      const honeypot = (heroForm.querySelector('input[name="_hp"]') as HTMLInputElement)?.value ?? '';
+
       try {
-        await fetch(scriptUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone, message: '', lang }),
-        });
+        await Promise.allSettled([
+          fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone, message: '', lang }),
+          }),
+          notifyWhatsApp(phone, lang, honeypot),
+        ]);
 
         heroForm.reset();
         successMsg.textContent = msgSuccess;

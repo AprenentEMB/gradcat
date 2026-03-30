@@ -26,6 +26,8 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
     <!-- Form -->
     <div class="bg-white border border-gray-200 rounded-2xl p-8 sm:p-10 shadow-sm">
       <form id="contact-form" class="space-y-6" data-script-url={appsScriptUrl} data-msg-success={t.formSuccess} data-msg-error={t.formError} data-msg-sending={t.formSending}>
+        {/* Honeypot antispam */}
+        <input type="text" name="_hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" />
         <!-- Phone -->
         <div>
           <label for="phone" class="block text-navy text-sm font-semibold mb-2">{t.phoneLabel}</label>
@@ -68,6 +70,8 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
 </section>
 
 <script>
+  import { notifyWhatsApp } from '../../scripts/whatsapp-notify';
+
   const form = document.getElementById('contact-form') as HTMLFormElement | null;
   if (form) {
     form.addEventListener('submit', async (e) => {
@@ -103,13 +107,18 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
       successMsg.classList.add('hidden');
       errorMsg.classList.add('hidden');
 
+      const honeypot = (form.querySelector('input[name="_hp"]') as HTMLInputElement)?.value ?? '';
+
       try {
-        await fetch(scriptUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone, message, lang }),
-        });
+        await Promise.allSettled([
+          fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone, message, lang }),
+          }),
+          notifyWhatsApp(phone, lang, honeypot),
+        ]);
 
         form.reset();
         successMsg.textContent = msgSuccess;
