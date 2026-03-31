@@ -36,13 +36,42 @@ const images = imageSrcs.map((img, i) => ({ ...img, alt: t.images[i]?.alt ?? '' 
       {images.map(({ src, alt, span }) => (
         <div class:list={['rounded-xl overflow-hidden group', span]}>
           <img
-            src={src}
+            data-src={src}
+            src=""
             alt={alt}
-            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            loading="lazy"
+            class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500 opacity-0"
           />
         </div>
       ))}
     </div>
   </div>
 </section>
+
+<script>
+  const section = document.getElementById('galeria');
+  if (section) {
+    const imgs = Array.from(section.querySelectorAll<HTMLImageElement>('img[data-src]'));
+
+    const loadAll = () => {
+      imgs.forEach(img => {
+        const src = img.dataset.src;
+        if (!src) return;
+        img.onload = () => img.classList.replace('opacity-0', 'opacity-100');
+        img.src = src;
+        img.removeAttribute('data-src');
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadAll();
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '800px 0px' }
+    );
+
+    observer.observe(section);
+  }
+</script>

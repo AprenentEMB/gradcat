@@ -1,0 +1,32 @@
+---
+import { translations } from '../../i18n/translations';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/sections/Header.astro';
+import Services from '../../components/sections/Services.astro';
+import Footer from '../../components/sections/Footer.astro';
+import WhatsAppButton from '../../components/ui/WhatsAppButton.astro';
+
+const t = translations.es;
+---
+
+<Layout
+  title="Servicios de Graduación — Graduacions.cat"
+  description="Todos los servicios para tu fiesta de graduación en Barcelona: cenas, salas exclusivas, DJ, fotografía, aftermovie y photocall personalizado."
+  lang="es"
+  skipToContent={t.layout.skipToContent}
+>
+  <Header t={t.header} lang="es" />
+  <main id="main-content" class="pt-16">
+    <div class="max-w-7xl mx-auto px-6 pt-10">
+      <a href="/es" class="inline-flex items-center gap-2 text-brand font-medium text-sm hover:underline">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        Volver al inicio
+      </a>
+    </div>
+    <Services t={t.services} />
+  </main>
+  <Footer t={t.footer} />
+  <WhatsAppButton t={t.whatsapp} />
+</Layout>

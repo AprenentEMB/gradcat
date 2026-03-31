@@ -119,7 +119,7 @@ export const translations = {
         {
           name: 'SOPAR',
           popular: false,
-          features: ['Càtering', 'Menú per grups', 'A la carta', 'Opció vegetarians'],
+          features: ['Càtering', 'Menú per grups'],
         },
         {
           name: 'FESTA',
@@ -129,7 +129,7 @@ export const translations = {
         {
           name: 'SOPAR + FESTA',
           popular: false,
-          features: ['Sopar', 'Festa'],
+          features: ['Càtering', 'Menú per grups', 'Locals', 'Entrades discoteques', 'Reservats VIP'],
         },
       ],
     },
@@ -350,7 +350,7 @@ export const translations = {
         {
           name: 'CENA',
           popular: false,
-          features: ['Catering', 'Menú para grupos', 'A la carta', 'Opción vegetarianos'],
+          features: ['Catering', 'Menú para grupos'],
         },
         {
           name: 'FIESTA',
@@ -360,7 +360,7 @@ export const translations = {
         {
           name: 'CENA + FIESTA',
           popular: false,
-          features: ['Cena', 'Fiesta'],
+          features: ['Catering', 'Menú para grupos', 'Locales', 'Entradas discotecas', 'Reservados VIP'],
         },
       ],
     },

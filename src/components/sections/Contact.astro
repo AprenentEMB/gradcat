@@ -70,8 +70,6 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
 </section>
 
 <script>
-  import { notifyWhatsApp } from '../../scripts/whatsapp-notify';
-
   const form = document.getElementById('contact-form') as HTMLFormElement | null;
   if (form) {
     form.addEventListener('submit', async (e) => {
@@ -107,18 +105,13 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
       successMsg.classList.add('hidden');
       errorMsg.classList.add('hidden');
 
-      const honeypot = (form.querySelector('input[name="_hp"]') as HTMLInputElement)?.value ?? '';
-
       try {
-        await Promise.allSettled([
-          fetch(scriptUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone, message, lang }),
-          }),
-          notifyWhatsApp(phone, lang, honeypot),
-        ]);
+        await fetch(scriptUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone, message, lang }),
+        });
 
         form.reset();
         successMsg.textContent = msgSuccess;

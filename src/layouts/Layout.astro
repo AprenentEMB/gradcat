@@ -87,5 +87,23 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
     </a>
     <slot />
     <ContactModal lang={lang} appsScriptUrl={appsScriptUrl} />
+    <script is:inline>
+      (function () {
+        var lang = document.documentElement.lang || 'ca';
+        var msg = lang === 'ca' ? 'Completa aquest camp' : 'Completa este campo';
+        document.addEventListener('invalid', function (e) {
+          var el = e.target;
+          if (el && typeof el.setCustomValidity === 'function') {
+            el.setCustomValidity(msg);
+          }
+        }, true);
+        document.addEventListener('input', function (e) {
+          var el = e.target;
+          if (el && typeof el.setCustomValidity === 'function') {
+            el.setCustomValidity('');
+          }
+        }, true);
+      })();
+    </script>
   </body>
 </html>

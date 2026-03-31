@@ -111,8 +111,6 @@ const copy = {
 </style>
 
 <script>
-  import { notifyWhatsApp } from '../../scripts/whatsapp-notify';
-
   const modal = document.getElementById('contact-modal') as HTMLElement;
   const backdrop = document.getElementById('contact-modal-backdrop') as HTMLElement;
   const closeBtn = document.getElementById('contact-modal-close') as HTMLButtonElement;
@@ -172,39 +170,27 @@ const copy = {
     const msgSuccess = form.dataset.msgSuccess || '';
     const msgError = form.dataset.msgError || '';
 
-    const honeypot = (form.querySelector('input[name="_hp"]') as HTMLInputElement)?.value ?? '';
-
     submitBtn.disabled = true;
     btnText.innerText = msgSending;
     successMsg.classList.add('hidden');
     errorMsg.classList.add('hidden');
 
-    try {
-      await Promise.allSettled([
-        fetch(scriptUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone, message: '', lang, pack: currentPack }),
-        }),
-        notifyWhatsApp(phone, lang, honeypot),
-      ]);
+    fetch(scriptUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, message: '', lang, pack: currentPack }),
+    }).catch(() => {});
 
-      form.reset();
-      successMsg.textContent = msgSuccess;
-      successMsg.classList.remove('hidden');
-      btnText.innerText = msgSent;
+    form.reset();
+    successMsg.textContent = msgSuccess;
+    successMsg.classList.remove('hidden');
+    btnText.innerText = msgSent;
 
-      setTimeout(() => {
-        closeModal();
-        submitBtn.disabled = false;
-        btnText.innerText = originalText;
-      }, 3000);
-    } catch {
-      errorMsg.textContent = msgError;
-      errorMsg.classList.remove('hidden');
-      btnText.innerText = originalText;
+    setTimeout(() => {
+      closeModal();
       submitBtn.disabled = false;
-    }
+      btnText.innerText = originalText;
+    }, 3000);
   });
 </script>

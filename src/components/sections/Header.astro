@@ -32,7 +32,7 @@ const homeBase = lang === 'ca' ? '/' : '/es';
 
     <!-- Nav -->
     <nav aria-label="Navegació principal" class="hidden lg:flex items-center gap-8">
-      <a href={`${homeBase}#services`} class="text-white hover:text-gray-300 text-sm font-medium transition-colors">{t.services}</a>
+      <a href={lang === 'ca' ? '/serveis' : '/es/servicios'} class="text-white hover:text-gray-300 text-sm font-medium transition-colors">{t.services}</a>
       <a href={`${homeBase}#packs`} class="text-white hover:text-gray-300 text-sm font-medium transition-colors">{t.packs}</a>
       <a href={`${homeBase}#contact`} class="text-white hover:text-gray-300 text-sm font-medium transition-colors">{t.contact}</a>
       <a href={lang === 'ca' ? '/blog' : '/es/blog'} class="text-white hover:text-gray-300 text-sm font-medium transition-colors">{t.blog}</a>
@@ -139,7 +139,7 @@ const homeBase = lang === 'ca' ? '/' : '/es';
         </svg>
         {PHONE}
       </a>
-      <a href={`${homeBase}#services`} class="text-gray-600 hover:text-brand text-sm font-medium py-3 border-b border-gray-50">{t.services}</a>
+      <a href={lang === 'ca' ? '/serveis' : '/es/servicios'} class="text-gray-600 hover:text-brand text-sm font-medium py-3 border-b border-gray-50">{t.services}</a>
       <a href={`${homeBase}#packs`} class="text-gray-600 hover:text-brand text-sm font-medium py-3 border-b border-gray-50">{t.packs}</a>
       <a href={`${homeBase}#contact`} class="text-gray-600 hover:text-brand text-sm font-medium py-3 border-b border-gray-50">{t.contact}</a>
       <a href={lang === 'ca' ? '/blog' : '/es/blog'} class="text-gray-600 hover:text-brand text-sm font-medium py-3 border-b border-gray-50">{t.blog}</a>
