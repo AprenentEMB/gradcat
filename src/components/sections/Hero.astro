@@ -113,43 +113,34 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
 </section>
 
 <script>
-  let player: any;
+  let videoMuted = true;
 
-  // Guard: only inject YouTube API script once (prevents duplicate on SPA navigation back)
-  if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    if (firstScriptTag && firstScriptTag.parentNode) {
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    }
+  function ytCommand(iframe: HTMLIFrameElement, func: string, args: any[] = []) {
+    iframe.contentWindow?.postMessage(
+      JSON.stringify({ event: 'command', func, args }),
+      '*'
+    );
   }
 
-  (window as any).onYouTubeIframeAPIReady = () => {
-    player = new (window as any).YT.Player('hero-video', {
-      events: {
-        'onReady': (_event: any) => {}
-      }
-    });
-  };
-
-  // If YT API already loaded (navigated back to homepage), init player immediately
-  if ((window as any).YT && (window as any).YT.Player) {
-    (window as any).onYouTubeIframeAPIReady();
-  }
-
-  // Video container click (mute/unmute) — use event delegation so it works
-  // after ClientRouter navigates back to homepage (new DOM, same script).
+  // Video container click (mute/unmute) via postMessage — no YT API needed,
+  // works on first load and after every SPA navigation.
   document.addEventListener('click', (e) => {
     if (!(e.target as HTMLElement).closest('#video-container')) return;
-    if (player && typeof player.unMute === 'function') {
-      if (player.isMuted()) {
-        player.unMute();
-        player.setVolume(100);
-      } else {
-        player.mute();
-      }
+    const iframe = document.getElementById('hero-video') as HTMLIFrameElement | null;
+    if (!iframe) return;
+    if (videoMuted) {
+      ytCommand(iframe, 'unMute');
+      ytCommand(iframe, 'setVolume', [100]);
+      videoMuted = false;
+    } else {
+      ytCommand(iframe, 'mute');
+      videoMuted = true;
     }
+  });
+
+  // Reset muted state when navigating away so returning starts muted again
+  document.addEventListener('astro:before-preparation', () => {
+    videoMuted = true;
   });
 
   // Hero form — re-attach on each page load so it works after SPA navigation.
@@ -214,12 +205,4 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
   }
 
   document.addEventListener('astro:page-load', setupHeroForm);
-
-  // Destroy YouTube player before navigating away to prevent postMessage errors
-  document.addEventListener('astro:before-preparation', () => {
-    if (player && typeof player.destroy === 'function') {
-      player.destroy();
-      player = null;
-    }
-  });
 </script>
