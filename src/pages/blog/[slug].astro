@@ -105,6 +105,7 @@ const contentHtml = blocksToHtml(article.content);
           alt={article.image?.alternativeText ?? article.title}
           class="w-full rounded-2xl object-cover max-h-80 shadow-lg"
           loading="eager"
+          transition:name={`post-image-${article.slug}`}
         />
       </div>
     )}

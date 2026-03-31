@@ -54,7 +54,40 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Disable smooth scroll during view transitions to prevent jarring scroll-to-top animation */
+html[data-astro-transition] {
+  scroll-behavior: auto;
+}
+
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── View Transitions: Fade-over sense flash ─────────────────────── */
+
+/* Desactivem mescles de color estranyes */
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+}
+
+@keyframes vt-fade-in {
+  from { opacity: 0; }
+}
+
+/* La vista vella es queda exactament on està, no fem fade-out */
+::view-transition-old(root) {
+  animation: none;
+}
+
+/* La vista nova apareix per sobre (requereix que la nova pàgina tingui un color de fons no transparent) */
+::view-transition-new(root) {
+  animation: vt-fade-in 0.27s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
 }

@@ -71,10 +71,13 @@ const { t } = Astro.props;
 </section>
 
 <script>
-  document.querySelectorAll<HTMLButtonElement>('[data-open-modal]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const pack = btn.dataset.pack ?? '';
-      document.dispatchEvent(new CustomEvent('open-contact-modal', { detail: { pack } }));
-    });
+  // Use event delegation — module scripts run once per session, but DOM nodes
+  // are replaced on each ClientRouter navigation. Delegating to document
+  // means the listener always catches clicks regardless of when buttons mount.
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('[data-open-modal]');
+    if (!btn) return;
+    const pack = (btn as HTMLButtonElement).dataset.pack ?? '';
+    document.dispatchEvent(new CustomEvent('open-contact-modal', { detail: { pack } }));
   });
 </script>

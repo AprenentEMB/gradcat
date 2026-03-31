@@ -10,7 +10,7 @@ const { t } = Astro.props;
 const WHATSAPP_URL = `https://wa.me/34658020084?text=${t.message}`;
 ---
 
-<div class="fixed bottom-6 right-6 z-40">
+<div class="fixed bottom-6 right-6 z-40" transition:persist="whatsapp-button">
   <!-- Pulse rings -->
   <span class="absolute inset-0 rounded-full bg-[#25D366] opacity-60 whatsapp-pulse"></span>
   <span class="absolute inset-0 rounded-full bg-[#25D366] opacity-40 whatsapp-pulse" style="animation-delay: 0.5s;"></span>

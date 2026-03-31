@@ -22,7 +22,7 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
       </p>
 
       <!-- Headline -->
-      <h1 class="font-display text-navy leading-[1.15] mb-5 lg:mb-6 text-center lg:text-left">
+      <h1 class="font-display text-navy leading-[1.15] mb-5 lg:mb-6 text-center lg:text-left" transition:name="hero-heading">
         <span class="block text-4xl sm:text-5xl lg:text-5xl font-bold italic">
           {t.headline1}
         </span>
@@ -115,11 +115,14 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
 <script>
   let player: any;
 
-  const tag = document.createElement('script');
-  tag.src = "https://www.youtube.com/iframe_api";
-  const firstScriptTag = document.getElementsByTagName('script')[0];
-  if (firstScriptTag && firstScriptTag.parentNode) {
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  // Guard: only inject YouTube API script once (prevents duplicate on SPA navigation back)
+  if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    if (firstScriptTag && firstScriptTag.parentNode) {
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
   }
 
   (window as any).onYouTubeIframeAPIReady = () => {
@@ -130,23 +133,31 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
     });
   };
 
-  const container = document.getElementById('video-container');
-  if (container) {
-    container.addEventListener('click', () => {
-      if (player && typeof player.unMute === 'function') {
-        if (player.isMuted()) {
-          player.unMute();
-          player.setVolume(100);
-        } else {
-          player.mute();
-        }
-      }
-    });
+  // If YT API already loaded (navigated back to homepage), init player immediately
+  if ((window as any).YT && (window as any).YT.Player) {
+    (window as any).onYouTubeIframeAPIReady();
   }
 
-  // Hero form -> Sheets
-  const heroForm = document.getElementById('hero-form') as HTMLFormElement | null;
-  if (heroForm) {
+  // Video container click (mute/unmute) — use event delegation so it works
+  // after ClientRouter navigates back to homepage (new DOM, same script).
+  document.addEventListener('click', (e) => {
+    if (!(e.target as HTMLElement).closest('#video-container')) return;
+    if (player && typeof player.unMute === 'function') {
+      if (player.isMuted()) {
+        player.unMute();
+        player.setVolume(100);
+      } else {
+        player.mute();
+      }
+    }
+  });
+
+  // Hero form — re-attach on each page load so it works after SPA navigation.
+  // Module scripts run once per session; astro:page-load fires every navigation.
+  function setupHeroForm() {
+    const heroForm = document.getElementById('hero-form') as HTMLFormElement | null;
+    if (!heroForm) return;
+
     heroForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -201,4 +212,14 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
       }
     });
   }
+
+  document.addEventListener('astro:page-load', setupHeroForm);
+
+  // Destroy YouTube player before navigating away to prevent postMessage errors
+  document.addEventListener('astro:before-preparation', () => {
+    if (player && typeof player.destroy === 'function') {
+      player.destroy();
+      player = null;
+    }
+  });
 </script>

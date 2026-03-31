@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import SEO from '../components/SEO.astro';
 import ContactModal from '../components/ui/ContactModal.astro';
+import { ClientRouter } from 'astro:transitions';
 import type { Lang } from '../i18n/translations';
 
 interface Props {
@@ -31,6 +32,8 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
 
     <SEO title={title} description={description} image={image} lang={lang} />
 
+    <ClientRouter />
+
     <meta name="theme-color" content="#173696" />
     <link rel="icon" type="image/png" href="/favicon.png" />
 
@@ -44,6 +47,18 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-LGSRT4G7R7');
+    </script>
+    <!-- Track SPA navigations with ClientRouter -->
+    <script>
+      let initialLoad = true;
+      document.addEventListener('astro:page-load', () => {
+        if (initialLoad) { initialLoad = false; return; }
+        if (typeof (window as any).gtag === 'function') {
+          (window as any).gtag('config', 'G-LGSRT4G7R7', {
+            page_path: window.location.pathname,
+          });
+        }
+      });
     </script>
 
     <!-- Local Business structured data -->
@@ -86,19 +101,19 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
       {skipToContent}
     </a>
     <slot />
-    <ContactModal lang={lang} appsScriptUrl={appsScriptUrl} />
-    <script is:inline>
+    <ContactModal lang={lang} appsScriptUrl={appsScriptUrl} transition:persist="contact-modal" />
+    <script>
       (function () {
         var lang = document.documentElement.lang || 'ca';
         var msg = lang === 'ca' ? 'Completa aquest camp' : 'Completa este campo';
         document.addEventListener('invalid', function (e) {
-          var el = e.target;
+          var el = e.target as HTMLInputElement | null;
           if (el && typeof el.setCustomValidity === 'function') {
             el.setCustomValidity(msg);
           }
         }, true);
         document.addEventListener('input', function (e) {
-          var el = e.target;
+          var el = e.target as HTMLInputElement | null;
           if (el && typeof el.setCustomValidity === 'function') {
             el.setCustomValidity('');
           }

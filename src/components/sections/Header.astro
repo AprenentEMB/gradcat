@@ -15,7 +15,7 @@ const currentLabel = lang === 'ca' ? 'CA' : 'ES';
 const homeBase = lang === 'ca' ? '/' : '/es';
 ---
 
-<header class="fixed top-0 left-0 right-0 z-50 bg-brand backdrop-blur-sm border-b border-gray-100">
+<header class="fixed top-0 left-0 right-0 z-50 bg-brand backdrop-blur-sm border-b border-gray-100" transition:persist="site-header">
   <div class="max-w-8xl mx-auto px-6 flex items-center justify-between h-16 lg:h-18 lg:pl-24 lg:pr-32">
     <!-- Logo -->
     <a href={lang === 'ca' ? '/' : '/es'} class="flex">
@@ -192,6 +192,12 @@ const homeBase = lang === 'ca' ? '/' : '/es';
         btn.setAttribute('aria-expanded', 'false');
       });
     });
+
+    // Close mobile menu on view transition navigation
+    document.addEventListener('astro:after-navigation', () => {
+      menu.classList.add('hidden');
+      btn.setAttribute('aria-expanded', 'false');
+    });
   }
 
   // Language dropdown
@@ -209,6 +215,13 @@ const homeBase = lang === 'ca' ? '/' : '/es';
     });
 
     document.addEventListener('click', () => {
+      langDropdown.classList.add('hidden');
+      langChevron.style.transform = '';
+      langBtn.setAttribute('aria-expanded', 'false');
+    });
+
+    // Close language dropdown on view transition navigation
+    document.addEventListener('astro:after-navigation', () => {
       langDropdown.classList.add('hidden');
       langChevron.style.transform = '';
       langBtn.setAttribute('aria-expanded', 'false');

@@ -67,6 +67,7 @@ const { data: articles } = await fetchStrapi<StrapiListResponse<Article>>(
                       alt={article.image.alternativeText ?? article.title}
                       class="w-full h-48 object-cover"
                       loading={i === 0 ? 'eager' : 'lazy'}
+                      transition:name={`post-image-${article.slug}`}
                     />
                   </a>
                 ) : (
