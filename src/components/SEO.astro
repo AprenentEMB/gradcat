@@ -15,7 +15,7 @@ const {
   image = '/images/og-image.jpg',
 } = Astro.props;
 
-const site = Astro.site ?? new URL('https://graduacions.cat');
+const site = Astro.site ?? new URL('https://www.graduacions.cat');
 const canonicalURL = new URL(Astro.url.pathname, site);
 const ogImage = new URL(image, site);
 const ogLocale = lang === 'ca' ? 'ca_ES' : 'es_ES';

@@ -59,7 +59,9 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
         document.head.appendChild(l);
       }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;800&display=swap" rel="stylesheet" />
+    <!-- Load Google Fonts non-blocking to avoid render-blocking penalty -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;800&display=swap" /></noscript>
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-LGSRT4G7R7" is:inline></script>
@@ -94,7 +96,7 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
         "name": "Graduacions.cat",
         "alternateName": "GRAD-CAT",
         "description": "Organizamos fiestas de graduación en Barcelona. ESO, Bachillerato y Selectividad.",
-        "url": "https://graduacions.cat",
+        "url": "https://www.graduacions.cat",
         "telephone": "+34605508397",
         "address": {
           "@type": "PostalAddress",

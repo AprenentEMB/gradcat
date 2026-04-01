@@ -44,6 +44,9 @@ const images = imageSrcs.map((img, i) => ({ ...img, alt: t.images[i]?.alt ?? '' 
           <Image
             src={src}
             alt={alt}
+            width={i === 0 ? 1200 : 640}
+            height={i === 0 ? 880 : 460}
+            quality={80}
             loading={i === 0 ? 'eager' : 'lazy'}
             class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
           />

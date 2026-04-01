@@ -111,86 +111,99 @@ const copy = {
 </style>
 
 <script>
-  const modal = document.getElementById('contact-modal') as HTMLElement;
-  const backdrop = document.getElementById('contact-modal-backdrop') as HTMLElement;
-  const closeBtn = document.getElementById('contact-modal-close') as HTMLButtonElement;
-  const form = document.getElementById('contact-modal-form') as HTMLFormElement;
-  const phoneInput = document.getElementById('contact-modal-phone') as HTMLInputElement;
-  const submitBtn = document.getElementById('contact-modal-submit') as HTMLButtonElement;
-  const btnText = document.getElementById('contact-modal-btn-text') as HTMLElement;
-  const successMsg = document.getElementById('contact-modal-success') as HTMLElement;
-  const errorMsg = document.getElementById('contact-modal-error') as HTMLElement;
+  function initContactModal() {
+    const modal = document.getElementById('contact-modal') as HTMLElement;
+    if (!modal || modal.hasAttribute('data-modal-init')) return;
+    modal.setAttribute('data-modal-init', 'true');
 
-  let currentPack = '';
+    const backdrop = document.getElementById('contact-modal-backdrop') as HTMLElement;
+    const closeBtn = document.getElementById('contact-modal-close') as HTMLButtonElement;
+    const form = document.getElementById('contact-modal-form') as HTMLFormElement;
+    const phoneInput = document.getElementById('contact-modal-phone') as HTMLInputElement;
+    const submitBtn = document.getElementById('contact-modal-submit') as HTMLButtonElement;
+    const btnText = document.getElementById('contact-modal-btn-text') as HTMLElement;
+    const successMsg = document.getElementById('contact-modal-success') as HTMLElement;
+    const errorMsg = document.getElementById('contact-modal-error') as HTMLElement;
 
-  function openModal(pack = '') {
-    currentPack = pack;
-    modal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-    setTimeout(() => phoneInput?.focus(), 50);
+    let currentPack = '';
+
+    function openModal(pack = '') {
+      currentPack = pack;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => phoneInput?.focus(), 50);
+    }
+
+    function closeModal() {
+      currentPack = '';
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+      form?.reset();
+      successMsg.classList.add('hidden');
+      errorMsg.classList.add('hidden');
+    }
+
+    // Expose globally so any button can open it
+    (window as any).openContactModal = openModal;
+
+    // Listen for custom event — detail.pack optional
+    document.addEventListener('open-contact-modal', (e) => {
+      const detail = (e as CustomEvent).detail;
+      openModal(detail?.pack ?? '');
+    });
+
+    closeBtn?.addEventListener('click', closeModal);
+    backdrop?.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+    });
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const scriptUrl = form.dataset.scriptUrl;
+      if (!scriptUrl) return;
+
+      const phone = phoneInput.value;
+      const lang = document.documentElement.lang || 'ca';
+      const originalText = btnText.innerText;
+
+      const msgSending = form.dataset.msgSending || '...';
+      const msgSent = form.dataset.msgSent || 'Enviat!';
+      const msgSuccess = form.dataset.msgSuccess || '';
+      const msgError = form.dataset.msgError || '';
+
+      submitBtn.disabled = true;
+      btnText.innerText = msgSending;
+      successMsg.classList.add('hidden');
+      errorMsg.classList.add('hidden');
+
+      fetch(scriptUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, message: '', lang, pack: currentPack }),
+      }).catch(() => {});
+
+      form.reset();
+      successMsg.textContent = msgSuccess;
+      successMsg.classList.remove('hidden');
+      btnText.innerText = msgSent;
+
+      setTimeout(() => {
+        closeModal();
+        submitBtn.disabled = false;
+        btnText.innerText = originalText;
+      }, 3000);
+    });
   }
 
-  function closeModal() {
-    currentPack = '';
-    modal.classList.add('hidden');
+  // Always restore scroll before any SPA navigation (guards against modal being open during navigation)
+  document.addEventListener('astro:before-swap', () => {
     document.body.style.overflow = '';
-    form?.reset();
-    successMsg.classList.add('hidden');
-    errorMsg.classList.add('hidden');
-  }
-
-  // Expose globally so any button can open it
-  (window as any).openContactModal = openModal;
-
-  // Listen for custom event — detail.pack optional
-  document.addEventListener('open-contact-modal', (e) => {
-    const detail = (e as CustomEvent).detail;
-    openModal(detail?.pack ?? '');
   });
 
-  closeBtn?.addEventListener('click', closeModal);
-  backdrop?.addEventListener('click', closeModal);
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
-  });
-
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const scriptUrl = form.dataset.scriptUrl;
-    if (!scriptUrl) return;
-
-    const phone = phoneInput.value;
-    const lang = document.documentElement.lang || 'ca';
-    const originalText = btnText.innerText;
-
-    const msgSending = form.dataset.msgSending || '...';
-    const msgSent = form.dataset.msgSent || 'Enviat!';
-    const msgSuccess = form.dataset.msgSuccess || '';
-    const msgError = form.dataset.msgError || '';
-
-    submitBtn.disabled = true;
-    btnText.innerText = msgSending;
-    successMsg.classList.add('hidden');
-    errorMsg.classList.add('hidden');
-
-    fetch(scriptUrl, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone, message: '', lang, pack: currentPack }),
-    }).catch(() => {});
-
-    form.reset();
-    successMsg.textContent = msgSuccess;
-    successMsg.classList.remove('hidden');
-    btnText.innerText = msgSent;
-
-    setTimeout(() => {
-      closeModal();
-      submitBtn.disabled = false;
-      btnText.innerText = originalText;
-    }, 3000);
-  });
+  initContactModal();
+  document.addEventListener('astro:page-load', initContactModal);
 </script>
