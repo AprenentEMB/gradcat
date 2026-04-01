@@ -1,16 +1,18 @@
 ---
-import type { Translations } from '../../i18n/translations';
+import type { Lang, Translations } from '../../i18n/translations';
 
 interface Props {
   t: Translations['contact'];
+  lang: Lang;
 }
 
-const { t } = Astro.props;
+const { t, lang } = Astro.props;
+const sectionId = lang === 'ca' ? 'contacte' : 'contacto';
 
 const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
 ---
 
-<section id="contact" class="bg-gray-50 py-24 px-6 border-t border-gray-100">
+<section id={sectionId} class="bg-gray-50 py-24 px-6 border-t border-gray-100">
   <div class="max-w-4xl mx-auto">
     <!-- Header -->
     <div class="text-center mb-12">
