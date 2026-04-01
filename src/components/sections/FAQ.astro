@@ -67,38 +67,45 @@ const faqSchema = JSON.stringify({
 </style>
 
 <script>
-  document.querySelectorAll<HTMLDetailsElement>('.faq-item').forEach((details) => {
-    const summary = details.querySelector('summary')!;
-    const content = details.querySelector<HTMLElement>('.faq-content')!;
-    const chevron = details.querySelector<HTMLElement>('.faq-chevron')!;
+  function initFaq() {
+    document.querySelectorAll<HTMLDetailsElement>('.faq-item:not([data-faq-init])').forEach((details) => {
+      details.setAttribute('data-faq-init', 'true');
 
-    // Sync initial state without animation
-    if (details.open) {
-      content.style.height = content.scrollHeight + 'px';
-      chevron.classList.add('is-open');
-    }
+      const summary = details.querySelector('summary')!;
+      const content = details.querySelector<HTMLElement>('.faq-content')!;
+      const chevron = details.querySelector<HTMLElement>('.faq-chevron')!;
 
-    summary.addEventListener('click', (e) => {
-      e.preventDefault();
-
+      // Sync initial state without animation
       if (details.open) {
-        // Collapse: pin current height, then animate to 0
         content.style.height = content.scrollHeight + 'px';
-        requestAnimationFrame(() => {
-          content.style.height = '0px';
-          chevron.classList.remove('is-open');
-        });
-        setTimeout(() => details.removeAttribute('open'), 350);
-      } else {
-        // Expand: open so content renders, measure, animate
-        details.setAttribute('open', '');
-        const target = content.scrollHeight;
-        content.style.height = '0px';
-        requestAnimationFrame(() => {
-          content.style.height = target + 'px';
-          chevron.classList.add('is-open');
-        });
+        chevron.classList.add('is-open');
       }
+
+      summary.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        if (details.open) {
+          // Collapse: pin current height, then animate to 0
+          content.style.height = content.scrollHeight + 'px';
+          requestAnimationFrame(() => {
+            content.style.height = '0px';
+            chevron.classList.remove('is-open');
+          });
+          setTimeout(() => details.removeAttribute('open'), 350);
+        } else {
+          // Expand: open so content renders, measure, animate
+          details.setAttribute('open', '');
+          const target = content.scrollHeight;
+          content.style.height = '0px';
+          requestAnimationFrame(() => {
+            content.style.height = target + 'px';
+            chevron.classList.add('is-open');
+          });
+        }
+      });
     });
-  });
+  }
+
+  initFaq();
+  document.addEventListener('astro:page-load', initFaq);
 </script>
