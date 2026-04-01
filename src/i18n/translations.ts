@@ -465,4 +465,4 @@ export const translations = {
   },
 } as const;
 
-export type Translations = typeof translations.ca;
+export type Translations = typeof translations['ca'] | typeof translations['es'];

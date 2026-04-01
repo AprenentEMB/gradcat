@@ -1,18 +1,26 @@
 ---
+import { Image } from 'astro:assets';
 import type { Translations } from '../../i18n/translations';
 
+// Importa les imatges (Astro les optimitzarà durant el build)
+import img1 from '../../assets/graduacions/1.webp';
+import img2 from '../../assets/graduacions/2.webp';
+import img3 from '../../assets/graduacions/3.webp';
+import img4 from '../../assets/graduacions/4.webp';
+import img5 from '../../assets/graduacions/5.webp';
 interface Props {
   t: Translations['gallery'];
 }
 
 const { t } = Astro.props;
 
+// Afegim les imatges directament a l'array
 const imageSrcs = [
-  { src: '/graduacions/1.webp', span: 'col-span-2 row-span-2' },
-  { src: '/graduacions/2.webp', span: '' },
-  { src: '/graduacions/3.webp', span: '' },
-  { src: '/graduacions/4.webp', span: '' },
-  { src: '/graduacions/5.webp', span: '' },
+  { src: img1, span: 'col-span-2 row-span-2' },
+  { src: img2, span: '' },
+  { src: img3, span: '' },
+  { src: img4, span: '' },
+  { src: img5, span: '' },
 ];
 
 const images = imageSrcs.map((img, i) => ({ ...img, alt: t.images[i]?.alt ?? '' }));
@@ -20,7 +28,6 @@ const images = imageSrcs.map((img, i) => ({ ...img, alt: t.images[i]?.alt ?? '' 
 
 <section id="galeria" class="bg-gray-50 py-24 px-6">
   <div class="max-w-7xl mx-auto">
-    <!-- Header -->
     <div class="text-center mb-16">
       <p class="text-brand font-semibold text-sm tracking-wide uppercase mb-3">{t.eyebrow}</p>
       <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display text-navy mb-4">
@@ -31,47 +38,17 @@ const images = imageSrcs.map((img, i) => ({ ...img, alt: t.images[i]?.alt ?? '' 
       </p>
     </div>
 
-    <!-- Photo grid -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 auto-rows-[200px] lg:auto-rows-[220px]">
-      {images.map(({ src, alt, span }) => (
+      {images.map(({ src, alt, span }, i) => (
         <div class:list={['rounded-xl overflow-hidden group', span]}>
-          <img
-            data-src={src}
-            src=""
+          <Image
+            src={src}
             alt={alt}
-            class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500 opacity-0"
+            loading={i === 0 ? 'eager' : 'lazy'}
+            class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
           />
         </div>
       ))}
     </div>
   </div>
 </section>
-
-<script>
-  const section = document.getElementById('galeria');
-  if (section) {
-    const imgs = Array.from(section.querySelectorAll<HTMLImageElement>('img[data-src]'));
-
-    const loadAll = () => {
-      imgs.forEach(img => {
-        const src = img.dataset.src;
-        if (!src) return;
-        img.onload = () => img.classList.replace('opacity-0', 'opacity-100');
-        img.src = src;
-        img.removeAttribute('data-src');
-      });
-    };
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadAll();
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '800px 0px' }
-    );
-
-    observer.observe(section);
-  }
-</script>

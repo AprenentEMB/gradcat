@@ -11,40 +11,44 @@ const { t } = Astro.props;
 const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
 ---
 
-<section class="bg-brand py-24 px-6">
-  <div class="max-w-3xl mx-auto text-center">
-    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display text-white leading-tight mb-6">
+<section class="relative overflow-hidden bg-gradient-to-b from-brand to-brand/90 py-24 px-6 border-y border-white/10">
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-blue-400/20 blur-[120px] rounded-full pointer-events-none"></div>
+
+  <div class="relative max-w-3xl mx-auto text-center z-10">
+    <h2 class="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-white to-white/85 tracking-tight leading-tight mb-6 drop-shadow-sm">
       {t.title}
     </h2>
-    <p class="text-white/70 text-lg max-w-xl mx-auto mb-10">
+    <p class="text-white/80 text-lg sm:text-xl font-medium max-w-xl mx-auto mb-10 leading-relaxed">
       {t.subtitle}
     </p>
     
-    <form id="cta-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" data-script-url={appsScriptUrl} data-msg-success={t.formSuccess} data-msg-error={t.formError} data-msg-sending={t.formSending} data-msg-sent={t.formSent}>
+    <form id="cta-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto relative" data-script-url={appsScriptUrl} data-msg-success={t.formSuccess} data-msg-error={t.formError} data-msg-sending={t.formSending} data-msg-sent={t.formSent}>
       {/* Honeypot antispam */}
       <input type="text" name="_hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" />
+      
       <input
         type="tel"
         id="cta-phone"
         name="phone"
         maxlength="9"
         placeholder={t.phonePlaceholder}
-        class="flex-1 bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 text-sm focus:outline-none focus:border-white focus:bg-white/20 transition-colors"
+        class="flex-1 bg-white/5 backdrop-blur-md border border-white/10 rounded-xl px-5 py-4 text-white placeholder-white/40 text-base shadow-inner focus:outline-none focus:border-white/30 focus:bg-white/10 focus:ring-4 focus:ring-white/5 transition-all duration-300"
         required
       />
+      
       <button
         type="submit"
         id="cta-submit-btn"
-        class="bg-white text-brand font-bold text-sm px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors whitespace-nowrap disabled:opacity-80 disabled:cursor-not-allowed disabled:hover:bg-white"
+        class="bg-white text-brand font-bold text-base px-8 py-4 rounded-xl shadow-[0_8px_20px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_25px_rgb(255,255,255,0.15)] hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap disabled:opacity-80 disabled:cursor-not-allowed disabled:transform-none"
       >
         <span id="cta-btn-text">{t.btn}</span>
       </button>
     </form>
     
-    <div id="cta-success" class="hidden mt-4 text-green-300 text-sm font-medium"></div>
-    <div id="cta-error" class="hidden mt-4 text-red-300 text-sm font-medium"></div>
+    <div id="cta-success" class="hidden mt-5 bg-green-500/10 border border-green-500/20 text-green-300 text-sm font-medium py-3 px-4 rounded-lg backdrop-blur-sm max-w-md mx-auto"></div>
+    <div id="cta-error" class="hidden mt-5 bg-red-500/10 border border-red-500/20 text-red-300 text-sm font-medium py-3 px-4 rounded-lg backdrop-blur-sm max-w-md mx-auto"></div>
 
-    <p class="text-white/40 text-xs mt-4">{t.callbackNote}</p>
+    <p class="text-white/70 text-xs mt-6 font-medium tracking-wide uppercase">{t.callbackNote}</p>
   </div>
 </section>
 

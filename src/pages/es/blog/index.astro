@@ -7,6 +7,7 @@ import Footer from '../../../components/sections/Footer.astro';
 import { fetchStrapi, getStrapiMediaUrl } from '../../../lib/strapi';
 import type { Article, StrapiListResponse } from '../../../lib/strapi';
 import { translations } from '../../../i18n/translations';
+import bgImage from '../../../assets/graduacions/2.webp';
 
 const t = translations.es;
 
@@ -27,12 +28,15 @@ const { data: articles } = await fetchStrapi<StrapiListResponse<Article>>(
 
       <!-- Hero -->
     <section class="relative pt-32 pb-16 px-6 overflow-hidden">
-      <img
-        src="/graduacions/4.webp"
+        <img
+        src={bgImage.src}
         alt=""
         aria-hidden="true"
         class="absolute inset-0 w-full h-full object-cover object-top"
         loading="eager"
+        fetchpriority="high"
+        width={bgImage.width}
+        height={bgImage.height}
       />
       <div class="absolute inset-0 bg-gray-900/65"></div>
       <div class="relative max-w-4xl mx-auto text-center">
@@ -63,6 +67,8 @@ const { data: articles } = await fetchStrapi<StrapiListResponse<Article>>(
                     <img
                       src={getStrapiMediaUrl(article.image.url)}
                       alt={article.image.alternativeText ?? article.title}
+                      width={article.image.width}
+                      height={article.image.height}
                       class="w-full h-48 object-cover"
                       loading={i === 0 ? 'eager' : 'lazy'}
                       transition:name={`post-image-es-${article.slug}`}

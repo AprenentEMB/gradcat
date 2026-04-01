@@ -8,9 +8,10 @@ interface Props {
 const { t } = Astro.props;
 
 const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
+const embedOrigin = Astro.url.origin;
 ---
 
-<section class="bg-white pt-24 pb-20 lg:pt-32 lg:pb-24 px-6">
+<section class="bg-gradient-to-br from-white via-white to-mist-200 pt-24 pb-20 lg:pt-32 lg:pb-24 px-6">
   <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-8">
 
     <!-- Left: Text + Form -->
@@ -22,17 +23,20 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
       </p>
 
       <!-- Headline -->
-      <h1 class="font-display text-navy leading-[1.15] mb-5 lg:mb-6 text-center lg:text-left" transition:name="hero-heading">
-        <span class="block text-4xl sm:text-5xl lg:text-5xl font-bold italic">
-          {t.headline1}
-        </span>
-        <span class="block text-4xl sm:text-5xl lg:text-5xl font-bold italic bg-gradient-to-r from-brand-dark via-brand to-brand-light bg-clip-text text-transparent pb-6">
-          {t.headline2}
-        </span>
-      </h1>
+      <h1 class="font-headline leading-tight mb-4 lg:mb-6 text-center lg:text-left" transition:name="hero-heading">
+
+  <span class="block text-2xl sm:text-3xl lg:text-3xl tracking-tight text-gray-500 mb-3 sm:mb-4" style="font-weight:200">
+    {t.headline1}
+  </span>
+
+  <span class="block text-5xl sm:text-6xl lg:text-7xl tracking-tighter bg-linear-to-r from-brand-dark via-brand to-blue-400 bg-clip-text text-transparent pb-4" style="font-weight:800">
+    {t.headline2}
+  </span>
+
+</h1>
 
       <!-- Subtitle -->
-      <p class="text-gray-500 text-base lg:text-lg leading-relaxed max-w-md mb-8 lg:mb-10 text-center lg:text-left">
+      <p class="font-light text-gray-500 text-base lg:text-lg leading-relaxed max-w-md mb-8 lg:mb-10 text-center lg:text-left">
         {t.subtitle}
       </p>
 
@@ -61,7 +65,7 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
         </form>
         <div id="hero-success" class="hidden mt-3 text-green-600 text-xs font-medium"></div>
         <div id="hero-error" class="hidden mt-3 text-red-600 text-xs font-medium"></div>
-        <p class="text-gray-400 text-xs mt-3 leading-relaxed">
+        <p class="text-gray-500 text-xs font-medium mt-3 leading-relaxed">
           {t.callbackNote}
         </p>
       </div>
@@ -69,47 +73,50 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
     </div>
 
     <!-- Right: Phone -->
-    <div class="flex-shrink-0 flex justify-center lg:justify-end relative pb-8 lg:pb-0">
-      <div class="relative w-[220px] sm:w-[240px] lg:w-[280px] group cursor-pointer" id="video-container">
+   <div class="flex-shrink-0 flex justify-center lg:justify-end relative pb-8 lg:pb-0">
+  <div class="relative w-[220px] sm:w-[240px] lg:w-[280px] group cursor-pointer" id="video-container">
 
-        <!-- Phone frame -->
-        <div class="relative aspect-[9/19] bg-gray-900 rounded-[2.5rem] p-2 shadow-2xl ring-1 ring-gray-900/10 transition-transform duration-300 group-hover:scale-[1.02]">
-          <!-- Notch -->
-          <div class="absolute top-2 inset-x-0 h-5 z-20 flex justify-center pointer-events-none">
-            <div class="w-24 h-full bg-gray-900 rounded-b-2xl"></div>
-          </div>
-          <!-- Screen -->
-          <div class="w-full h-full rounded-[2rem] overflow-hidden bg-black relative">
-            <iframe
-              id="hero-video"
-              src="https://www.youtube.com/embed/I96DLrMyilk?enablejsapi=1&autoplay=1&mute=1&loop=1&playlist=I96DLrMyilk&controls=0&playsinline=1&rel=0"
-              title="Vídeo de presentació"
-              class="w-full h-full pointer-events-none scale-105"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
-            ></iframe>
-          </div>
+    <div class="absolute -inset-2 sm:-inset-4 bg-gradient-to-tr from-brand via-gray-400 to-zinc-900 rounded-[3rem] blur-2xl opacity-40 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700 ease-out z-0"></div>
+
+    <div class="relative z-10 aspect-[9/19] bg-zinc-950 rounded-[2.5rem] p-2 shadow-2xl ring-1 ring-white/10 transition-transform duration-500 ease-out group-hover:scale-[1.02]">
+      
+      <div class="absolute inset-0 rounded-[2.5rem] ring-1 ring-inset ring-white/5 pointer-events-none"></div>
+
+      <div class="absolute top-2 inset-x-0 h-5 z-20 flex justify-center pointer-events-none">
+        <div class="w-24 h-full bg-zinc-950 rounded-b-2xl"></div>
+      </div>
+      
+      <div class="w-full h-full rounded-[2rem] overflow-hidden bg-black relative">
+        <iframe
+          id="hero-video"
+          src={`https://www.youtube.com/embed/I96DLrMyilk?enablejsapi=1&origin=${embedOrigin}&autoplay=1&mute=1&loop=1&playlist=I96DLrMyilk&controls=0&playsinline=1&rel=0`}
+          title="Vídeo de presentació"
+          class="w-full h-full pointer-events-none scale-105 opacity-90 group-hover:opacity-100 transition-opacity duration-500"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+
+    <div class="absolute -bottom-5 -left-6 lg:-left-10 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 px-4 py-3 z-30 pointer-events-none group-hover:-translate-y-1.5 transition-transform duration-500 ease-out">
+      <div class="flex items-center gap-3">
+        <div class="flex -space-x-2">
+          <div class="w-7 h-7 rounded-full bg-zinc-800 border-2 border-white"></div>
+          <div class="w-7 h-7 rounded-full bg-gray-400 border-2 border-white"></div>
+          <div class="w-7 h-7 rounded-full bg-brand border-2 border-white"></div>
         </div>
-
-        <!-- Floating badge -->
-        <div class="absolute -bottom-5 -left-6 lg:-left-10 bg-white rounded-2xl shadow-xl border border-gray-100 px-4 py-3 z-30 pointer-events-none">
-          <div class="flex items-center gap-3">
-            <div class="flex -space-x-2">
-              <div class="w-7 h-7 rounded-full bg-brand/20 border-2 border-white"></div>
-              <div class="w-7 h-7 rounded-full bg-brand/35 border-2 border-white"></div>
-              <div class="w-7 h-7 rounded-full bg-brand/50 border-2 border-white"></div>
-            </div>
-            <div>
-              <p class="text-navy font-bold text-xs leading-tight">{t.badgeCount}</p>
-              <p class="text-gray-400 text-[10px] leading-tight">{t.badgeLabel}</p>
-            </div>
-          </div>
+        <div>
+          <p class="text-zinc-900 font-extrabold text-xs leading-tight tracking-wide">{t.badgeCount}</p>
+          <p class="text-zinc-500 font-medium text-[10px] leading-tight uppercase tracking-wider mt-0.5">{t.badgeLabel}</p>
         </div>
-
       </div>
     </div>
 
   </div>
+</div>
+
+  </div>
+  
 </section>
 
 <script>

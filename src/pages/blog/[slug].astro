@@ -32,6 +32,20 @@ if (!article) return Astro.redirect('/blog');
 
 const coverUrl = article.image ? getStrapiMediaUrl(article.image.url) : undefined;
 const contentHtml = blocksToHtml(article.content);
+
+const articleSchema = article ? {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: article.title,
+  description: article.description ?? article.title,
+  ...(coverUrl ? { image: coverUrl } : {}),
+  datePublished: article.publishedAt,
+  publisher: {
+    '@type': 'Organization',
+    name: 'Graduacions.cat',
+    url: 'https://graduacions.cat',
+  },
+} : null;
 ---
 
 <Layout
@@ -41,6 +55,9 @@ const contentHtml = blocksToHtml(article.content);
   skipToContent={t.layout.skipToContent}
   image={coverUrl}
 >
+  {articleSchema && (
+    <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  )}
   <Header t={t.header} lang="ca" />
 
   <main id="main-content">
@@ -103,8 +120,11 @@ const contentHtml = blocksToHtml(article.content);
         <img
           src={coverUrl}
           alt={article.image?.alternativeText ?? article.title}
+          width={article.image?.width}
+          height={article.image?.height}
           class="w-full rounded-2xl object-cover max-h-80 shadow-lg"
           loading="eager"
+          fetchpriority="high"
           transition:name={`post-image-${article.slug}`}
         />
       </div>
@@ -112,13 +132,7 @@ const contentHtml = blocksToHtml(article.content);
 
     <!-- Contingut -->
     <article class="max-w-3xl mx-auto px-6 pb-20">
-      <div class="prose prose-lg max-w-none
-        prose-headings:text-brand prose-headings:font-bold
-        prose-a:text-brand prose-a:no-underline hover:prose-a:underline
-        prose-strong:text-gray-900
-        prose-blockquote:border-brand prose-blockquote:text-gray-600
-        prose-code:text-brand-dark prose-code:bg-gray-50 prose-code:px-1 prose-code:rounded
-        text-gray-700">
+      <div class="prose max-w-none text-gray-700">
         <Fragment set:html={contentHtml} />
       </div>
 

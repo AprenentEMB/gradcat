@@ -37,8 +37,16 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
     <meta name="theme-color" content="#173696" />
     <link rel="icon" type="image/png" href="/favicon.png" />
 
+    <!-- Preconnect to external origins -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://i.ytimg.com" />
+    <link rel="dns-prefetch" href="https://www.youtube.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
     <!-- Fonts -->
-    <link rel="preload" href="/fonts/Corra Montserra/VARIABLE/Cora Montserra Variable.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Corra Montserra/WOFF2/Corra Montserra Medium.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;800&display=swap" rel="stylesheet" />
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-LGSRT4G7R7" is:inline></script>
@@ -46,7 +54,9 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-LGSRT4G7R7');
+      gtag('config', 'G-LGSRT4G7R7', {
+        cookie_flags: 'SameSite=Lax;Secure',
+      });
     </script>
     <!-- Track SPA navigations with ClientRouter -->
     <script>
@@ -60,6 +70,8 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
         }
       });
     </script>
+
+    <slot name="head" />
 
     <!-- Local Business structured data -->
     <script is:inline type="application/ld+json">
@@ -91,9 +103,6 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
     </script>
   </head>
   <body class="bg-white text-gray-900 font-sans">
-    <!-- Google Tag Manager (noscript) -->
-    <noscript is:raw><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MTBJLLX3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
     <a
       href="#main-content"
       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:bg-brand focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg"

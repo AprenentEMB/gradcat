@@ -2,17 +2,23 @@
 
 @font-face {
   font-family: 'Corra Montserra';
-  src: url('/fonts/Corra Montserra/VARIABLE/Cora Montserra Variable.woff2') format('woff2'),
-       url('/fonts/Corra Montserra/VARIABLE/Cora Montserra Variable.woff') format('woff');
-  font-weight: 100 900;
+  src: url('/fonts/Corra Montserra/WOFF2/Corra Montserra Medium.woff2') format('woff2');
+  font-weight: 350 549;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Corra Montserra';
-  src: url('/fonts/Corra Montserra/WOFF2/Corra Montserra Bold.woff2') format('woff2'),
-       url('/fonts/Corra Montserra/WOFF/Corra Montserra Bold.woff') format('woff');
+  src: url('/fonts/Corra Montserra/WOFF2/Corra Montserra Light.woff2') format('woff2');
+  font-weight: 100 349;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Corra Montserra';
+  src: url('/fonts/Corra Montserra/WOFF2/Corra Montserra Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -20,11 +26,23 @@
 
 @font-face {
   font-family: 'Corra Montserra';
-  src: url('/fonts/Corra Montserra/WOFF2/Corra Montserra Semibold.woff2') format('woff2'),
-       url('/fonts/Corra Montserra/WOFF/Corra Montserra Semibold.woff') format('woff');
+  src: url('/fonts/Corra Montserra/WOFF2/Corra Montserra Semibold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
+}
+
+/* Adjusted fallback to minimise layout shift during font-swap.
+   Values approximate Corra Montserra metrics; fine-tune with
+   https://screenspan.net/fallback or fonttools if CLS persists. */
+@font-face {
+  font-family: 'Corra Montserra Fallback';
+  src: local('Arial');
+  ascent-override: 88%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+  size-adjust: 102%;
+  font-weight: 100 900;
 }
 
 @theme {
@@ -32,6 +50,9 @@
   --color-brand-light: #1e45b8;
   --color-brand-dark: #0f2567;
   --color-navy: #0b1a3e;
+  --color-gold: #c9922a;
+  --color-gold-light: #f5d06a;
+  --color-gold-dark: #7a5200;
   --color-gray-50: #f8fafc;
   --color-gray-100: #f1f5f9;
   --color-gray-200: #e2e8f0;
@@ -41,8 +62,9 @@
   --color-gray-700: #334155;
   --color-gray-800: #1e293b;
   --color-gray-900: #0f172a;
-  --font-display: 'Poppins', ui-sans-serif, system-ui, sans-serif;
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Corra Montserra', 'Corra Montserra Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Corra Montserra', 'Corra Montserra Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-headline: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
 }
 
 .font-display {
@@ -90,4 +112,141 @@ body {
   ::view-transition-new(root) {
     animation: none !important;
   }
+}
+
+/* ─── Contingut rich text del blog (substitut de @tailwindcss/typography) ── */
+
+.prose h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: var(--color-brand);
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.33;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-brand);
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-brand);
+}
+
+.prose h4, .prose h5, .prose h6 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-brand);
+}
+
+.prose p {
+  margin-bottom: 1.25rem;
+  line-height: 1.75;
+}
+
+.prose ul,
+.prose ol {
+  margin: 1rem 0 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.prose ul { list-style-type: disc; }
+.prose ol { list-style-type: decimal; }
+
+.prose li {
+  margin-bottom: 0.5rem;
+  line-height: 1.75;
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--color-brand);
+  padding-left: 1rem;
+  font-style: italic;
+  color: #475569;
+  margin: 1.5rem 0;
+}
+
+.prose strong {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.prose em {
+  font-style: italic;
+}
+
+.prose a {
+  color: var(--color-brand);
+  text-decoration: none;
+}
+
+.prose a:hover {
+  text-decoration: underline;
+}
+
+.prose code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.875em;
+  background-color: var(--color-gray-50);
+  color: var(--color-brand-dark);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.prose pre {
+  background-color: var(--color-gray-900);
+  color: var(--color-gray-100);
+  padding: 1rem 1.25rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-size: 0.875em;
+  line-height: 1.7;
+}
+
+.prose pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+}
+
+.prose img {
+  border-radius: 0.75rem;
+  margin: 1.5rem auto;
+  max-width: 100%;
+}
+
+/* ─── Gold Pack Card ─────────────────────────────────────────────────── */
+.pack-gold {
+  background: linear-gradient(
+    150deg,
+    #4a2c00 0%,
+    #9a6210 12%,
+    #c9922a 26%,
+    #e8b84b 40%,
+    #f5d06a 50%,
+    #e8b84b 60%,
+    #c9922a 74%,
+    #9a6210 88%,
+    #4a2c00 100%
+  );
+  box-shadow: 0 4px 20px -4px rgba(120, 75, 0, 0.4), inset 0 1px 0 rgba(255, 220, 100, 0.25);
+}
+
+.pack-gold:hover {
+  box-shadow: 0 24px 60px -10px rgba(140, 85, 0, 0.55), 0 8px 20px -4px rgba(140, 85, 0, 0.3), inset 0 1px 0 rgba(255, 220, 100, 0.3);
 }

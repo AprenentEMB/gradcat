@@ -32,6 +32,20 @@ if (!article) return Astro.redirect('/es/blog');
 
 const coverUrl = article.image ? getStrapiMediaUrl(article.image.url) : undefined;
 const contentHtml = blocksToHtml(article.content);
+
+const articleSchema = article ? {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: article.title,
+  description: article.description ?? article.title,
+  ...(coverUrl ? { image: coverUrl } : {}),
+  datePublished: article.publishedAt,
+  publisher: {
+    '@type': 'Organization',
+    name: 'Graduacions.cat',
+    url: 'https://graduacions.cat',
+  },
+} : null;
 ---
 
 <Layout
@@ -41,6 +55,9 @@ const contentHtml = blocksToHtml(article.content);
   skipToContent={t.layout.skipToContent}
   image={coverUrl}
 >
+  {articleSchema && (
+    <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  )}
   <Header t={t.header} lang="es" />
 
   <main id="main-content">
@@ -99,8 +116,11 @@ const contentHtml = blocksToHtml(article.content);
         <img
           src={coverUrl}
           alt={article.image?.alternativeText ?? article.title}
+          width={article.image?.width}
+          height={article.image?.height}
           class="w-full rounded-2xl object-cover max-h-80 shadow-lg"
           loading="eager"
+          fetchpriority="high"
           transition:name={`post-image-es-${article.slug}`}
         />
       </div>

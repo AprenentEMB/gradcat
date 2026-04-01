@@ -19,11 +19,31 @@ const site = Astro.site ?? new URL('https://graduacions.cat');
 const canonicalURL = new URL(Astro.url.pathname, site);
 const ogImage = new URL(image, site);
 const ogLocale = lang === 'ca' ? 'ca_ES' : 'es_ES';
+
+// Derive alternate URL for hreflang — handles asymmetric paths like /serveis ↔ /es/servicios
+const asymmetricPaths: Record<string, string> = {
+  '/serveis': '/es/servicios',
+  '/es/servicios': '/serveis',
+};
+const currentPath = Astro.url.pathname;
+let alternatePath: string;
+if (asymmetricPaths[currentPath]) {
+  alternatePath = asymmetricPaths[currentPath];
+} else if (lang === 'es') {
+  alternatePath = currentPath.replace(/^\/es/, '') || '/';
+} else {
+  alternatePath = `/es${currentPath === '/' ? '' : currentPath}`;
+}
+const alternateURL = new URL(alternatePath, site);
+const xDefaultURL = lang === 'ca' ? canonicalURL : alternateURL;
 ---
 
 <title>{title}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalURL} />
+<link rel="alternate" hreflang={lang === 'ca' ? 'ca' : 'es'} href={canonicalURL} />
+<link rel="alternate" hreflang={lang === 'ca' ? 'es' : 'ca'} href={alternateURL} />
+<link rel="alternate" hreflang="x-default" href={xDefaultURL} />
 
 <meta property="og:type" content="website" />
 <meta property="og:url" content={canonicalURL} />

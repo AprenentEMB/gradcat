@@ -8,13 +8,17 @@ interface Props {
 const { t } = Astro.props;
 ---
 
-<section id="stats" class="bg-brand py-16 px-6">
+<section id="stats" class="bg-gradient-to-br from-brand to-brand/85 py-20 px-6">
   <div class="max-w-5xl mx-auto">
-    <div class="grid grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-0 sm:divide-x sm:divide-white/20">
       {t.map(({ value, label }) => (
-        <div class="text-center">
-          <p class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">{value}</p>
-          <p class="text-white/70 text-sm font-medium mt-2">{label}</p>
+        <div class="text-center px-4">
+          <p class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight drop-shadow-sm">
+            <span set:html={typeof value === 'string' ? value.replace('%', '<span class=\"font-light\">%</span>') : value} />
+          </p>
+          <p class="text-white/80 text-sm font-semibold uppercase tracking-wider mt-3">
+            {label}
+          </p>
         </div>
       ))}
     </div>
