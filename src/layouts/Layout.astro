@@ -44,8 +44,21 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- Fonts -->
-    <link rel="preload" href="/fonts/Corra Montserra/WOFF2/Corra Montserra Medium.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high" />
+    <!-- Fonts: preload injected once per browser session via script to avoid
+         Astro ClientRouter re-inserting it on every SPA navigation, which
+         triggers repeated "preloaded but not used" browser warnings. -->
+    <script is:inline>
+      if (!window.__fontPreloaded) {
+        window.__fontPreloaded = true;
+        var l = document.createElement('link');
+        l.rel = 'preload';
+        l.href = '/fonts/Corra%20Montserra/WOFF2/Corra%20Montserra%20Medium.woff2';
+        l.as = 'font';
+        l.type = 'font/woff2';
+        l.crossOrigin = 'anonymous';
+        document.head.appendChild(l);
+      }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;800&display=swap" rel="stylesheet" />
 
     <!-- Google Analytics -->

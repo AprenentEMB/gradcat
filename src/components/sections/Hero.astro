@@ -122,25 +122,18 @@ const embedOrigin = Astro.url.origin;
 <script>
   let videoMuted = true;
 
-  function ytCommand(iframe: HTMLIFrameElement, func: string, args: any[] = []) {
-    iframe.contentWindow?.postMessage(
-      JSON.stringify({ event: 'command', func, args }),
-      '*'
-    );
-  }
-
-  // Video container click (mute/unmute) via postMessage — no YT API needed,
-  // works on first load and after every SPA navigation.
+  // Video container click (mute/unmute) via YouTube IFrame API postMessage.
+  // Mute/unmute does not trigger the autoplay audio policy block, so postMessage
+  // works here without needing to reload the src (which would restart the video).
   document.addEventListener('click', (e) => {
     if (!(e.target as HTMLElement).closest('#video-container')) return;
     const iframe = document.getElementById('hero-video') as HTMLIFrameElement | null;
     if (!iframe) return;
     if (videoMuted) {
-      ytCommand(iframe, 'unMute');
-      ytCommand(iframe, 'setVolume', [100]);
+      iframe.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
       videoMuted = false;
     } else {
-      ytCommand(iframe, 'mute');
+      iframe.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'mute', args: '' }), '*');
       videoMuted = true;
     }
   });
