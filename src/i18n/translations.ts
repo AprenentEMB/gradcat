@@ -24,7 +24,7 @@ export const translations = {
       formSent: "Enviat!",
     },
     hero: {
-      preheadline: 'GRADUACIONS, ESO, BATXILLERAT I UNIVERSITAT',
+      preheadline: 'GRADUACIONS ESO, BATXILLERAT I UNIVERSITAT',
       headline1: 'Organitzem la teva graduació.',
       headline2: 'Tu només gaudeix.',
       subtitle:
@@ -42,9 +42,9 @@ export const translations = {
       formSent: "Enviat!",
     },
     stats: [
-      { value: '+50', label: 'Graduacions organitzades' },
-      { value: '+5000', label: 'Graduats feliços' },
-      { value: '100%', label: 'Satisfacció garantida' },
+      { value: '+8', label: 'anys d’experiència' },
+      { value: '+100', label: 'Graduacions' },
+      { value: '+11.000', label: 'Graduats feliços' },
     ],
     universities: {
       eyebrow: 'Confien en nosaltres',
@@ -110,7 +110,7 @@ export const translations = {
       ],
     },
     packs: {
-      eyebrow: 'TIPUS DE GRADUACIONS',
+      eyebrow: 'PACKS DE GRADUACIONS',
       title: 'Tria la teva experiència',
       subtitle: 'Packs adaptats a cada tipus de graduació',
       popularLabel: 'Més popular',
@@ -255,7 +255,7 @@ export const translations = {
       formSent: "¡Enviado!",
     },
     hero: {
-      preheadline: 'GRADUACIONES, ESO, BACHILLERATO Y UNIVERSIDAD',
+      preheadline: 'GRADUACIONES ESO, BACHILLERATO Y UNIVERSIDAD',
       headline1: 'Organizamos tu graduación.',
       headline2: 'Tú solo disfruta.',
       subtitle:
@@ -273,9 +273,9 @@ export const translations = {
       formSent: "¡Enviado!",
     },
     stats: [
-      { value: '+50', label: 'Graduaciones organizadas' },
-      { value: '+5000', label: 'Graduados felices' },
-      { value: '100%', label: 'Satisfacción garantizada' },
+      { value: '+8', label: 'Años de experiencia' },
+      { value: '+100', label: 'Graduaciones' },
+      { value: '+11.000', label: 'Graduados felices' },
     ],
     universities: {
       eyebrow: 'Confían en nosotros',
@@ -341,7 +341,7 @@ export const translations = {
       ],
     },
     packs: {
-      eyebrow: 'TIPOS DE GRADUACIONES',
+      eyebrow: 'PACKS DE GRADUACIONES',
       title: 'Elige tu experiencia',
       subtitle: 'Packs adaptados a cada tipo de graduación',
       popularLabel: 'Más popular',
