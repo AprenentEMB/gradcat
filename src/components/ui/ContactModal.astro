@@ -179,11 +179,14 @@ const copy = {
       successMsg.classList.add('hidden');
       errorMsg.classList.add('hidden');
 
+      const phoneCopy = phone;
+      const packCopy = currentPack;
+
       fetch(scriptUrl, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone, message: '', lang, pack: currentPack }),
+        body: JSON.stringify({ action: 'create', phone, message: '', lang, pack: currentPack, canal: 'Web' }),
       }).catch(() => {});
 
       form.reset();
@@ -195,7 +198,8 @@ const copy = {
         closeModal();
         submitBtn.disabled = false;
         btnText.innerText = originalText;
-      }, 3000);
+        document.dispatchEvent(new CustomEvent('open-info-modal', { detail: { phone: phoneCopy, pack: packCopy } }));
+      }, 800);
     });
   }
 

@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import SEO from '../components/SEO.astro';
 import ContactModal from '../components/ui/ContactModal.astro';
+import InfoModal from '../components/ui/InfoModal.astro';
 import { ClientRouter } from 'astro:transitions';
 import type { Lang } from '../i18n/translations';
 
@@ -126,6 +127,7 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
     </a>
     <slot />
     <ContactModal lang={lang} appsScriptUrl={appsScriptUrl} transition:persist="contact-modal" />
+    <InfoModal lang={lang} appsScriptUrl={appsScriptUrl} transition:persist="info-modal" />
     <script>
       (function () {
         var lang = document.documentElement.lang || 'ca';

@@ -7,8 +7,6 @@ import Footer from '../../components/sections/Footer.astro';
 import { fetchStrapi, getStrapiMediaUrl } from '../../lib/strapi';
 import type { Article, StrapiListResponse } from '../../lib/strapi';
 import { translations } from '../../i18n/translations';
-import bgImage from '../../assets/graduacions/2.webp';
-
 const t = translations.ca;
 
 const { data: articles } = await fetchStrapi<StrapiListResponse<Article>>(
@@ -27,24 +25,14 @@ const { data: articles } = await fetchStrapi<StrapiListResponse<Article>>(
   <main id="main-content">
 
     <!-- Hero -->
-    <section class="relative pt-32 pb-16 px-6 overflow-hidden">
-      <img
-        src={bgImage.src}
-        alt=""
-        aria-hidden="true"
-        class="absolute inset-0 w-full h-full object-cover object-top"
-        loading="eager"
-        fetchpriority="high"
-        width={bgImage.width}
-        height={bgImage.height}
-      />
-      <div class="absolute inset-0 bg-gray-900/65"></div>
-      <div class="relative max-w-4xl mx-auto text-center">
-        <p class="text-white/60 text-sm font-semibold uppercase tracking-widest mb-3">Graduacions.cat</p>
-        <h1 class="text-4xl md:text-5xl font-bold text-white leading-tight mb-4">
-          Blog
+    <section class="bg-linear-to-br from-white via-white to-brand/5 pt-32 pb-16 px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <p class="text-brand font-semibold text-xs tracking-widest uppercase mb-4">Graduacions.cat</p>
+        <h1 class="font-headline leading-tight mb-4">
+          <span class="block text-4xl md:text-5xl tracking-tight text-gray-500 mb-2" style="font-weight:200">El nostre</span>
+          <span class="block text-5xl md:text-6xl tracking-tighter bg-linear-to-r from-brand-dark via-brand to-blue-400 bg-clip-text text-transparent pb-2" style="font-weight:800">Blog</span>
         </h1>
-        <p class="text-white/70 text-lg max-w-xl mx-auto">
+        <p class="font-light text-gray-500 text-lg max-w-xl mx-auto">
           Consells, idees i inspiració per organitzar la festa de graduació perfecta.
         </p>
       </div>

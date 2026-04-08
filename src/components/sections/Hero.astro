@@ -183,13 +183,15 @@ const embedOrigin = Astro.url.origin;
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone, message: '', lang }),
+          body: JSON.stringify({ action: 'create', phone, message: '', lang, canal: 'Web' }),
         });
 
         heroForm.reset();
         successMsg.textContent = msgSuccess;
         successMsg.classList.remove('hidden');
         btnText.innerText = msgSent;
+
+        document.dispatchEvent(new CustomEvent('open-info-modal', { detail: { phone } }));
       } catch {
         errorMsg.textContent = msgError;
         errorMsg.classList.remove('hidden');

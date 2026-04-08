@@ -1,0 +1,350 @@
+---
+import type { Lang } from '../../i18n/translations';
+
+interface Props {
+  lang: Lang;
+  appsScriptUrl: string;
+}
+
+const { lang, appsScriptUrl } = Astro.props;
+
+const currentYear = new Date().getFullYear();
+const years = [currentYear, currentYear + 1, currentYear + 2, currentYear + 3];
+
+const copy = {
+  ca: {
+    stepLabel: "Pas 2 · Opcional",
+    title: "Ajuda'ns a preparar la teva proposta!",
+    subtitle: "Uns detalls per fer-te l'oferta perfecta.",
+    closeLabel: "Tancar",
+    nomPlaceholder: "El teu nom",
+    paxPlaceholder: "Nombre de persones",
+    centrePlaceholder: "Institut o universitat",
+    ciutatPlaceholder: "Ciutat",
+    mesDefault: "Mes aprox.",
+    anyDefault: "Any aprox.",
+    months: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
+    tipusDefault: "Tipus d'event...",
+    tipusOptions: ["SOPAR", "FESTA", "SOPAR + FESTA", "ALTRA"],
+    infoPlaceholder: "Altres comentaris...",
+    submitBtn: "Enviar informació",
+    skipBtn: "Ometre, ja m'avisareu",
+    formSuccess: "Gràcies! Tenim tota la info per preparar la teva proposta.",
+    formError: "Hi ha hagut un error. Si us plau, torna-ho a provar.",
+    formSending: "Enviant...",
+    formSent: "Enviat!",
+  },
+  es: {
+    stepLabel: "Paso 2 · Opcional",
+    title: "¡Ayúdanos a preparar tu propuesta!",
+    subtitle: "Unos datos para hacerte la oferta perfecta.",
+    closeLabel: "Cerrar",
+    nomPlaceholder: "Tu nombre",
+    paxPlaceholder: "Número de personas",
+    centrePlaceholder: "Instituto o universidad",
+    ciutatPlaceholder: "Ciudad",
+    mesDefault: "Mes aprox.",
+    anyDefault: "Año aprox.",
+    months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+    tipusDefault: "Tipo de evento...",
+    tipusOptions: ["CENA", "FIESTA", "CENA + FIESTA", "OTRA"],
+    infoPlaceholder: "Otros comentarios...",
+    submitBtn: "Enviar información",
+    skipBtn: "Omitir, ya me avisaréis",
+    formSuccess: "¡Gracias! Tenemos toda la info para preparar tu propuesta.",
+    formError: "Ha habido un error. Por favor, inténtalo de nuevo.",
+    formSending: "Enviando...",
+    formSent: "¡Enviado!",
+  },
+}[lang];
+---
+
+<!-- Info Modal backdrop -->
+<div
+  id="info-modal"
+  class="fixed inset-0 z-[300] flex items-center justify-center p-4 hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="info-modal-title"
+>
+  <!-- Backdrop -->
+  <div id="info-modal-backdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+
+  <!-- Panel -->
+  <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto animate-info-modal">
+
+    <!-- Close button -->
+    <button
+      id="info-modal-close"
+      type="button"
+      aria-label={copy.closeLabel}
+      class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10"
+    >
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <div class="p-8">
+      <!-- Step badge -->
+      <span class="inline-block bg-gray-100 text-gray-500 text-xs font-semibold px-3 py-1 rounded-full mb-4 tracking-wide">
+        {copy.stepLabel}
+      </span>
+
+      <!-- Header -->
+      <div class="mb-6">
+        <h2 id="info-modal-title" class="text-2xl font-extrabold text-navy mb-1">{copy.title}</h2>
+        <p class="text-gray-500 text-sm">{copy.subtitle}</p>
+      </div>
+
+      <!-- Form -->
+      <form
+        id="info-modal-form"
+        class="flex flex-col gap-3"
+        data-script-url={appsScriptUrl}
+        data-msg-success={copy.formSuccess}
+        data-msg-error={copy.formError}
+        data-msg-sending={copy.formSending}
+        data-msg-sent={copy.formSent}
+      >
+        <!-- Name -->
+        <input
+          type="text"
+          id="info-modal-nom"
+          name="nom"
+          placeholder={copy.nomPlaceholder}
+          class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+        />
+
+        <!-- Pax -->
+        <input
+          type="number"
+          id="info-modal-pax"
+          name="pax"
+          min="1"
+          max="1000"
+          placeholder={copy.paxPlaceholder}
+          class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+        />
+
+        <!-- Centre Educatiu -->
+        <input
+          type="text"
+          id="info-modal-centre"
+          name="centre"
+          placeholder={copy.centrePlaceholder}
+          class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+        />
+
+        <!-- Ciutat -->
+        <input
+          type="text"
+          id="info-modal-ciutat"
+          name="ciutat"
+          placeholder={copy.ciutatPlaceholder}
+          class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+        />
+
+        <!-- Data aproximada: mes + any -->
+        <div class="grid grid-cols-2 gap-3">
+          <select
+            id="info-modal-mes"
+            name="mes"
+            class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+          >
+            <option value="">{copy.mesDefault}</option>
+            {copy.months.map((month, i) => (
+              <option value={String(i + 1).padStart(2, '0')}>{month}</option>
+            ))}
+          </select>
+          <select
+            id="info-modal-any"
+            name="any"
+            class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+          >
+            <option value="">{copy.anyDefault}</option>
+            {years.map(year => (
+              <option value={String(year)}>{year}</option>
+            ))}
+          </select>
+        </div>
+
+        <!-- Tipus d'event -->
+        <select
+          id="info-modal-tipus"
+          name="tipus"
+          class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+        >
+          <option value="">{copy.tipusDefault}</option>
+          {copy.tipusOptions.map(option => (
+            <option value={option}>{option}</option>
+          ))}
+        </select>
+
+        <!-- Info / comentaris -->
+        <textarea
+          id="info-modal-info"
+          name="info"
+          rows="3"
+          placeholder={copy.infoPlaceholder}
+          class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand resize-none"
+        ></textarea>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          id="info-modal-submit"
+          class="w-full bg-brand text-white font-semibold text-sm px-4 py-3.5 rounded-xl hover:bg-brand-light transition-colors disabled:opacity-80 disabled:cursor-not-allowed"
+        >
+          <span id="info-modal-btn-text">{copy.submitBtn}</span>
+        </button>
+      </form>
+
+      <div id="info-modal-success" class="hidden mt-3 text-green-600 text-sm font-medium text-center"></div>
+      <div id="info-modal-error" class="hidden mt-3 text-red-600 text-sm font-medium text-center"></div>
+
+      <!-- Skip link -->
+      <div class="mt-4 text-center">
+        <button
+          id="info-modal-skip"
+          type="button"
+          class="text-gray-400 text-xs hover:text-gray-600 transition-colors underline underline-offset-2"
+        >
+          {copy.skipBtn}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes info-modal-in {
+    from { opacity: 0; transform: scale(0.95) translateY(8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .animate-info-modal {
+    animation: info-modal-in 0.18s ease-out both;
+  }
+</style>
+
+<script>
+  function initInfoModal() {
+    const modal = document.getElementById('info-modal') as HTMLElement;
+    if (!modal || modal.hasAttribute('data-modal-init')) return;
+    modal.setAttribute('data-modal-init', 'true');
+
+    const backdrop = document.getElementById('info-modal-backdrop') as HTMLElement;
+    const closeBtn = document.getElementById('info-modal-close') as HTMLButtonElement;
+    const skipBtn = document.getElementById('info-modal-skip') as HTMLButtonElement;
+    const form = document.getElementById('info-modal-form') as HTMLFormElement;
+    const submitBtn = document.getElementById('info-modal-submit') as HTMLButtonElement;
+    const btnText = document.getElementById('info-modal-btn-text') as HTMLElement;
+    const successMsg = document.getElementById('info-modal-success') as HTMLElement;
+    const errorMsg = document.getElementById('info-modal-error') as HTMLElement;
+
+    let currentPhone = '';
+    let currentPack = '';
+
+    function openModal(phone = '', pack = '') {
+      currentPhone = phone;
+      currentPack = pack;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      currentPhone = '';
+      currentPack = '';
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+      form?.reset();
+      successMsg.classList.add('hidden');
+      errorMsg.classList.add('hidden');
+    }
+
+    // Expose globally
+    (window as any).openInfoModal = openModal;
+
+    // Listen for custom event
+    document.addEventListener('open-info-modal', (e) => {
+      const detail = (e as CustomEvent).detail;
+      openModal(detail?.phone ?? '', detail?.pack ?? '');
+    });
+
+    closeBtn?.addEventListener('click', closeModal);
+    skipBtn?.addEventListener('click', closeModal);
+    backdrop?.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+    });
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const scriptUrl = form.dataset.scriptUrl;
+      if (!scriptUrl) return;
+
+      const nom = (document.getElementById('info-modal-nom') as HTMLInputElement).value.trim();
+      const pax = (document.getElementById('info-modal-pax') as HTMLInputElement).value.trim();
+      const centre = (document.getElementById('info-modal-centre') as HTMLInputElement).value.trim();
+      const ciutat = (document.getElementById('info-modal-ciutat') as HTMLInputElement).value.trim();
+      const mes = (document.getElementById('info-modal-mes') as HTMLSelectElement).value;
+      const any = (document.getElementById('info-modal-any') as HTMLSelectElement).value;
+      const tipus = (document.getElementById('info-modal-tipus') as HTMLSelectElement).value;
+      const info = (document.getElementById('info-modal-info') as HTMLTextAreaElement).value.trim();
+
+      // Build dataEvent string if at least one is selected
+      const dataEvent = mes && any ? `${mes}/${any}` : (any || mes || '');
+
+      const originalText = btnText.innerText;
+      const msgSending = form.dataset.msgSending || '...';
+      const msgSent = form.dataset.msgSent || 'Enviat!';
+      const msgSuccess = form.dataset.msgSuccess || '';
+      const msgError = form.dataset.msgError || '';
+
+      submitBtn.disabled = true;
+      btnText.innerText = msgSending;
+      successMsg.classList.add('hidden');
+      errorMsg.classList.add('hidden');
+
+      const payload: Record<string, string | number> = {
+        action: 'update_info',
+        phone: currentPhone,
+      };
+      if (nom) payload.nom = nom;
+      if (pax) payload.pax = Number(pax);
+      if (centre) payload.centre = centre;
+      if (ciutat) payload.ciutat = ciutat;
+      if (dataEvent) payload.dataEvent = dataEvent;
+      if (tipus) payload.tipus = tipus;
+      if (currentPack && !tipus) payload.tipus = currentPack;
+      if (info) payload.info = info;
+
+      fetch(scriptUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }).catch(() => {});
+
+      form.reset();
+      btnText.innerText = msgSent;
+      successMsg.textContent = msgSuccess;
+      successMsg.classList.remove('hidden');
+
+      setTimeout(() => {
+        closeModal();
+        submitBtn.disabled = false;
+        btnText.innerText = originalText;
+      }, 2500);
+    });
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    document.body.style.overflow = '';
+  });
+
+  initInfoModal();
+  document.addEventListener('astro:page-load', initInfoModal);
+</script>
