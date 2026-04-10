@@ -91,10 +91,8 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
 
       const phone = (document.getElementById('phone') as HTMLInputElement).value;
       const message = (document.getElementById('message') as HTMLTextAreaElement).value;
-      
-      // Llegim l'idioma actual (Astro normalment el posa al html lang="")
-      // Si a la teva web el guardeu d'una altra manera, ho pots canviar aquí.
-      const lang = document.documentElement.lang || 'ca'; 
+      const lang = document.documentElement.lang || 'ca';
+      const referit = sessionStorage.getItem('referit') || '';
 
       const msgSending = form.dataset.msgSending || 'Enviant...';
       const msgSuccess = form.dataset.msgSuccess || '';
@@ -112,7 +110,7 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'create', phone, message, lang, canal: 'Web' }),
+          body: JSON.stringify({ action: 'create', phone, message, lang, canal: 'Web', referit }),
         });
 
         form.reset();

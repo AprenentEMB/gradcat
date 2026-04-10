@@ -25,7 +25,7 @@
 //  K  = Whatsapp          (telèfon — formulari pas 1)
 //  L  = Ciutat            (camp intern — buit)
 //  M  = Contacte          (reservat per ús intern — buit)
-//  N  = Estat             (camp intern — buit)
+//  N  = Referit           (codi d'afiliat — paràmetre ?ref= de la URL)
 //  O  = Info              (missatge formulari contacte)
 //  P–X = Local, Cost, Preu, Benefici… (camps interns — buits)
 //
@@ -68,7 +68,7 @@ function doPost(e) {
       // G–J: omplerts per update_info
       sheetSolicituds.getRange(newRow, 11).setValue(data.phone || '');   // K: Whatsapp
       // L, M: omplerts per update_info / reservat
-      // N: Estat — buit (camp intern)
+      if (data.referit) sheetSolicituds.getRange(newRow, 14).setValue(data.referit); // N: Referit
       if (data.message && data.message.trim() !== '') {
         sheetSolicituds.getRange(newRow, 15).setValue(data.message);     // O: Info
       }
