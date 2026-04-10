@@ -8,6 +8,7 @@ import { fetchStrapi, getStrapiMediaUrl } from '../../../lib/strapi';
 import type { Article, StrapiListResponse } from '../../../lib/strapi';
 import { translations } from '../../../i18n/translations';
 import fallbackImg from '../../../assets/blog/1.webp';
+const blogImages = import.meta.glob<{ default: ImageMetadata }>('../../../assets/blog/*.webp', { eager: true });
 const t = translations.es;
 
 const { data: articles } = await fetchStrapi<StrapiListResponse<Article>>(
@@ -52,15 +53,19 @@ const { data: articles } = await fetchStrapi<StrapiListResponse<Article>>(
               <li class="flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100">
 
                 <a href={`/es/blog/${article.slug}`} tabindex="-1" aria-hidden="true">
-                  <img
-                    src={article.image ? getStrapiMediaUrl(article.image.url) : fallbackImg.src}
-                    alt={article.image?.alternativeText ?? article.title}
-                    width={article.image?.width ?? fallbackImg.width}
-                    height={article.image?.height ?? fallbackImg.height}
-                    class="w-full h-48 object-cover"
-                    loading={i === 0 ? 'eager' : 'lazy'}
-                    transition:name={`post-image-es-${article.slug}`}
-                  />
+                  {(() => {
+                    const slugImg = blogImages[`../../../assets/blog/${article.slug}.webp`];
+                    const src = slugImg ? slugImg.default.src : fallbackImg.src;
+                    return (
+                      <img
+                        src={src}
+                        alt={article.title}
+                        class="w-full h-48 object-cover"
+                        loading={i === 0 ? 'eager' : 'lazy'}
+                        transition:name={`post-image-es-${article.slug}`}
+                      />
+                    );
+                  })()}
                 </a>
 
                 <div class="h-1 bg-linear-to-r from-brand to-brand-light"></div>

@@ -9,6 +9,8 @@ import type { Article, StrapiListResponse } from '../../../lib/strapi';
 import { translations } from '../../../i18n/translations';
 import fallbackImg from '../../../assets/blog/1.webp';
 
+const blogImages = import.meta.glob<{ default: ImageMetadata }>('../../../assets/blog/*.webp', { eager: true });
+
 const t = translations.es;
 
 export async function getStaticPaths() {
@@ -31,7 +33,8 @@ const article = articles[0];
 
 if (!article) return Astro.redirect('/es/blog');
 
-const coverUrl = article.image ? getStrapiMediaUrl(article.image.url) : fallbackImg.src;
+const slugImg = blogImages[`../../../assets/blog/${article.slug}.webp`];
+const coverUrl = slugImg ? slugImg.default.src : fallbackImg.src;
 const contentHtml = blocksToHtml(article.content);
 
 const articleSchema = article ? {
