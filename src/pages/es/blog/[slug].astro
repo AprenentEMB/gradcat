@@ -7,6 +7,7 @@ import Footer from '../../../components/sections/Footer.astro';
 import { fetchStrapi, getStrapiMediaUrl, blocksToHtml } from '../../../lib/strapi';
 import type { Article, StrapiListResponse } from '../../../lib/strapi';
 import { translations } from '../../../i18n/translations';
+import fallbackImg from '../../../assets/blog/1.webp';
 
 const t = translations.es;
 
@@ -30,7 +31,7 @@ const article = articles[0];
 
 if (!article) return Astro.redirect('/es/blog');
 
-const coverUrl = article.image ? getStrapiMediaUrl(article.image.url) : undefined;
+const coverUrl = article.image ? getStrapiMediaUrl(article.image.url) : fallbackImg.src;
 const contentHtml = blocksToHtml(article.content);
 
 const articleSchema = article ? {

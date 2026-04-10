@@ -16,17 +16,17 @@
 //  B  = Idioma            (lang)
 //  C  = Canal             ("Web")
 //  D  = Usuari            (camp intern — buit)
-//  E  = Tipus             (InfoModal: SOPAR / FESTA / SOPAR + FESTA / ALTRA)
-//  F  = Pack              (modal de packs)
-//  G  = Data              (InfoModal: mes/any aprox.)
-//  H  = Pax               (InfoModal: nombre de persones)
+//  E  = Tipus graduació   (InfoModal: ESO / BATXILLERAT / UNIVERSITAT)
+//  F  = Pack              (modal de packs + InfoModal: SOPAR / FESTA / SOPAR + FESTA)
+//  G  = Data              (InfoModal: data de la graduació DD/MM/YYYY)
+//  H  = Pax               (InfoModal: nombre d'assistents)
 //  I  = Centre Educatiu   (InfoModal)
 //  J  = Contacte          (InfoModal: nom)
 //  K  = Whatsapp          (telèfon — formulari pas 1)
-//  L  = Ciutat            (InfoModal)
+//  L  = Ciutat            (camp intern — buit)
 //  M  = Contacte          (reservat per ús intern — buit)
 //  N  = Estat             (camp intern — buit)
-//  O  = Info              (missatge formulari contacte + comentaris InfoModal)
+//  O  = Info              (missatge formulari contacte)
 //  P–X = Local, Cost, Preu, Benefici… (camps interns — buits)
 //
 // COLUMNES DEL FULL "Dubtes":
@@ -88,29 +88,52 @@ function doPost(e) {
 
     // ── PAS 2: informació addicional de l'InfoModal ──────────────────────────
     if (action === 'update_info') {
-      const phone = data.phone || '';
-      const lastRow = sheetSolicituds.getLastRow();
+      const phone = String(data.phone || '').replace(/\s+/g, '').trim();
 
-      // Cerquem les últimes 100 files per trobar el telèfon coincident (col K = 11)
-      for (let r = lastRow; r >= Math.max(2, lastRow - 100); r--) {
-        const rowPhone = sheetSolicituds.getRange(r, 11).getValue();
-        if (String(rowPhone).trim() === String(phone).trim()) {
-          if (data.tipus)     sheetSolicituds.getRange(r, 5).setValue(data.tipus);         // E: Tipus
-          if (data.dataEvent) sheetSolicituds.getRange(r, 7).setValue(data.dataEvent);    // G: Data
-          if (data.pax)       sheetSolicituds.getRange(r, 8).setValue(Number(data.pax));  // H: Pax
-          if (data.centre)    sheetSolicituds.getRange(r, 9).setValue(data.centre);       // I: Centre Educatiu
-          if (data.nom)       sheetSolicituds.getRange(r, 10).setValue(data.nom);         // J: Contacte (nom)
-          if (data.ciutat)    sheetSolicituds.getRange(r, 12).setValue(data.ciutat);      // L: Ciutat
-          // M: reservat — no s'omple
-          if (data.info) {
-            // Afegim als comentaris existents (p.ex. missatge del formulari de contacte)
-            const existing = sheetSolicituds.getRange(r, 15).getValue();
-            const combined = existing ? existing + '\n' + data.info : data.info;
-            sheetSolicituds.getRange(r, 15).setValue(combined);                           // O: Info
-          }
+      Logger.log('update_info rebut, phone: ' + phone);
+
+      if (!phone) {
+        return ContentService
+          .createTextOutput(JSON.stringify({ error: 'phone buit' }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+
+      const lastRow = sheetSolicituds.getLastRow();
+      if (lastRow < 2) {
+        Logger.log('No hi ha files de dades');
+        return ContentService
+          .createTextOutput(JSON.stringify({ error: 'cap fila' }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+
+      // Llegim tota la columna K d'una sola vegada (molt més ràpid)
+      const phones = sheetSolicituds
+        .getRange(2, 11, lastRow - 1, 1)
+        .getValues();
+
+      let foundRow = -1;
+      for (let i = phones.length - 1; i >= 0; i--) {
+        const stored = String(phones[i][0] || '').replace(/\s+/g, '').trim();
+        if (stored === phone) {
+          foundRow = i + 2; // +2: array base 0 + fila 1 és capçalera
           break;
         }
       }
+
+      Logger.log('Fila trobada: ' + foundRow);
+
+      if (foundRow === -1) {
+        return ContentService
+          .createTextOutput(JSON.stringify({ error: 'telèfon no trobat' }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+
+      if (data.tipusGraduacio) sheetSolicituds.getRange(foundRow, 5).setValue(data.tipusGraduacio); // E: Tipus graduació
+      if (data.pack)           sheetSolicituds.getRange(foundRow, 6).setValue(data.pack);           // F: Pack
+      if (data.dataEvent)      sheetSolicituds.getRange(foundRow, 7).setValue(data.dataEvent);      // G: Data
+      if (data.pax)            sheetSolicituds.getRange(foundRow, 8).setValue(Number(data.pax));    // H: Pax
+      if (data.centre)         sheetSolicituds.getRange(foundRow, 9).setValue(data.centre);         // I: Centre Educatiu
+      if (data.nom)            sheetSolicituds.getRange(foundRow, 10).setValue(data.nom);           // J: Contacte (nom)
     }
 
     return ContentService
@@ -164,12 +187,11 @@ function testUpdateInfo() {
         action: 'update_info',
         phone: '600123456',
         nom: 'Joan Garcia',
-        pax: 80,
+        tipusGraduacio: 'BATXILLERAT',
+        pack: 'SOPAR + FESTA',
         centre: 'IES Exemple',
-        dataEvent: '06/2026',
-        tipus: 'SOPAR + FESTA',
-        ciutat: 'Barcelona',
-        info: 'Volem DJ de reggaeton'
+        dataEvent: '29/05/2026',
+        pax: 80
       })
     }
   };

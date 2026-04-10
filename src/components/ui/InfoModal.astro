@@ -18,15 +18,13 @@ const copy = {
     subtitle: "Uns detalls per fer-te l'oferta perfecta.",
     closeLabel: "Tancar",
     nomPlaceholder: "El teu nom",
-    paxPlaceholder: "Nombre de persones",
-    centrePlaceholder: "Institut o universitat",
-    ciutatPlaceholder: "Ciutat",
-    mesDefault: "Mes aprox.",
-    anyDefault: "Any aprox.",
-    months: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
-    tipusDefault: "Tipus d'event...",
-    tipusOptions: ["SOPAR", "FESTA", "SOPAR + FESTA", "ALTRA"],
-    infoPlaceholder: "Altres comentaris...",
+    tipusGraduacioDefault: "Tipus de graduació...",
+    tipusGraduacioOptions: ["ESO", "BATXILLERAT", "UNIVERSITAT"],
+    packDefault: "Pack escollit...",
+    packOptions: ["SOPAR", "FESTA", "SOPAR + FESTA"],
+    centrePlaceholder: "De quina escola / universitat vens",
+    dataLabel: "Data de la graduació",
+    paxPlaceholder: "Número aproximat d'assistents",
     submitBtn: "Enviar informació",
     skipBtn: "Ometre, ja m'avisareu",
     formSuccess: "Gràcies! Tenim tota la info per preparar la teva proposta.",
@@ -40,15 +38,13 @@ const copy = {
     subtitle: "Unos datos para hacerte la oferta perfecta.",
     closeLabel: "Cerrar",
     nomPlaceholder: "Tu nombre",
-    paxPlaceholder: "Número de personas",
-    centrePlaceholder: "Instituto o universidad",
-    ciutatPlaceholder: "Ciudad",
-    mesDefault: "Mes aprox.",
-    anyDefault: "Año aprox.",
-    months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-    tipusDefault: "Tipo de evento...",
-    tipusOptions: ["CENA", "FIESTA", "CENA + FIESTA", "OTRA"],
-    infoPlaceholder: "Otros comentarios...",
+    tipusGraduacioDefault: "Tipo de graduación...",
+    tipusGraduacioOptions: ["ESO", "BACHILLERATO", "UNIVERSIDAD"],
+    packDefault: "Pack elegido...",
+    packOptions: ["CENA", "FIESTA", "CENA + FIESTA"],
+    centrePlaceholder: "¿De qué instituto / universidad vienes?",
+    dataLabel: "Fecha de la graduación",
+    paxPlaceholder: "Número aproximado de asistentes",
     submitBtn: "Enviar información",
     skipBtn: "Omitir, ya me avisaréis",
     formSuccess: "¡Gracias! Tenemos toda la info para preparar tu propuesta.",
@@ -107,7 +103,7 @@ const copy = {
         data-msg-sending={copy.formSending}
         data-msg-sent={copy.formSent}
       >
-        <!-- Name -->
+        <!-- Nom -->
         <input
           type="text"
           id="info-modal-nom"
@@ -116,16 +112,29 @@ const copy = {
           class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
         />
 
-        <!-- Pax -->
-        <input
-          type="number"
-          id="info-modal-pax"
-          name="pax"
-          min="1"
-          max="1000"
-          placeholder={copy.paxPlaceholder}
-          class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
-        />
+        <!-- Tipus de graduació -->
+        <select
+          id="info-modal-tipus-graduacio"
+          name="tipusGraduacio"
+          class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+        >
+          <option value="">{copy.tipusGraduacioDefault}</option>
+          {copy.tipusGraduacioOptions.map(option => (
+            <option value={option}>{option}</option>
+          ))}
+        </select>
+
+        <!-- Pack escollit -->
+        <select
+          id="info-modal-pack"
+          name="pack"
+          class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+        >
+          <option value="">{copy.packDefault}</option>
+          {copy.packOptions.map(option => (
+            <option value={option}>{option}</option>
+          ))}
+        </select>
 
         <!-- Centre Educatiu -->
         <input
@@ -136,59 +145,27 @@ const copy = {
           class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
         />
 
-        <!-- Ciutat -->
-        <input
-          type="text"
-          id="info-modal-ciutat"
-          name="ciutat"
-          placeholder={copy.ciutatPlaceholder}
-          class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
-        />
-
-        <!-- Data aproximada: mes + any -->
-        <div class="grid grid-cols-2 gap-3">
-          <select
-            id="info-modal-mes"
-            name="mes"
+        <!-- Data de la graduació -->
+        <div class="flex flex-col gap-1">
+          <label for="info-modal-data" class="text-xs text-gray-400 px-1">{copy.dataLabel}</label>
+          <input
+            type="date"
+            id="info-modal-data"
+            name="dataEvent"
             class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
-          >
-            <option value="">{copy.mesDefault}</option>
-            {copy.months.map((month, i) => (
-              <option value={String(i + 1).padStart(2, '0')}>{month}</option>
-            ))}
-          </select>
-          <select
-            id="info-modal-any"
-            name="any"
-            class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
-          >
-            <option value="">{copy.anyDefault}</option>
-            {years.map(year => (
-              <option value={String(year)}>{year}</option>
-            ))}
-          </select>
+          />
         </div>
 
-        <!-- Tipus d'event -->
-        <select
-          id="info-modal-tipus"
-          name="tipus"
-          class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
-        >
-          <option value="">{copy.tipusDefault}</option>
-          {copy.tipusOptions.map(option => (
-            <option value={option}>{option}</option>
-          ))}
-        </select>
-
-        <!-- Info / comentaris -->
-        <textarea
-          id="info-modal-info"
-          name="info"
-          rows="3"
-          placeholder={copy.infoPlaceholder}
-          class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand resize-none"
-        ></textarea>
+        <!-- Pax -->
+        <input
+          type="number"
+          id="info-modal-pax"
+          name="pax"
+          min="1"
+          max="10000"
+          placeholder={copy.paxPlaceholder}
+          class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+        />
 
         <!-- Submit -->
         <button
@@ -250,6 +227,11 @@ const copy = {
       currentPack = pack;
       modal.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
+      // Pre-fill pack selector if a pack was passed
+      if (pack) {
+        const packSelect = document.getElementById('info-modal-pack') as HTMLSelectElement;
+        if (packSelect) packSelect.value = pack;
+      }
     }
 
     function closeModal() {
@@ -286,22 +268,21 @@ const copy = {
       if (!scriptUrl) return;
 
       const nom = (document.getElementById('info-modal-nom') as HTMLInputElement).value.trim();
-      const pax = (document.getElementById('info-modal-pax') as HTMLInputElement).value.trim();
+      const tipusGraduacio = (document.getElementById('info-modal-tipus-graduacio') as HTMLSelectElement).value;
+      const pack = (document.getElementById('info-modal-pack') as HTMLSelectElement).value;
       const centre = (document.getElementById('info-modal-centre') as HTMLInputElement).value.trim();
-      const ciutat = (document.getElementById('info-modal-ciutat') as HTMLInputElement).value.trim();
-      const mes = (document.getElementById('info-modal-mes') as HTMLSelectElement).value;
-      const any = (document.getElementById('info-modal-any') as HTMLSelectElement).value;
-      const tipus = (document.getElementById('info-modal-tipus') as HTMLSelectElement).value;
-      const info = (document.getElementById('info-modal-info') as HTMLTextAreaElement).value.trim();
+      const dataRaw = (document.getElementById('info-modal-data') as HTMLInputElement).value;
+      const pax = (document.getElementById('info-modal-pax') as HTMLInputElement).value.trim();
 
-      // Build dataEvent string if at least one is selected
-      const dataEvent = mes && any ? `${mes}/${any}` : (any || mes || '');
+      // Convert YYYY-MM-DD to DD/MM/YYYY for the sheet
+      const dataEvent = dataRaw
+        ? dataRaw.split('-').reverse().join('/')
+        : '';
 
       const originalText = btnText.innerText;
       const msgSending = form.dataset.msgSending || '...';
       const msgSent = form.dataset.msgSent || 'Enviat!';
       const msgSuccess = form.dataset.msgSuccess || '';
-      const msgError = form.dataset.msgError || '';
 
       submitBtn.disabled = true;
       btnText.innerText = msgSending;
@@ -313,13 +294,11 @@ const copy = {
         phone: currentPhone,
       };
       if (nom) payload.nom = nom;
-      if (pax) payload.pax = Number(pax);
+      if (tipusGraduacio) payload.tipusGraduacio = tipusGraduacio;
+      if (pack) payload.pack = pack;
       if (centre) payload.centre = centre;
-      if (ciutat) payload.ciutat = ciutat;
       if (dataEvent) payload.dataEvent = dataEvent;
-      if (tipus) payload.tipus = tipus;
-      if (currentPack && !tipus) payload.tipus = currentPack;
-      if (info) payload.info = info;
+      if (pax) payload.pax = Number(pax);
 
       fetch(scriptUrl, {
         method: 'POST',
