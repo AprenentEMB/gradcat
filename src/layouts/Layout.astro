@@ -64,19 +64,37 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;800&display=swap" /></noscript>
 
-    <!-- Referral tracking: capture ?ref=XXX from URL and persist in sessionStorage -->
+    <!-- Referral tracking: capture ?ref=XXX from URL and persist in localStorage (cross-tab) -->
     <script is:inline>
       (function () {
         var params = new URLSearchParams(window.location.search);
         var ref = params.get('ref');
-        if (ref) sessionStorage.setItem('referit', ref);
+        if (ref) {
+          localStorage.setItem('referit', ref);
+        } else {
+          var stored = localStorage.getItem('referit');
+          if (stored) {
+            var url = new URL(window.location.href);
+            url.searchParams.set('ref', stored);
+            history.replaceState(null, '', url.toString());
+          }
+        }
       })();
     </script>
     <script>
       document.addEventListener('astro:page-load', () => {
         var params = new URLSearchParams(window.location.search);
         var ref = params.get('ref');
-        if (ref) sessionStorage.setItem('referit', ref);
+        if (ref) {
+          localStorage.setItem('referit', ref);
+        } else {
+          var stored = localStorage.getItem('referit');
+          if (stored) {
+            var url = new URL(window.location.href);
+            url.searchParams.set('ref', stored);
+            history.replaceState(null, '', url.toString());
+          }
+        }
       });
     </script>
 

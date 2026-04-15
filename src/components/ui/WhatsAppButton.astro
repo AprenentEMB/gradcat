@@ -16,7 +16,9 @@ const WHATSAPP_URL = `https://wa.me/34658020084?text=${t.message}`;
   <span class="absolute inset-0 rounded-full bg-[#25D366] opacity-40 whatsapp-pulse" style="animation-delay: 0.5s;"></span>
 
   <a
+    id="whatsapp-link"
     href={WHATSAPP_URL}
+    data-base-url={WHATSAPP_URL}
     target="_blank"
     rel="noopener noreferrer"
     aria-label={t.ariaLabel}
@@ -65,3 +67,22 @@ const WHATSAPP_URL = `https://wa.me/34658020084?text=${t.message}`;
     animation: none;
   }
 </style>
+
+<script>
+  function updateWhatsAppRef() {
+    const btn = document.getElementById('whatsapp-link') as HTMLAnchorElement | null;
+    if (!btn) return;
+    const referit = localStorage.getItem('referit');
+    const baseUrl = btn.dataset.baseUrl || btn.href;
+    if (referit) {
+      const url = new URL(baseUrl);
+      const currentText = url.searchParams.get('text') || '';
+      url.searchParams.set('text', `${currentText}\n\nRef: ${referit}`);
+      btn.href = url.toString();
+    } else {
+      btn.href = baseUrl;
+    }
+  }
+
+  document.addEventListener('astro:page-load', updateWhatsAppRef);
+</script>
