@@ -108,6 +108,7 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
 
       const phone = phoneInput.value;
       const lang = document.documentElement.lang || 'ca';
+      const referit = localStorage.getItem('referit') || '';
       const originalBtnText = btnText.innerText;
 
       const msgSending = ctaForm.dataset.msgSending || 'Enviant...';
@@ -125,7 +126,7 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'create', phone, message: '', lang, canal: 'Web' }),
+          body: JSON.stringify({ action: 'create', phone, message: '', lang, canal: 'Web', referit }),
         });
 
         ctaForm.reset();
