@@ -57,7 +57,27 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
         document.head.appendChild(l);
       }
     </script>
-    <!-- Analytics + Referral: only activated after cookie consent -->
+    <!-- Referral capture: always runs, no consent needed (?ref= is functional data, not tracking) -->
+    <script is:inline>
+      window.__loadReferral = function () {
+        try {
+          var params = new URLSearchParams(window.location.search);
+          var ref = params.get('ref');
+          if (ref) {
+            localStorage.setItem('referit', ref);
+          } else {
+            var stored = localStorage.getItem('referit');
+            if (stored) {
+              var url = new URL(window.location.href);
+              url.searchParams.set('ref', stored);
+              history.replaceState(null, '', url.toString());
+            }
+          }
+        } catch (e) {}
+      };
+      window.__loadReferral();
+    </script>
+    <!-- Analytics: only activated after cookie consent -->
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -77,39 +97,21 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
         gtag('config', 'G-LGSRT4G7R7', { cookie_flags: 'SameSite=Lax;Secure' });
       };
 
-      window.__loadReferral = function () {
-        try {
-          var params = new URLSearchParams(window.location.search);
-          var ref = params.get('ref');
-          if (ref) {
-            localStorage.setItem('referit', ref);
-          } else {
-            var stored = localStorage.getItem('referit');
-            if (stored) {
-              var url = new URL(window.location.href);
-              url.searchParams.set('ref', stored);
-              history.replaceState(null, '', url.toString());
-            }
-          }
-        } catch (e) {}
-      };
-
       (function () {
         var c = null;
         try { c = localStorage.getItem('cookie_consent'); } catch (e) {}
         if (c === 'accepted') {
           window.__loadGA();
-          window.__loadReferral();
         }
       })();
     </script>
-    <!-- SPA: referral + GA page tracking on each navigation -->
+    <!-- SPA: referral (always) + GA page tracking (only with consent) on each navigation -->
     <script>
       let initialLoad = true;
       document.addEventListener('astro:page-load', () => {
         try {
+          (window as any).__loadReferral?.();
           if (localStorage.getItem('cookie_consent') === 'accepted') {
-            (window as any).__loadReferral?.();
             if (!initialLoad && (window as any).__gaLoaded) {
               (window as any).gtag?.('config', 'G-LGSRT4G7R7', {
                 page_path: window.location.pathname,

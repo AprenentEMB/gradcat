@@ -95,7 +95,6 @@ const copy = {
       saveConsent('accepted');
       banner.classList.add('hidden');
       (window as any).__loadGA?.();
-      (window as any).__loadReferral?.();
     });
 
     document.getElementById('cookie-reject')?.addEventListener('click', () => {
