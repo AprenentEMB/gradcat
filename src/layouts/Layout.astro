@@ -3,6 +3,7 @@ import '../styles/global.css';
 import SEO from '../components/SEO.astro';
 import ContactModal from '../components/ui/ContactModal.astro';
 import InfoModal from '../components/ui/InfoModal.astro';
+import CookieBanner from '../components/ui/CookieBanner.astro';
 import { ClientRouter } from 'astro:transitions';
 import type { Lang } from '../i18n/translations';
 
@@ -38,12 +39,8 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
     <meta name="theme-color" content="#173696" />
     <link rel="icon" type="image/png" href="/favicon.png" />
 
-    <!-- Preconnect to external origins -->
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <!-- Preconnect to YouTube thumbnails (no personal data, no cookies) -->
     <link rel="preconnect" href="https://i.ytimg.com" />
-    <link rel="dns-prefetch" href="https://www.youtube.com" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <!-- Fonts: preload injected once per browser session via script to avoid
          Astro ClientRouter re-inserting it on every SPA navigation, which
@@ -60,64 +57,67 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
         document.head.appendChild(l);
       }
     </script>
-    <!-- Load Google Fonts non-blocking to avoid render-blocking penalty -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;800&display=swap" /></noscript>
-
-    <!-- Referral tracking: capture ?ref=XXX from URL and persist in localStorage (cross-tab) -->
-    <script is:inline>
-      (function () {
-        var params = new URLSearchParams(window.location.search);
-        var ref = params.get('ref');
-        if (ref) {
-          localStorage.setItem('referit', ref);
-        } else {
-          var stored = localStorage.getItem('referit');
-          if (stored) {
-            var url = new URL(window.location.href);
-            url.searchParams.set('ref', stored);
-            history.replaceState(null, '', url.toString());
-          }
-        }
-      })();
-    </script>
-    <script>
-      document.addEventListener('astro:page-load', () => {
-        var params = new URLSearchParams(window.location.search);
-        var ref = params.get('ref');
-        if (ref) {
-          localStorage.setItem('referit', ref);
-        } else {
-          var stored = localStorage.getItem('referit');
-          if (stored) {
-            var url = new URL(window.location.href);
-            url.searchParams.set('ref', stored);
-            history.replaceState(null, '', url.toString());
-          }
-        }
-      });
-    </script>
-
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LGSRT4G7R7" is:inline></script>
+    <!-- Analytics + Referral: only activated after cookie consent -->
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-LGSRT4G7R7', {
-        cookie_flags: 'SameSite=Lax;Secure',
-      });
+
+      window.__loadGA = function () {
+        if (window.__gaLoaded) return;
+        window.__gaLoaded = true;
+        var pc = document.createElement('link');
+        pc.rel = 'preconnect';
+        pc.href = 'https://www.googletagmanager.com';
+        document.head.appendChild(pc);
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-LGSRT4G7R7';
+        document.head.appendChild(s);
+        gtag('js', new Date());
+        gtag('config', 'G-LGSRT4G7R7', { cookie_flags: 'SameSite=Lax;Secure' });
+      };
+
+      window.__loadReferral = function () {
+        try {
+          var params = new URLSearchParams(window.location.search);
+          var ref = params.get('ref');
+          if (ref) {
+            localStorage.setItem('referit', ref);
+          } else {
+            var stored = localStorage.getItem('referit');
+            if (stored) {
+              var url = new URL(window.location.href);
+              url.searchParams.set('ref', stored);
+              history.replaceState(null, '', url.toString());
+            }
+          }
+        } catch (e) {}
+      };
+
+      (function () {
+        var c = null;
+        try { c = localStorage.getItem('cookie_consent'); } catch (e) {}
+        if (c === 'accepted') {
+          window.__loadGA();
+          window.__loadReferral();
+        }
+      })();
     </script>
-    <!-- Track SPA navigations with ClientRouter -->
+    <!-- SPA: referral + GA page tracking on each navigation -->
     <script>
       let initialLoad = true;
       document.addEventListener('astro:page-load', () => {
-        if (initialLoad) { initialLoad = false; return; }
-        if (typeof (window as any).gtag === 'function') {
-          (window as any).gtag('config', 'G-LGSRT4G7R7', {
-            page_path: window.location.pathname,
-          });
-        }
+        try {
+          if (localStorage.getItem('cookie_consent') === 'accepted') {
+            (window as any).__loadReferral?.();
+            if (!initialLoad && (window as any).__gaLoaded) {
+              (window as any).gtag?.('config', 'G-LGSRT4G7R7', {
+                page_path: window.location.pathname,
+              });
+            }
+          }
+        } catch (e) {}
+        initialLoad = false;
       });
     </script>
 
@@ -162,6 +162,7 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
     <slot />
     <ContactModal lang={lang} appsScriptUrl={appsScriptUrl} transition:persist="contact-modal" />
     <InfoModal lang={lang} appsScriptUrl={appsScriptUrl} transition:persist="info-modal" />
+    <CookieBanner lang={lang} transition:persist="cookie-banner" />
     <script>
       (function () {
         var lang = document.documentElement.lang || 'ca';

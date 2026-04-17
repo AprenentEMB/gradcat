@@ -1,0 +1,109 @@
+---
+interface Props {
+  lang: 'ca' | 'es';
+}
+const { lang } = Astro.props;
+
+const copy = {
+  ca: {
+    message: "Fem servir Google Analytics per entendre com s'utilitza el lloc. Les dades s'envien a Google i es conserven 13 mesos.",
+    privacyLink: "Política de privacitat",
+    privacyHref: "/privacitat",
+    accept: "Acceptar",
+    reject: "Rebutjar",
+    ariaLabel: "Avís de cookies",
+  },
+  es: {
+    message: "Usamos Google Analytics para entender cómo se usa el sitio. Los datos se envían a Google y se conservan 13 meses.",
+    privacyLink: "Política de privacidad",
+    privacyHref: "/es/privacidad",
+    accept: "Aceptar",
+    reject: "Rechazar",
+    ariaLabel: "Aviso de cookies",
+  },
+}[lang];
+---
+
+<div
+  id="cookie-banner"
+  class="fixed bottom-0 left-0 right-0 z-[300] bg-navy border-t border-white/10 px-4 py-4 hidden"
+  role="region"
+  aria-label={copy.ariaLabel}
+>
+  <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+    <p class="text-white/75 text-sm text-center sm:text-left leading-relaxed">
+      {copy.message}{' '}
+      <a
+        href={copy.privacyHref}
+        class="underline text-white/90 hover:text-white transition-colors"
+      >
+        {copy.privacyLink}
+      </a>
+    </p>
+    <div class="flex items-center gap-3 shrink-0">
+      <button
+        id="cookie-reject"
+        type="button"
+        class="text-white/60 hover:text-white text-sm font-medium px-4 py-2 rounded-lg border border-white/20 hover:border-white/40 transition-colors cursor-pointer"
+      >
+        {copy.reject}
+      </button>
+      <button
+        id="cookie-accept"
+        type="button"
+        class="bg-brand hover:bg-brand-light text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors cursor-pointer"
+      >
+        {copy.accept}
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const CONSENT_KEY = 'cookie_consent';
+  const CONSENT_TS_KEY = 'cookie_consent_ts';
+  const CONSENT_TTL_MS = 365 * 24 * 60 * 60 * 1000; // 12 mesos
+
+  function isConsentExpired(): boolean {
+    try {
+      const ts = localStorage.getItem(CONSENT_TS_KEY);
+      if (!ts) return true;
+      return Date.now() - parseInt(ts, 10) > CONSENT_TTL_MS;
+    } catch { return true; }
+  }
+
+  function saveConsent(value: 'accepted' | 'rejected') {
+    try {
+      localStorage.setItem(CONSENT_KEY, value);
+      localStorage.setItem(CONSENT_TS_KEY, String(Date.now()));
+    } catch {}
+  }
+
+  function initCookieBanner() {
+    const banner = document.getElementById('cookie-banner');
+    if (!banner || banner.hasAttribute('data-banner-init')) return;
+    banner.setAttribute('data-banner-init', 'true');
+
+    let consent: string | null = null;
+    try { consent = localStorage.getItem(CONSENT_KEY); } catch {}
+
+    if (consent === null || isConsentExpired()) {
+      banner.classList.remove('hidden');
+    }
+
+    document.getElementById('cookie-accept')?.addEventListener('click', () => {
+      saveConsent('accepted');
+      banner.classList.add('hidden');
+      (window as any).__loadGA?.();
+      (window as any).__loadReferral?.();
+    });
+
+    document.getElementById('cookie-reject')?.addEventListener('click', () => {
+      saveConsent('rejected');
+      banner.classList.add('hidden');
+    });
+  }
+
+  initCookieBanner();
+  document.addEventListener('astro:page-load', initCookieBanner);
+</script>
