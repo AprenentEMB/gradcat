@@ -5,7 +5,7 @@ export const translations = {
     layout: {
       title: "Graduacions.cat — Festes de Graduació a Barcelona",
       description:
-        "Organitzem la festa de graduació perfecta a Barcelona. ESO, Batxillerat i Selectivitat. Sales exclusives, DJ, càtering, fotografia i aftermovie. Demana pressupost gratis.",
+        "Organitzem la festa de graduació perfecta a Barcelona, Girona, Lleida i Tarragona. ESO, Batxillerat i Selectivitat. Sales exclusives, DJ, càtering, fotografia i aftermovie. Demana pressupost gratis.",
       skipToContent: "Anar al contingut",
       locale: "ca_ES",
     },
@@ -254,7 +254,7 @@ export const translations = {
     layout: {
       title: "Graduacions.cat — Fiestas de Graduación en Barcelona",
       description:
-        "Organizamos la fiesta de graduación perfecta en Barcelona. ESO, Bachillerato y Selectividad. Salas exclusivas, DJ, catering, fotografía y aftermovie. Pide presupuesto gratis.",
+        "Organizamos la fiesta de graduación perfecta en Barcelona, Girona, Lleida y Tarragona. ESO, Bachillerato y Selectividad. Salas exclusivas, DJ, catering, fotografía y aftermovie. Pide presupuesto gratis.",
       skipToContent: "Ir al contenido",
       locale: "es_ES",
     },

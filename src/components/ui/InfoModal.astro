@@ -20,9 +20,12 @@ const copy = {
     nomPlaceholder: "El teu nom",
     tipusGraduacioDefault: "Tipus de graduació...",
     tipusGraduacioOptions: ["ESO", "BATXILLERAT", "UNIVERSITAT"],
+    cursDefault: "Curs universitari...",
+    cursOptions: ["1", "2", "3", "4", "Altres"],
     packDefault: "Pack escollit...",
     packOptions: ["SOPAR", "FESTA", "SOPAR + FESTA"],
     centrePlaceholder: "De quina escola / universitat vens",
+    ciutatPlaceholder: "Ciutat",
     dataLabel: "Data de la graduació",
     paxPlaceholder: "Número aproximat d'assistents",
     submitBtn: "Enviar informació",
@@ -40,9 +43,12 @@ const copy = {
     nomPlaceholder: "Tu nombre",
     tipusGraduacioDefault: "Tipo de graduación...",
     tipusGraduacioOptions: ["ESO", "BACHILLERATO", "UNIVERSIDAD"],
+    cursDefault: "Curso universitario...",
+    cursOptions: ["1", "2", "3", "4", "Otros"],
     packDefault: "Pack elegido...",
     packOptions: ["CENA", "FIESTA", "CENA + FIESTA"],
     centrePlaceholder: "¿De qué instituto / universidad vienes?",
+    ciutatPlaceholder: "Ciudad",
     dataLabel: "Fecha de la graduación",
     paxPlaceholder: "Número aproximado de asistentes",
     submitBtn: "Enviar información",
@@ -124,6 +130,20 @@ const copy = {
           ))}
         </select>
 
+        <!-- Curs (només UNIVERSITAT) -->
+        <div id="info-modal-curs-wrapper" style="display:none">
+          <select
+            id="info-modal-curs"
+            name="curs"
+            class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+          >
+            <option value="">{copy.cursDefault}</option>
+            {copy.cursOptions.map(option => (
+              <option value={option}>{option}</option>
+            ))}
+          </select>
+        </div>
+
         <!-- Pack escollit -->
         <select
           id="info-modal-pack"
@@ -142,6 +162,15 @@ const copy = {
           id="info-modal-centre"
           name="centre"
           placeholder={copy.centrePlaceholder}
+          class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+        />
+
+        <!-- Ciutat -->
+        <input
+          type="text"
+          id="info-modal-ciutat"
+          name="ciutat"
+          placeholder={copy.ciutatPlaceholder}
           class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
         />
 
@@ -222,6 +251,17 @@ const copy = {
     let currentPhone = '';
     let currentPack = '';
 
+    const tipusSelect = document.getElementById('info-modal-tipus-graduacio') as HTMLSelectElement;
+    const cursWrapper = document.getElementById('info-modal-curs-wrapper') as HTMLElement;
+
+    tipusSelect?.addEventListener('change', () => {
+      const isUniversity = tipusSelect.value.includes('UNIVERSIT');
+      cursWrapper.style.display = isUniversity ? 'block' : 'none';
+      if (!isUniversity) {
+        (document.getElementById('info-modal-curs') as HTMLSelectElement).value = '';
+      }
+    });
+
     function openModal(phone = '', pack = '') {
       currentPhone = phone;
       currentPack = pack;
@@ -269,8 +309,10 @@ const copy = {
 
       const nom = (document.getElementById('info-modal-nom') as HTMLInputElement).value.trim();
       const tipusGraduacio = (document.getElementById('info-modal-tipus-graduacio') as HTMLSelectElement).value;
+      const curs = (document.getElementById('info-modal-curs') as HTMLSelectElement).value;
       const pack = (document.getElementById('info-modal-pack') as HTMLSelectElement).value;
       const centre = (document.getElementById('info-modal-centre') as HTMLInputElement).value.trim();
+      const ciutat = (document.getElementById('info-modal-ciutat') as HTMLInputElement).value.trim();
       const dataRaw = (document.getElementById('info-modal-data') as HTMLInputElement).value;
       const pax = (document.getElementById('info-modal-pax') as HTMLInputElement).value.trim();
 
@@ -295,8 +337,10 @@ const copy = {
       };
       if (nom) payload.nom = nom;
       if (tipusGraduacio) payload.tipusGraduacio = tipusGraduacio;
+      if (curs) payload.curs = curs;
       if (pack) payload.pack = pack;
       if (centre) payload.centre = centre;
+      if (ciutat) payload.ciutat = ciutat;
       if (dataEvent) payload.dataEvent = dataEvent;
       if (pax) payload.pax = Number(pax);
 
