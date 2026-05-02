@@ -97,11 +97,27 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
         gtag('config', 'G-LGSRT4G7R7', { cookie_flags: 'SameSite=Lax;Secure' });
       };
 
+      window.__loadFBQ = function () {
+        if (window.__fbqLoaded) return;
+        window.__fbqLoaded = true;
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window,document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '2755842494789310');
+        fbq('track', 'PageView');
+      };
+
       (function () {
         var c = null;
         try { c = localStorage.getItem('cookie_consent'); } catch (e) {}
         if (c === 'accepted') {
           window.__loadGA();
+          window.__loadFBQ();
         }
       })();
     </script>
@@ -116,6 +132,9 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
               (window as any).gtag?.('config', 'G-LGSRT4G7R7', {
                 page_path: window.location.pathname,
               });
+            }
+            if (!initialLoad && (window as any).__fbqLoaded) {
+              (window as any).fbq?.('track', 'PageView');
             }
           }
         } catch (e) {}

@@ -6,7 +6,7 @@ const { lang } = Astro.props;
 
 const copy = {
   ca: {
-    message: "Fem servir Google Analytics per entendre com s'utilitza el lloc. Les dades s'envien a Google i es conserven 13 mesos.",
+    message: "Fem servir Google Analytics i Meta Pixel per entendre com s'utilitza el lloc i millorar els nostres anuncis. Les dades s'envien a Google i Meta.",
     privacyLink: "Política de privacitat",
     privacyHref: "/privacitat",
     accept: "Acceptar",
@@ -14,7 +14,7 @@ const copy = {
     ariaLabel: "Avís de cookies",
   },
   es: {
-    message: "Usamos Google Analytics para entender cómo se usa el sitio. Los datos se envían a Google y se conservan 13 meses.",
+    message: "Usamos Google Analytics y Meta Pixel para entender cómo se usa el sitio y mejorar nuestros anuncios. Los datos se envían a Google y Meta.",
     privacyLink: "Política de privacidad",
     privacyHref: "/es/privacidad",
     accept: "Aceptar",
@@ -95,6 +95,7 @@ const copy = {
       saveConsent('accepted');
       banner.classList.add('hidden');
       (window as any).__loadGA?.();
+      (window as any).__loadFBQ?.();
     });
 
     document.getElementById('cookie-reject')?.addEventListener('click', () => {
