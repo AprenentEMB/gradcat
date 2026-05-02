@@ -1,11 +1,26 @@
 ---
-import type { Translations } from '../../i18n/translations';
+import type { Translations, Lang } from '../../i18n/translations';
 
 interface Props {
   t: Translations['footer'];
+  lang?: Lang;
 }
 
-const { t } = Astro.props;
+const { t, lang = 'ca' } = Astro.props;
+
+const seoLinks = lang === 'ca' ? [
+  { href: '/graduacions-eso', label: "Graduació de l'ESO" },
+  { href: '/graduacions-batxillerat', label: 'Graduació de Batxillerat' },
+  { href: '/graduacions-universitat', label: 'Graduació Universitària' },
+  { href: '/graduacions-barcelona', label: 'Graduació a Barcelona' },
+  { href: '/graduacions-girona', label: 'Graduació a Girona' },
+] : [
+  { href: '/es/graduaciones-eso', label: 'Graduación de la ESO' },
+  { href: '/es/graduaciones-bachillerato', label: 'Graduación de Bachillerato' },
+  { href: '/es/graduaciones-universidad', label: 'Graduación Universitaria' },
+  { href: '/es/graduaciones-barcelona', label: 'Graduación en Barcelona' },
+  { href: '/es/graduaciones-girona', label: 'Graduación en Girona' },
+];
 
 const PHONE_HREF = 'tel:+34658020084';
 const EMAIL = 'info@graduacions.cat';
@@ -63,6 +78,12 @@ const EMAIL = 'info@graduacions.cat';
           <li class="text-white/30">{t.attention}</li>
         </ul>
       </div>
+    </div>
+
+    <div class="border-t border-white/5 pt-5 pb-6 flex flex-wrap gap-x-5 gap-y-1.5">
+      {seoLinks.map((link) => (
+        <a href={link.href} class="text-white/20 hover:text-white/40 text-xs transition-colors">{link.label}</a>
+      ))}
     </div>
 
     <div class="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">

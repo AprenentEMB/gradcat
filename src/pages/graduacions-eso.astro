@@ -15,28 +15,34 @@ import Contact from '../components/sections/Contact.astro';
 import Footer from '../components/sections/Footer.astro';
 import WhatsAppButton from '../components/ui/WhatsAppButton.astro';
 
-const t = translations.ca;
+const base = translations.ca;
+const hero = {
+  ...base.hero,
+  preheadline: "GRADUACIÓ DE L'ESO · BARCELONA I CATALUNYA",
+  headline1: "Organitzem la teva",
+  headline2: "Graduació de l'ESO.",
+} as typeof base.hero;
 ---
 
 <Layout
-  title={t.layout.title}
-  description={t.layout.description}
+  title="Graduació de l'ESO a Catalunya | Graduacions.cat"
+  description="Organitzem la festa de graduació de l'ESO a Barcelona i Catalunya. Sales exclusives, DJ, càtering, fotografia i aftermovie. Demana pressupost gratis."
   lang="ca"
-  skipToContent={t.layout.skipToContent}
+  skipToContent={base.layout.skipToContent}
 >
-  <Header t={t.header} lang="ca" />
+  <Header t={base.header} lang="ca" />
   <main id="main-content">
-    <Hero t={t.hero} />
-    <Stats t={t.stats} />
-    <Universities t={t.universities} />
-    <Services t={t.services} lang="ca" />
-    <CTA t={t.cta} />
-    <Gallery t={t.gallery} />
-    <Packs t={t.packs} />
-    <Testimonials t={t.testimonials} />
-    <FAQ t={t.faq} />
-    <Contact t={t.contact} lang="ca" />
+    <Hero t={hero} />
+    <Stats t={base.stats} />
+    <Universities t={base.universities} />
+    <Services t={base.services} lang="ca" />
+    <CTA t={base.cta} />
+    <Gallery t={base.gallery} />
+    <Packs t={base.packs} />
+    <Testimonials t={base.testimonials} />
+    <FAQ t={base.faq} />
+    <Contact t={base.contact} lang="ca" />
   </main>
-  <Footer t={t.footer} lang="ca" />
-  <WhatsAppButton t={t.whatsapp} />
+  <Footer t={base.footer} lang="ca" />
+  <WhatsAppButton t={base.whatsapp} />
 </Layout>

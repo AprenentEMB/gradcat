@@ -8,23 +8,26 @@ import BlogCTA from '../../components/blog/BlogCTA.astro';
 import { fetchStrapi, getStrapiMediaUrl, blocksToHtml } from '../../lib/strapi';
 import type { Article, StrapiListResponse } from '../../lib/strapi';
 import { translations } from '../../i18n/translations';
-import fallbackImg from '../../assets/blog/1.webp';
-
+import blogImg1 from '../../assets/blog/1.webp';
+import blogImg2 from '../../assets/blog/2.webp';
+import blogImg3 from '../../assets/blog/3.webp';
+const numberedFallbacks = [blogImg1, blogImg2, blogImg3];
 const blogImages = import.meta.glob<{ default: ImageMetadata }>('../../assets/blog/*.webp', { eager: true });
 
 const t = translations.ca;
 
 export async function getStaticPaths() {
   const { data: articles } = await fetchStrapi<StrapiListResponse<Article>>(
-    '/articles?fields[0]=slug&fields[1]=title&pagination[pageSize]=100&locale=ca-ES'
+    '/articles?sort=publishedAt:desc&fields[0]=slug&fields[1]=title&pagination[pageSize]=100&locale=ca-ES'
   );
-  return articles.map((article) => ({
+  return articles.map((article, i) => ({
     params: { slug: article.slug },
-    props: { article },
+    props: { article, articleIndex: i },
   }));
 }
 
 const { slug } = Astro.params;
+const { articleIndex } = Astro.props;
 
 const { data: articles } = await fetchStrapi<StrapiListResponse<Article>>(
   `/articles?filters[slug][$eq]=${slug}&populate=image&pagination[pageSize]=1&locale=ca-ES`
@@ -35,7 +38,12 @@ const article = articles[0];
 if (!article) return Astro.redirect('/blog');
 
 const slugImg = blogImages[`../../assets/blog/${article.slug}.webp`];
-const coverUrl = slugImg ? slugImg.default.src : fallbackImg.src;
+const idx = typeof articleIndex === 'number' ? articleIndex : 0;
+const fallbackKey = `../../assets/blog/${(idx % 6) + 1}.webp`;
+const coverUrl = slugImg?.default.src
+  ?? blogImages[fallbackKey]?.default?.src
+  ?? numberedFallbacks[idx % 3]?.src
+  ?? blogImg1.src;
 const contentHtml = blocksToHtml(article.content);
 
 const articleSchema = article ? {

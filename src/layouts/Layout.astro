@@ -125,6 +125,9 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
     <script>
       let initialLoad = true;
       document.addEventListener('astro:page-load', () => {
+        if (!initialLoad && !window.location.hash) {
+          window.scrollTo({ top: 0, behavior: 'instant' });
+        }
         try {
           (window as any).__loadReferral?.();
           if (localStorage.getItem('cookie_consent') === 'accepted') {

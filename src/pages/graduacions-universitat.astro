@@ -1,0 +1,48 @@
+---
+import { translations } from '../i18n/translations';
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/sections/Header.astro';
+import Hero from '../components/sections/Hero.astro';
+import Stats from '../components/sections/Stats.astro';
+import Universities from '../components/sections/Universities.astro';
+import Services from '../components/sections/Services.astro';
+import CTA from '../components/sections/CTA.astro';
+import Gallery from '../components/sections/Gallery.astro';
+import Packs from '../components/sections/Packs.astro';
+import Testimonials from '../components/sections/Testimonials.astro';
+import FAQ from '../components/sections/FAQ.astro';
+import Contact from '../components/sections/Contact.astro';
+import Footer from '../components/sections/Footer.astro';
+import WhatsAppButton from '../components/ui/WhatsAppButton.astro';
+
+const base = translations.ca;
+const hero = {
+  ...base.hero,
+  preheadline: "GRADUACIÓ UNIVERSITÀRIA · BARCELONA I CATALUNYA",
+  headline1: "Organitzem la teva",
+  headline2: "Graduació Universitària.",
+} as typeof base.hero;
+---
+
+<Layout
+  title="Graduació Universitària a Catalunya | Graduacions.cat"
+  description="Organitzem la festa de graduació universitària a Barcelona i Catalunya. Sales exclusives, DJ, càtering, fotografia i aftermovie. Demana pressupost gratis."
+  lang="ca"
+  skipToContent={base.layout.skipToContent}
+>
+  <Header t={base.header} lang="ca" />
+  <main id="main-content">
+    <Hero t={hero} />
+    <Stats t={base.stats} />
+    <Universities t={base.universities} />
+    <Services t={base.services} lang="ca" />
+    <CTA t={base.cta} />
+    <Gallery t={base.gallery} />
+    <Packs t={base.packs} />
+    <Testimonials t={base.testimonials} />
+    <FAQ t={base.faq} />
+    <Contact t={base.contact} lang="ca" />
+  </main>
+  <Footer t={base.footer} lang="ca" />
+  <WhatsAppButton t={base.whatsapp} />
+</Layout>
