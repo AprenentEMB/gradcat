@@ -30,12 +30,12 @@ const { slug } = Astro.params;
 const { articleIndex } = Astro.props;
 
 const { data: articles } = await fetchStrapi<StrapiListResponse<Article>>(
-  `/articles?filters[slug][$eq]=${slug}&populate=image&pagination[pageSize]=1&locale=es`
+  `/articles?filters[slug][$eq]=${slug}&populate=image&populate=localizations&pagination[pageSize]=1&locale=es`
 );
 
 const article = articles[0];
 
-if (!article) return Astro.redirect('/es/blog');
+if (!article) return Astro.redirect('/es/blog/');
 
 const slugImg = blogImages[`../../../assets/blog/${article.slug}.webp`];
 const idx = typeof articleIndex === 'number' ? articleIndex : 0;
@@ -45,6 +45,11 @@ const coverUrl = slugImg?.default.src
   ?? numberedFallbacks[idx % 3]?.src
   ?? blogImg1.src;
 const contentHtml = blocksToHtml(article.content);
+
+// hreflang pair comes from Strapi i18n, never from slug guessing: the two
+// locales use different slugs. No linked translation means no hreflang.
+const translatedSlug = article.localizations?.[0]?.slug ?? null;
+const alternatePath = translatedSlug ? `/blog/${translatedSlug}/` : null;
 
 const articleSchema = article ? {
   '@context': 'https://schema.org',
@@ -67,6 +72,7 @@ const articleSchema = article ? {
   lang="es"
   skipToContent={t.layout.skipToContent}
   image={coverUrl}
+  alternatePath={alternatePath}
 >
   {articleSchema && (
     <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
@@ -88,7 +94,7 @@ const articleSchema = article ? {
             />
           </div>
           <div class="relative max-w-3xl mx-auto px-6 pt-8 pb-16 text-center">
-            <a href="/es/blog" class="inline-flex items-center gap-1.5 text-white/60 hover:text-white text-sm font-medium transition-colors mb-6">
+            <a href="/es/blog/" class="inline-flex items-center gap-1.5 text-white/60 hover:text-white text-sm font-medium transition-colors mb-6">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
               </svg>
@@ -104,7 +110,7 @@ const articleSchema = article ? {
         </>
       ) : (
         <div class="relative max-w-3xl mx-auto px-6 pt-8 pb-16 text-center">
-          <a href="/es/blog" class="inline-flex items-center gap-1.5 text-white/60 hover:text-white text-sm font-medium transition-colors mb-6">
+          <a href="/es/blog/" class="inline-flex items-center gap-1.5 text-white/60 hover:text-white text-sm font-medium transition-colors mb-6">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
             </svg>
@@ -154,7 +160,7 @@ const articleSchema = article ? {
 
       <div class="mt-0 pt-8 border-t border-gray-100">
         <a
-          href="/es/blog"
+          href="/es/blog/"
           class="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:text-brand-light transition-colors"
         >
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
