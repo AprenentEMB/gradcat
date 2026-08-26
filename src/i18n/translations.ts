@@ -227,7 +227,7 @@ export const translations = {
       attention: "Atenció 24/7",
       copyright: "© 2025 Graduacions.cat. Tots els drets reservats.",
       privacyLink: "Política de privacitat",
-      privacyHref: "/privacitat",
+      privacyHref: "/privacitat/",
       seoText:
         "Graduacions Barcelona · Festes de graduació ESO, Batxillerat, Selectivitat",
       services: [
@@ -480,7 +480,7 @@ export const translations = {
       attention: "Atención 24/7",
       copyright: "© 2025 Graduacions.cat. Todos los derechos reservados.",
       privacyLink: "Política de privacidad",
-      privacyHref: "/es/privacidad",
+      privacyHref: "/es/privacidad/",
       seoText:
         "Graduaciones Barcelona · Fiestas de graduación ESO, Bachillerato, Selectividad",
       services: [

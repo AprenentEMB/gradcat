@@ -13,6 +13,8 @@ interface Props {
   lang: Lang;
   skipToContent: string;
   image?: string;
+  /** Forwarded to <SEO>. See its Props for the omit/null distinction. */
+  alternatePath?: string | null;
 }
 
 const {
@@ -21,6 +23,7 @@ const {
   lang,
   skipToContent,
   image = '/images/og-image.jpg',
+  alternatePath,
 } = Astro.props;
 
 const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
@@ -32,7 +35,13 @@ const appsScriptUrl = import.meta.env.PUBLIC_APPS_SCRIPT_URL ?? '';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
 
-    <SEO title={title} description={description} image={image} lang={lang} />
+    <SEO
+      title={title}
+      description={description}
+      image={image}
+      lang={lang}
+      {...(alternatePath !== undefined ? { alternatePath } : {})}
+    />
 
     <ClientRouter />
 

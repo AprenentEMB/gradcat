@@ -26,3 +26,9 @@ pnpm-debug.log*
 .CLAUDE
 .agents
 
+
+# vercel build output
+.vercel/
+
+# local agent scratch
+.atl/

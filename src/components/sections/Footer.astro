@@ -9,17 +9,17 @@ interface Props {
 const { t, lang = 'ca' } = Astro.props;
 
 const seoLinks = lang === 'ca' ? [
-  { href: '/graduacions-eso', label: "Graduació de l'ESO" },
-  { href: '/graduacions-batxillerat', label: 'Graduació de Batxillerat' },
-  { href: '/graduacions-universitat', label: 'Graduació Universitària' },
-  { href: '/graduacions-barcelona', label: 'Graduació a Barcelona' },
-  { href: '/graduacions-girona', label: 'Graduació a Girona' },
+  { href: '/graduacions-eso/', label: "Graduació de l'ESO" },
+  { href: '/graduacions-batxillerat/', label: 'Graduació de Batxillerat' },
+  { href: '/graduacions-universitat/', label: 'Graduació Universitària' },
+  { href: '/graduacions-barcelona/', label: 'Graduació a Barcelona' },
+  { href: '/graduacions-girona/', label: 'Graduació a Girona' },
 ] : [
-  { href: '/es/graduaciones-eso', label: 'Graduación de la ESO' },
-  { href: '/es/graduaciones-bachillerato', label: 'Graduación de Bachillerato' },
-  { href: '/es/graduaciones-universidad', label: 'Graduación Universitaria' },
-  { href: '/es/graduaciones-barcelona', label: 'Graduación en Barcelona' },
-  { href: '/es/graduaciones-girona', label: 'Graduación en Girona' },
+  { href: '/es/graduaciones-eso/', label: 'Graduación de la ESO' },
+  { href: '/es/graduaciones-bachillerato/', label: 'Graduación de Bachillerato' },
+  { href: '/es/graduaciones-universidad/', label: 'Graduación Universitaria' },
+  { href: '/es/graduaciones-barcelona/', label: 'Graduación en Barcelona' },
+  { href: '/es/graduaciones-girona/', label: 'Graduación en Girona' },
 ];
 
 const PHONE_HREF = 'tel:+34658020084';

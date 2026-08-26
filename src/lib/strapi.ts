@@ -33,6 +33,8 @@ export interface Article {
   content: StrapiBlock[];    // Rich text (Blocks) — array of block objects
   image: StrapiImage | null;
   publishedAt: string;
+  /** Same article in the other locale. Only present when ?populate=localizations. */
+  localizations?: { slug: string; locale: string }[];
 }
 
 export interface StrapiListResponse<T> {

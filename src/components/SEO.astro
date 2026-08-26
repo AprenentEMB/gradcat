@@ -1,11 +1,19 @@
 ---
 import type { Lang } from '../i18n/translations';
+import { getAlternatePath, withTrailingSlash } from '../i18n/routes';
 
 interface Props {
   title: string;
   description: string;
   lang: Lang;
   image?: string;
+  /**
+   * Counterpart URL in the other language, for routes the static map cannot
+   * resolve (blog posts, whose slugs come from Strapi). Pass `null` to state
+   * that no translation exists — no hreflang is emitted in that case.
+   * Omit it entirely to let the static route map resolve the pair.
+   */
+  alternatePath?: string | null;
 }
 
 const {
@@ -13,37 +21,38 @@ const {
   description,
   lang,
   image = '/images/og-image.jpg',
+  alternatePath,
 } = Astro.props;
 
 const site = Astro.site ?? new URL('https://www.graduacions.cat');
-const canonicalURL = new URL(Astro.url.pathname, site);
+const canonicalPath = withTrailingSlash(Astro.url.pathname);
+const canonicalURL = new URL(canonicalPath, site);
 const ogImage = new URL(image, site);
 const ogLocale = lang === 'ca' ? 'ca_ES' : 'es_ES';
 
-// Derive alternate URL for hreflang — handles asymmetric paths like /serveis ↔ /es/servicios
-const asymmetricPaths: Record<string, string> = {
-  '/serveis': '/es/servicios',
-  '/es/servicios': '/serveis',
-};
-const currentPath = Astro.url.pathname;
-let alternatePath: string;
-if (asymmetricPaths[currentPath]) {
-  alternatePath = asymmetricPaths[currentPath];
-} else if (lang === 'es') {
-  alternatePath = currentPath.replace(/^\/es/, '') || '/';
-} else {
-  alternatePath = `/es${currentPath === '/' ? '' : currentPath}`;
-}
-const alternateURL = new URL(alternatePath, site);
-const xDefaultURL = lang === 'ca' ? canonicalURL : alternateURL;
+const resolvedAlternate =
+  alternatePath !== undefined ? alternatePath : getAlternatePath(canonicalPath, lang);
+const alternateURL = resolvedAlternate
+  ? new URL(withTrailingSlash(resolvedAlternate), site)
+  : null;
+
+// With a known pair, each page links to both versions and to itself, which is
+// what Google requires for hreflang to be honoured at all.
+const caURL = lang === 'ca' ? canonicalURL : alternateURL;
+const esURL = lang === 'es' ? canonicalURL : alternateURL;
 ---
 
 <title>{title}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalURL} />
-<link rel="alternate" hreflang={lang === 'ca' ? 'ca' : 'es'} href={canonicalURL} />
-<link rel="alternate" hreflang={lang === 'ca' ? 'es' : 'ca'} href={alternateURL} />
-<link rel="alternate" hreflang="x-default" href={xDefaultURL} />
+
+{alternateURL && (
+  <Fragment>
+    <link rel="alternate" hreflang="ca" href={caURL} />
+    <link rel="alternate" hreflang="es" href={esURL} />
+    <link rel="alternate" hreflang="x-default" href={caURL} />
+  </Fragment>
+)}
 
 <meta property="og:type" content="website" />
 <meta property="og:url" content={canonicalURL} />
