@@ -9,15 +9,14 @@ import type { Lang } from './translations';
  * Every pair is declared by hand. A route missing from this map emits no
  * hreflang at all, which is always better than emitting a broken one.
  *
- * The blog is not listed here: its routes live under src/pages/_blog/ and
- * src/pages/es/_blog/, which Astro excludes from the build (leading
- * underscore). The code is kept for when the section is re-enabled; those
- * pages resolve their own pair from the article's Strapi `localizations`
- * and pass it to <SEO> as `alternatePath`.
+ * Only the blog *index* is listed. Individual posts cannot be: their slugs are
+ * authored per locale in Strapi, so each post page resolves its own pair from
+ * the article's `localizations` and passes it to <SEO> as `alternatePath`.
  */
 const ROUTE_PAIRS: ReadonlyArray<readonly [ca: string, es: string]> = [
   ['/', '/es/'],
   ['/privacitat/', '/es/privacidad/'],
+  ['/blog/', '/es/blog/'],
   ['/graduacions-eso/', '/es/graduaciones-eso/'],
   ['/graduacions-batxillerat/', '/es/graduaciones-bachillerato/'],
   ['/graduacions-universitat/', '/es/graduaciones-universidad/'],

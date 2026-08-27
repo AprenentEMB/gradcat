@@ -4,23 +4,47 @@ export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/sections/Header.astro';
 import Footer from '../../../components/sections/Footer.astro';
-import { fetchStrapi, getStrapiMediaUrl } from '../../../lib/strapi';
+import { Image } from 'astro:assets';
+import { fetchStrapi } from '../../../lib/strapi';
 import type { Article, StrapiListResponse } from '../../../lib/strapi';
 import { translations } from '../../../i18n/translations';
+import { buildPageTitle } from '../../../lib/seo';
 import blogImg1 from '../../../assets/blog/1.webp';
 import blogImg2 from '../../../assets/blog/2.webp';
 import blogImg3 from '../../../assets/blog/3.webp';
 const numberedFallbacks = [blogImg1, blogImg2, blogImg3];
 const blogImages = import.meta.glob<{ default: ImageMetadata }>('../../../assets/blog/*.webp', { eager: true });
+
+/**
+ * Cover for a post: an image named after its slug, else a numbered
+ * fallback. Returns the ImageMetadata object (not `.src`) so <Image>
+ * can emit a responsive srcset — the raw assets weigh up to 1.9 MB.
+ */
+function coverFor(slug: string, index: number): ImageMetadata {
+  return blogImages[`../../../assets/blog/${slug}.webp`]?.default
+    ?? blogImages[`../../../assets/blog/${(index % 6) + 1}.webp`]?.default
+    ?? numberedFallbacks[index % 3];
+}
+
+/** Height that keeps the source aspect ratio at a given rendered width. */
+function heightAt(img: ImageMetadata, width: number): number {
+  return Math.round((width * img.height) / img.width);
+}
+
+const CARD_WIDTHS = [400, 800];
+const CARD_MAX_WIDTH = 800;
+const CARD_SIZES = '(min-width: 1024px) 384px, (min-width: 640px) 50vw, 100vw';
 const t = translations.es;
 
 const { data: articles } = await fetchStrapi<StrapiListResponse<Article>>(
   '/articles?sort=publishedAt:desc&pagination[pageSize]=100&populate=image&locale=es'
 );
+
+const covers = articles.map((article, i) => coverFor(article.slug, i));
 ---
 
 <Layout
-  title="Blog — Graduacions.cat"
+  title={buildPageTitle("Blog de graduaciones")}
   description="Consejos, ideas e inspiración para organizar la mejor fiesta de graduación en Barcelona."
   lang="es"
   skipToContent={t.layout.skipToContent}
@@ -56,22 +80,17 @@ const { data: articles } = await fetchStrapi<StrapiListResponse<Article>>(
               <li class="flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100">
 
                 <a href={`/es/blog/${article.slug}/`} tabindex="-1" aria-hidden="true">
-                  {(() => {
-                    const slugImg = blogImages[`../../../assets/blog/${article.slug}.webp`];
-                    const fallbackKey = `../../../assets/blog/${(i % 6) + 1}.webp`;
-                    const src = slugImg
-                      ? slugImg.default.src
-                      : (blogImages[fallbackKey]?.default.src ?? numberedFallbacks[i % 3].src);
-                    return (
-                      <img
-                        src={src}
-                        alt={article.title}
-                        class="w-full h-48 object-cover"
-                        loading={i === 0 ? 'eager' : 'lazy'}
-                        transition:name={`post-image-es-${article.slug}`}
-                      />
-                    );
-                  })()}
+                  <Image
+                    src={covers[i]}
+                    alt={article.title}
+                    widths={CARD_WIDTHS}
+                    sizes={CARD_SIZES}
+                    width={CARD_MAX_WIDTH}
+                    height={heightAt(covers[i], CARD_MAX_WIDTH)}
+                    class="w-full h-48 object-cover"
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    transition:name={`post-image-es-${article.slug}`}
+                  />
                 </a>
 
                 <div class="h-1 bg-linear-to-r from-brand to-brand-light"></div>
