@@ -108,7 +108,10 @@ export function blocksToHtml(blocks: StrapiBlock[]): string {
       case 'paragraph':
         return `<p>${inner}</p>`;
       case 'heading': {
-        const lvl = (block as any).level ?? 2;
+        // The page template already owns the single <h1> (the article title).
+        // Editors can pick "Heading 1" in Strapi, so the level is clamped to
+        // h2..h6 — otherwise a post ships two or more <h1> elements.
+        const lvl = clampHeadingLevel((block as any).level);
         return `<h${lvl}>${inner}</h${lvl}>`;
       }
       case 'list': {
@@ -133,6 +136,12 @@ export function blocksToHtml(blocks: StrapiBlock[]): string {
         return `<p>${inner}</p>`;
     }
   }).join('\n');
+}
+
+/** Keeps CMS headings inside h2..h6 so the template's <h1> stays unique. */
+function clampHeadingLevel(level: unknown): number {
+  const n = typeof level === 'number' ? level : 2;
+  return Math.min(6, Math.max(2, n));
 }
 
 function renderChildren(children: { type: string; text?: string; bold?: boolean; italic?: boolean; underline?: boolean; strikethrough?: boolean; code?: boolean; url?: string; children?: any[] }[]): string {
