@@ -255,7 +255,7 @@ const copy = {
     const cursWrapper = document.getElementById('info-modal-curs-wrapper') as HTMLElement;
 
     tipusSelect?.addEventListener('change', () => {
-      const isUniversity = tipusSelect.value.includes('UNIVERSIT');
+      const isUniversity = tipusSelect.value.includes('UNIVERSI'); // UNIVERSITAT / UNIVERSIDAD
       cursWrapper.style.display = isUniversity ? 'block' : 'none';
       if (!isUniversity) {
         (document.getElementById('info-modal-curs') as HTMLSelectElement).value = '';
